@@ -33,10 +33,15 @@ const formatBoxes = csv => {
 
 const formatVeggies = csv => {
   const arr = parseCSV(csv);
-  const kulturen = new Array(arr[0].length - 1).fill().map(Object);
-  arr.forEach(row =>
-    row.slice(1).forEach((element, i) => (kulturen[i][row[0]] = element))
-  );
+  const kulturen = {};
+  arr[0].slice(1).forEach(id => (kulturen[id] = {}));
+  arr
+    .slice(1)
+    .forEach(row =>
+      row
+        .slice(1)
+        .forEach((element, i) => (kulturen[arr[0][i + 1]][row[0]] = element))
+    );
   return Object.freeze(kulturen);
 };
 
