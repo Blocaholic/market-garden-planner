@@ -22,6 +22,8 @@ const readFile = path =>
     )
   );
 
+const commaToDot = n => n.replace(',', '.');
+
 /* const trimChar = (s, c) => {
   if (s.charAt(0) == c) return trimChar(s.substring(1), c);
   if (s.charAt(s.length - 1) == c)
@@ -41,5 +43,6 @@ export default Object.freeze({
   parseCSV,
   readFile,
   writeFile,
+  commaToDot,
   //trimChar,
 });
