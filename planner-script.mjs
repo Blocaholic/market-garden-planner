@@ -74,8 +74,5 @@ const plant = (veggies, boxes, numberOfBoxes) => {
 };
 
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
-  const plantSets = plant(veggies, boxes, 174);
-  console.log(plantSets);
-  Utils.commaToDot;
-  //View.printBoxes({veggies, boxes});
+  console.log(plant(veggies, boxes, 174));
 });
