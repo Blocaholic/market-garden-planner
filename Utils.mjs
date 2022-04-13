@@ -24,6 +24,20 @@ const readFile = path =>
 
 const commaToDot = n => n.replace(',', '.');
 
+const dateToString = date => {
+  const d = date.getDate();
+  const m = date.getMonth() + 1;
+  const yyyy = date.getFullYear();
+  const dd = String(d).length === 1 ? `0${d}` : d;
+  const mm = String(m).length === 1 ? `0${m}` : m;
+  return `${dd}.${mm}.${yyyy}`;
+};
+
+const stringToDate = x => {
+  const [d, m, y] = x.split('.');
+  return new Date(+y, m - 1, +d);
+};
+
 /* const trimChar = (s, c) => {
   if (s.charAt(0) == c) return trimChar(s.substring(1), c);
   if (s.charAt(s.length - 1) == c)
@@ -44,5 +58,7 @@ export default Object.freeze({
   readFile,
   writeFile,
   commaToDot,
+  dateToString,
+  stringToDate,
   //trimChar,
 });

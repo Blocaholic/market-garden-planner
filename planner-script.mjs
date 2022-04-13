@@ -46,19 +46,7 @@ const boxesPromise = Utils.readFile('data/kistenplanung.csv')
 const plant = (veggies, boxes) => {
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amount]) => {
-      const stringToDate = x => {
-        const [d, m, y] = x.split('.');
-        return new Date(+y, m - 1, +d);
-      };
-      const dateToString = date => {
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        const dayString = String(day).length === 1 ? `0${day}` : day;
-        const monthString = String(month).length === 1 ? `0${month}` : month;
-        return `${dayString}.${monthString}.${year}`;
-      };
-      const boxDate = stringToDate(box.datum);
+      const boxDate = Utils.stringToDate(box.datum);
       const veggieAmount = Utils.commaToDot(amount);
       const anzuchtquote = Utils.commaToDot(veggies[kind].Anzuchtquote || '1');
       const feldquote = Utils.commaToDot(veggies[kind].Feldquote || '1');
@@ -71,9 +59,9 @@ const plant = (veggies, boxes) => {
       const aussaatDatum = new Date(boxDate.getTime());
       aussaatDatum.setDate(boxDate.getDate() - beetdauer - anzuchtdauer);
       console.log(
-        `${dateToString(boxDate)}: ${Math.round(seedAmount * 10) / 10} ${
+        `${Utils.dateToString(boxDate)}: ${Math.round(seedAmount * 10) / 10} ${
           veggies[kind].fullName
-        } am ${dateToString(aussaatDatum)}`
+        } am ${Utils.dateToString(aussaatDatum)}`
       );
     });
   });
