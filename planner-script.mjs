@@ -28,10 +28,14 @@ const formatVeggies = csv => {
         .slice(1)
         .forEach((element, i) => (kulturen[arr[0][i + 1]][row[0]] = element))
     );
-  Object.entries(kulturen).forEach(
-    ([, kultur]) =>
-      (kultur.fullName = `${kultur.Kulturname} ${kultur.Sortenname}`)
-  );
+  Object.entries(kulturen).forEach(([, kultur]) => {
+    kultur.fullName = `${kultur.Kulturname} ${kultur.Sortenname}`;
+    kultur.Anzuchtquote = Utils.commaToDot(kultur.Anzuchtquote || '1');
+    kultur.Feldquote = Utils.commaToDot(kultur.Feldquote || '1');
+    kultur['Erntemenge pro Ernte'] = Utils.commaToDot(
+      kultur['Erntemenge pro Ernte']
+    );
+  });
   return Utils.deepFreeze(kulturen);
 };
 
@@ -43,27 +47,26 @@ const boxesPromise = Utils.readFile('data/kistenplanung.csv')
   .then(formatBoxes)
   .catch(console.error);
 
-const plant = (veggies, boxes) => {
+const plant = (veggies, boxes, numberOfBoxes) => {
   const plantSets = [];
   boxes.forEach(box => {
-    Object.entries(box.ingredients).forEach(([kind, amount]) => {
-      const anzuchtquote = Utils.commaToDot(veggies[kind].Anzuchtquote || '1');
-      const feldquote = Utils.commaToDot(veggies[kind].Feldquote || '1');
-      const cropAmount = Utils.commaToDot(
-        veggies[kind]['Erntemenge pro Ernte']
+    Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
+      const seedAmount = Math.ceil(
+        (amountPerBox * numberOfBoxes) /
+          veggies[kind]['Erntemenge pro Ernte'] /
+          veggies[kind].Feldquote /
+          veggies[kind].Anzuchtquote
       );
 
-      const seedAmount = amount / cropAmount / feldquote / anzuchtquote;
-      const beetdauer = veggies[kind]['Kulturdauer am Beet'];
-      const anzuchtdauer = veggies[kind].Anzuchtzeit;
-
-      const aussaatDatum = new Date(box.datum.getTime());
-      aussaatDatum.setDate(box.datum.getDate() - beetdauer - anzuchtdauer);
+      const bedTime = veggies[kind]['Kulturdauer am Beet'];
+      const quickpotTime = veggies[kind].Anzuchtzeit;
+      const sowingDate = new Date(box.datum.getTime());
+      sowingDate.setDate(box.datum.getDate() - bedTime - quickpotTime);
 
       plantSets.push(
-        `${Utils.dateToString(box.datum)}: ${
-          Math.round(seedAmount * 10) / 10
-        } ${veggies[kind].fullName} am ${Utils.dateToString(aussaatDatum)}`
+        `${Utils.dateToString(box.datum)}: ${seedAmount} ${
+          veggies[kind].fullName
+        } am ${Utils.dateToString(sowingDate)}`
       );
     });
   });
@@ -71,7 +74,7 @@ const plant = (veggies, boxes) => {
 };
 
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
-  const plantSets = plant(veggies, boxes);
+  const plantSets = plant(veggies, boxes, 174);
   console.log(plantSets);
   Utils.commaToDot;
   //View.printBoxes({veggies, boxes});
