@@ -22,7 +22,15 @@ const readFile = path =>
     )
   );
 
-const commaToDot = n => n.replace(',', '.');
+const commaToDot = n => {
+  n = '' + n;
+  return n.replace(',', '.');
+};
+
+const dotToComma = n => {
+  n = '' + n;
+  return n.replace('.', ',');
+};
 
 const dateToString = date => {
   const d = date.getDate();
@@ -36,6 +44,16 @@ const dateToString = date => {
 const stringToDate = x => {
   const [d, m, y] = x.split('.');
   return new Date(+y, m - 1, +d);
+};
+
+const addDaysToDate = (origin, days) => {
+  if (origin.constructor.name !== 'Date')
+    throw 'First Property of "addDaysToDate()" has to be instance of "Date"';
+  if (typeof days !== 'number')
+    throw 'Second Property of "addDaysToDate()" has to be of type "number"';
+  const result = new Date(origin.getTime());
+  result.setDate(result.getDate() + days);
+  return result;
 };
 
 /* const trimChar = (s, c) => {
@@ -58,7 +76,9 @@ export default Object.freeze({
   readFile,
   writeFile,
   commaToDot,
+  dotToComma,
   dateToString,
   stringToDate,
+  addDaysToDate,
   //trimChar,
 });

@@ -32,18 +32,33 @@ const formatVeggies = csv => {
     kultur.fullName = `${kultur.Kulturname} ${kultur.Sortenname}`;
     kultur.Anzuchtquote = Utils.commaToDot(kultur.Anzuchtquote || '1');
     kultur.Feldquote = Utils.commaToDot(kultur.Feldquote || '1');
-    kultur['Erntemenge pro Ernte'] = Utils.commaToDot(
-      kultur['Erntemenge pro Ernte']
+    kultur['Erntemenge pro Ernte'] = Number(
+      Utils.commaToDot(kultur['Erntemenge pro Ernte'])
     );
+    if (kultur['Erntemenge pro Ernte'] === 0)
+      throw 'Erwartete Erntemenge darf nicht Null sein!';
+    kultur['Erntehäufigkeit pro Pflanze'] = Number(
+      kultur['Erntehäufigkeit pro Pflanze']
+    );
+    kultur['Kulturdauer am Beet'] = Number(kultur['Kulturdauer am Beet']);
+    kultur.Anzuchtzeit = Number(kultur.Anzuchtzeit);
+    kultur.Erntezeittoleranz = Number(kultur.Erntezeittoleranz);
+    kultur.Ernteintervall = Number(kultur.Ernteintervall);
+    kultur.Ernteintervall =
+      kultur.Ernteintervall <= 7 && kultur.Ernteintervall > 0
+        ? 7
+        : Math.round(kultur.Ernteintervall / 7) * 7;
+    kultur.Quickpot = Number(kultur.Quickpot);
+    kultur.Vorziehen = kultur.Vorziehen === 'ja';
   });
   return Utils.deepFreeze(kulturen);
 };
 
-const veggiesPromise = Utils.readFile('data/sortensteckbriefe.csv')
+const veggiesPromise = Utils.readFile('./data/sortensteckbriefe.csv')
   .then(formatVeggies)
   .catch(console.error);
 
-const boxesPromise = Utils.readFile('data/kistenplanung.csv')
+const boxesPromise = Utils.readFile('./data/kistenplanung.csv')
   .then(formatBoxes)
   .catch(console.error);
 
@@ -51,28 +66,158 @@ const plant = (veggies, boxes, numberOfBoxes) => {
   const plantSets = [];
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
+      let planned = false;
+      const bedTime = veggies[kind]['Kulturdauer am Beet'];
+      const quickpotTime = veggies[kind].Anzuchtzeit;
       const seedAmount = Math.ceil(
         (amountPerBox * numberOfBoxes) /
           veggies[kind]['Erntemenge pro Ernte'] /
           veggies[kind].Feldquote /
           veggies[kind].Anzuchtquote
       );
+      plantSets
+        .filter(plantSet => plantSet.kind === kind)
+        .forEach(plantSet => {
+          if (planned) return;
+          if (veggies[kind]['Erntehäufigkeit pro Pflanze'] === 1) {
+            const minDate = new Date(plantSet.sowingDate.getTime());
+            minDate.setDate(
+              plantSet.sowingDate.getDate() + bedTime + quickpotTime
+            );
+            const maxDate = new Date(minDate.getTime());
+            maxDate.setDate(
+              minDate.getDate() + veggies[kind]['Erntezeittoleranz']
+            );
+            const minTime = minDate.getTime();
+            const maxTime = maxDate.getTime();
+            const cropTime = box.datum.getTime();
+            if (cropTime >= minTime && cropTime <= maxTime) {
+              plantSet.seedAmount += seedAmount;
+              plantSet.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              planned = true;
+            }
+            return;
+          }
+          if (
+            veggies[kind]['Erntehäufigkeit pro Pflanze'] > plantSet.crops.length
+          ) {
+            const getPossibleCropTimes = (plantSet, veggie) => {
+              let tempDate = new Date(plantSet.sowingDate.getTime());
+              tempDate.setDate(
+                tempDate.getDate() +
+                  veggie.Anzuchtzeit +
+                  veggie['Kulturdauer am Beet']
+              );
+              let possibleCropTimes = [tempDate.getTime()];
+              const plannedCropTimes = plantSet.crops.map(crop =>
+                crop[0].getTime()
+              );
+              for (let i = 1; i < veggie['Erntehäufigkeit pro Pflanze']; i++) {
+                tempDate.setDate(tempDate.getDate() + veggie.Ernteintervall);
+                if (!plannedCropTimes.includes(tempDate.getTime()))
+                  possibleCropTimes.push(tempDate.getTime());
+              }
+              return possibleCropTimes;
+            };
+            const cropTime = box.datum.getTime();
+            const possibleCropTimes = getPossibleCropTimes(
+              plantSet,
+              veggies[kind]
+            );
+            if (!possibleCropTimes.includes(cropTime)) {
+              const cropDate = new Date(cropTime);
+              const possibleCropDates = possibleCropTimes
+                .map(x => new Date(x))
+                .map(x => Utils.dateToString(x));
+              return;
+            }
+            const grownCrop =
+              plantSet.seedAmount *
+              veggies[kind].Anzuchtquote *
+              veggies[kind].Feldquote *
+              veggies[kind]['Erntemenge pro Ernte'];
+            const neededCrop = amountPerBox * numberOfBoxes;
+            if (grownCrop >= neededCrop) {
+              plantSet.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              planned = true;
+              return;
+            } else {
+              console.error(
+                `Benötigte Erntemenge (${neededCrop}) ist größer als von bestehendem Satz zu ernten (${grownCrop}). Neuer Satz ${veggies[kind].fullName} wird geplant!`
+              );
+            }
+          }
+        });
 
-      const bedTime = veggies[kind]['Kulturdauer am Beet'];
-      const quickpotTime = veggies[kind].Anzuchtzeit;
       const sowingDate = new Date(box.datum.getTime());
       sowingDate.setDate(box.datum.getDate() - bedTime - quickpotTime);
 
-      plantSets.push(
-        `${Utils.dateToString(box.datum)}: ${seedAmount} ${
-          veggies[kind].fullName
-        } am ${Utils.dateToString(sowingDate)}`
-      );
+      if (!planned)
+        plantSets.push({
+          kind,
+          sowingDate,
+          seedAmount,
+          crops: [[box.datum, amountPerBox * numberOfBoxes]],
+        });
     });
   });
   return plantSets;
 };
 
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
-  console.log(plant(veggies, boxes, 174));
+  const plants = plant(veggies, boxes, 174);
+  plants.forEach(plant => {
+    console.log(
+      `Aussaat: ${plant.seedAmount} ${
+        veggies[plant.kind].fullName
+      } am ${Utils.dateToString(plant.sowingDate)} mit folgenden Ernten:`
+    );
+    plant.crops.forEach(crop =>
+      console.log(
+        `${Utils.dateToString(crop[0])}: ${Math.round(crop[1] * 100) / 100}`
+      )
+    );
+  });
+
+  console.log(`Aussaaten gesamt: ${plants.length}`);
+
+  const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
+  const csv = plants.reduce((csv, plant) => {
+    const quickpotSize = veggies[plant.kind].Vorziehen
+      ? veggies[plant.kind].Quickpot
+      : '';
+    const quickpotAmount = Utils.dotToComma(
+      veggies[plant.kind].Vorziehen
+        ? Math.round((plant.seedAmount / quickpotSize) * 100) / 100
+        : ''
+    );
+    const bedStartDate = veggies[plant.kind].Vorziehen
+      ? Utils.dateToString(
+          Utils.addDaysToDate(plant.sowingDate, veggies[plant.kind].Anzuchtzeit)
+        )
+      : Utils.dateToString(plant.sowingDate);
+    const bedAmount = veggies[plant.kind].Vorziehen
+      ? plant.seedAmount * veggies[plant.kind].Anzuchtquote
+      : plant.seedAmount;
+    const bedLength = Utils.dotToComma(
+      Math.round(
+        (bedAmount /
+          ((100 / veggies[plant.kind].Pflanzabstand) *
+            Math.floor(75 / veggies[plant.kind].Reihenabstand))) *
+          100
+      ) / 100
+    );
+    const finalCropDate = Utils.dateToString(
+      plant.crops.reduce(
+        (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
+        new Date(0)
+      )
+    );
+    const row = `${Utils.dateToString(plant.sowingDate)};${plant.seedAmount};${
+      veggies[plant.kind].fullName
+    };${quickpotAmount};${quickpotSize};${bedStartDate};${bedLength};${finalCropDate}`;
+    return `${csv}\n${row}`;
+  }, head);
+
+  Utils.writeFile('./data/output/plantSets.csv', csv);
 });
