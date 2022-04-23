@@ -8,27 +8,26 @@ const plant = (veggies, boxes, numberOfBoxes) => {
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
       let planned = false;
-      const bedDuration = veggies[kind]['Kulturdauer am Beet'];
-      const quickpotDuration = veggies[kind].Anzuchtzeit;
+      const veggie = veggies[kind];
+      const bedDuration = veggie['Kulturdauer am Beet'];
+      const quickpotDuration = veggie.Anzuchtzeit;
       const seedAmount = Math.ceil(
         (amountPerBox * numberOfBoxes) /
-          veggies[kind]['Erntemenge pro Ernte'] /
-          veggies[kind].Feldquote /
-          veggies[kind].Anzuchtquote
+          veggie['Erntemenge pro Ernte'] /
+          veggie.Feldquote /
+          veggie.Anzuchtquote
       );
       plantSets
         .filter(plantSet => plantSet.kind === kind)
         .forEach(plantSet => {
           if (planned) return;
-          if (veggies[kind].isSingleCrop) {
+          if (veggie.isSingleCrop) {
             const minDate = new Date(plantSet.sowingDate.getTime());
             minDate.setDate(
               plantSet.sowingDate.getDate() + bedDuration + quickpotDuration
             );
             const maxDate = new Date(minDate.getTime());
-            maxDate.setDate(
-              minDate.getDate() + veggies[kind]['Erntezeittoleranz']
-            );
+            maxDate.setDate(minDate.getDate() + veggie['Erntezeittoleranz']);
             const minTime = minDate.getTime();
             const maxTime = maxDate.getTime();
             const cropTime = box.datum.getTime();
@@ -39,9 +38,7 @@ const plant = (veggies, boxes, numberOfBoxes) => {
             }
             return;
           }
-          if (
-            veggies[kind]['Erntehäufigkeit pro Pflanze'] > plantSet.crops.length
-          ) {
+          if (veggie['Erntehäufigkeit pro Pflanze'] > plantSet.crops.length) {
             const getPossibleCropTimes = (plantSet, veggie) => {
               let tempDate = new Date(plantSet.sowingDate.getTime());
               tempDate.setDate(
@@ -61,10 +58,7 @@ const plant = (veggies, boxes, numberOfBoxes) => {
               return possibleCropTimes;
             };
             const cropTime = box.datum.getTime();
-            const possibleCropTimes = getPossibleCropTimes(
-              plantSet,
-              veggies[kind]
-            );
+            const possibleCropTimes = getPossibleCropTimes(plantSet, veggie);
             if (!possibleCropTimes.includes(cropTime)) {
               const cropDate = new Date(cropTime);
               const possibleCropDates = possibleCropTimes
@@ -74,9 +68,9 @@ const plant = (veggies, boxes, numberOfBoxes) => {
             }
             const grownCrop =
               plantSet.seedAmount *
-              veggies[kind].Anzuchtquote *
-              veggies[kind].Feldquote *
-              veggies[kind]['Erntemenge pro Ernte'];
+              veggie.Anzuchtquote *
+              veggie.Feldquote *
+              veggie['Erntemenge pro Ernte'];
             const neededCrop = amountPerBox * numberOfBoxes;
             if (grownCrop >= neededCrop) {
               plantSet.crops.push([box.datum, amountPerBox * numberOfBoxes]);
