@@ -9,7 +9,7 @@ const plant = (veggies, boxes, numberOfBoxes) => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
       let planned = false;
       const bedDuration = veggies[kind]['Kulturdauer am Beet'];
-      const quickpotTime = veggies[kind].Anzuchtzeit;
+      const quickpotDuration = veggies[kind].Anzuchtzeit;
       const seedAmount = Math.ceil(
         (amountPerBox * numberOfBoxes) /
           veggies[kind]['Erntemenge pro Ernte'] /
@@ -23,7 +23,7 @@ const plant = (veggies, boxes, numberOfBoxes) => {
           if (veggies[kind].isSingleCrop) {
             const minDate = new Date(plantSet.sowingDate.getTime());
             minDate.setDate(
-              plantSet.sowingDate.getDate() + bedDuration + quickpotTime
+              plantSet.sowingDate.getDate() + bedDuration + quickpotDuration
             );
             const maxDate = new Date(minDate.getTime());
             maxDate.setDate(
@@ -91,7 +91,7 @@ const plant = (veggies, boxes, numberOfBoxes) => {
         });
 
       const sowingDate = new Date(box.datum.getTime());
-      sowingDate.setDate(box.datum.getDate() - bedDuration - quickpotTime);
+      sowingDate.setDate(box.datum.getDate() - bedDuration - quickpotDuration);
 
       if (!planned)
         plantSets.push({
