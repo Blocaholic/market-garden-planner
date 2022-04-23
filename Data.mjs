@@ -37,6 +37,8 @@ const formatVeggies = csv => {
     kultur['Erntehäufigkeit pro Pflanze'] = Number(
       kultur['Erntehäufigkeit pro Pflanze']
     );
+    kultur.isSingleCrop = kultur['Erntehäufigkeit pro Pflanze'] === 1;
+    kultur.isMultiCrop = kultur['Erntehäufigkeit pro Pflanze'] > 1;
     kultur['Kulturdauer am Beet'] = Number(kultur['Kulturdauer am Beet']);
     kultur.Anzuchtzeit = Number(kultur.Anzuchtzeit);
     kultur.Erntezeittoleranz = Number(kultur.Erntezeittoleranz);
