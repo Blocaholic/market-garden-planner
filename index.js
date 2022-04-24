@@ -239,11 +239,9 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
               planned = true;
               return;
             } else {
-              console.error(
-                `Benötigte Erntemenge (${neededCrop}) ist größer als von \
-                bestehendem Satz zu ernten (${grownCrop}). Neuer Satz \
-                ${veggies[kind].fullName} wird geplant!`
-              );
+              console.error(`\
+Benötigte Erntemenge (${neededCrop}) ist größer als von bestehendem Satz zu \
+ernten (${grownCrop}). Neuer Satz ${veggies[kind].fullName} wird geplant!`);
             }
           }
         });
