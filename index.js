@@ -152,9 +152,24 @@ const View = new (function () {
           )}`
       )
     );
+  this.printSowings = (sowings, veggies) => {
+    sowings.forEach(sowing => {
+      console.log(
+        `Aussaat: ${sowing.seedAmount} ${
+          veggies[sowing.kind].fullName
+        } am ${Utils.dateToString(sowing.sowingDate)} mit folgenden Ernten:`
+      );
+      sowing.crops.forEach(crop =>
+        console.log(
+          `${Utils.dateToString(crop[0])}: ${Math.round(crop[1] * 100) / 100}`
+        )
+      );
+    });
+    console.log(`Aussaaten gesamt: ${sowings.length}`);
+  };
 })();
 
-const plant = (veggies, boxes, numberOfBoxes) => {
+const planSowings = (veggies, boxes, numberOfBoxes) => {
   const plantSets = [];
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
@@ -254,24 +269,11 @@ const veggiesPromise = Data.getVeggies();
 const boxesPromise = Data.getBoxes();
 
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
-  const plants = plant(veggies, boxes, 174);
-  plants.forEach(plant => {
-    console.log(
-      `Aussaat: ${plant.seedAmount} ${
-        veggies[plant.kind].fullName
-      } am ${Utils.dateToString(plant.sowingDate)} mit folgenden Ernten:`
-    );
-    plant.crops.forEach(crop =>
-      console.log(
-        `${Utils.dateToString(crop[0])}: ${Math.round(crop[1] * 100) / 100}`
-      )
-    );
-  });
-
-  console.log(`Aussaaten gesamt: ${plants.length}`);
+  const sowings = planSowings(veggies, boxes, 174);
+  View.printSowings(sowings, veggies);
 
   const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
-  const csv = plants.reduce((csv, plant) => {
+  const csv = sowings.reduce((csv, plant) => {
     const quickpotSize = veggies[plant.kind].Vorziehen
       ? veggies[plant.kind].Quickpot
       : '';
