@@ -170,7 +170,7 @@ const View = new (function () {
 })();
 
 const planSowings = (veggies, boxes, numberOfBoxes) => {
-  const plantSets = [];
+  const sowings = [];
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
       let planned = false;
@@ -183,14 +183,14 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
           veggie.Feldquote /
           veggie.Anzuchtquote
       );
-      plantSets
-        .filter(plantSet => plantSet.kind === kind)
-        .forEach(plantSet => {
+      sowings
+        .filter(sowing => sowing.kind === kind)
+        .forEach(sowing => {
           if (planned) return;
           if (veggie.isSingleCrop) {
-            const minDate = new Date(plantSet.sowingDate.getTime());
+            const minDate = new Date(sowing.sowingDate.getTime());
             minDate.setDate(
-              plantSet.sowingDate.getDate() + bedDuration + quickpotDuration
+              sowing.sowingDate.getDate() + bedDuration + quickpotDuration
             );
             const maxDate = new Date(minDate.getTime());
             maxDate.setDate(minDate.getDate() + veggie['Erntezeittoleranz']);
@@ -198,22 +198,22 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
             const maxTime = maxDate.getTime();
             const cropTime = box.datum.getTime();
             if (cropTime >= minTime && cropTime <= maxTime) {
-              plantSet.seedAmount += seedAmount;
-              plantSet.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              sowing.seedAmount += seedAmount;
+              sowing.crops.push([box.datum, amountPerBox * numberOfBoxes]);
               planned = true;
             }
             return;
           }
-          if (veggie['Erntehäufigkeit pro Pflanze'] > plantSet.crops.length) {
-            const getPossibleCropTimes = (plantSet, veggie) => {
-              let tempDate = new Date(plantSet.sowingDate.getTime());
+          if (veggie['Erntehäufigkeit pro Pflanze'] > sowing.crops.length) {
+            const getPossibleCropTimes = (sowing, veggie) => {
+              let tempDate = new Date(sowing.sowingDate.getTime());
               tempDate.setDate(
                 tempDate.getDate() +
                   veggie.Anzuchtzeit +
                   veggie['Kulturdauer am Beet']
               );
               let possibleCropTimes = [tempDate.getTime()];
-              const plannedCropTimes = plantSet.crops.map(crop =>
+              const plannedCropTimes = sowing.crops.map(crop =>
                 crop[0].getTime()
               );
               for (let i = 1; i < veggie['Erntehäufigkeit pro Pflanze']; i++) {
@@ -224,7 +224,7 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
               return possibleCropTimes;
             };
             const cropTime = box.datum.getTime();
-            const possibleCropTimes = getPossibleCropTimes(plantSet, veggie);
+            const possibleCropTimes = getPossibleCropTimes(sowing, veggie);
             if (!possibleCropTimes.includes(cropTime)) {
               const cropDate = new Date(cropTime);
               const possibleCropDates = possibleCropTimes
@@ -233,13 +233,13 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
               return;
             }
             const grownCrop =
-              plantSet.seedAmount *
+              sowing.seedAmount *
               veggie.Anzuchtquote *
               veggie.Feldquote *
               veggie['Erntemenge pro Ernte'];
             const neededCrop = amountPerBox * numberOfBoxes;
             if (grownCrop >= neededCrop) {
-              plantSet.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              sowing.crops.push([box.datum, amountPerBox * numberOfBoxes]);
               planned = true;
               return;
             } else {
@@ -254,7 +254,7 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
       sowingDate.setDate(box.datum.getDate() - bedDuration - quickpotDuration);
 
       if (!planned)
-        plantSets.push({
+        sowings.push({
           kind,
           sowingDate,
           seedAmount,
@@ -262,7 +262,7 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
         });
     });
   });
-  return plantSets;
+  return sowings;
 };
 
 const veggiesPromise = Data.getVeggies();
@@ -310,5 +310,5 @@ Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
     return `${csv}\n${row}`;
   }, head);
 
-  Utils.writeFile('./data/output/plantSets.csv', csv);
+  Utils.writeFile('./data/output/sowings.csv', csv);
 });
