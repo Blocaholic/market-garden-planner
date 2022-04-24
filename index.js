@@ -171,6 +171,20 @@ const View = new (function () {
 
 const planSowings = (veggies, boxes, numberOfBoxes) => {
   const sowings = [];
+  const getPossibleCropTimes = (sowing, veggie) => {
+    let tempDate = new Date(sowing.sowingDate.getTime());
+    tempDate.setDate(
+      tempDate.getDate() + veggie.Anzuchtzeit + veggie['Kulturdauer am Beet']
+    );
+    let possibleCropTimes = [tempDate.getTime()];
+    const plannedCropTimes = sowing.crops.map(crop => crop[0].getTime());
+    for (let i = 1; i < veggie['Erntehäufigkeit pro Pflanze']; i++) {
+      tempDate.setDate(tempDate.getDate() + veggie.Ernteintervall);
+      if (!plannedCropTimes.includes(tempDate.getTime()))
+        possibleCropTimes.push(tempDate.getTime());
+    }
+    return possibleCropTimes;
+  };
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
       let planned = false;
@@ -205,24 +219,6 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
             return;
           }
           if (veggie['Erntehäufigkeit pro Pflanze'] > sowing.crops.length) {
-            const getPossibleCropTimes = (sowing, veggie) => {
-              let tempDate = new Date(sowing.sowingDate.getTime());
-              tempDate.setDate(
-                tempDate.getDate() +
-                  veggie.Anzuchtzeit +
-                  veggie['Kulturdauer am Beet']
-              );
-              let possibleCropTimes = [tempDate.getTime()];
-              const plannedCropTimes = sowing.crops.map(crop =>
-                crop[0].getTime()
-              );
-              for (let i = 1; i < veggie['Erntehäufigkeit pro Pflanze']; i++) {
-                tempDate.setDate(tempDate.getDate() + veggie.Ernteintervall);
-                if (!plannedCropTimes.includes(tempDate.getTime()))
-                  possibleCropTimes.push(tempDate.getTime());
-              }
-              return possibleCropTimes;
-            };
             const cropTime = box.datum.getTime();
             const possibleCropTimes = getPossibleCropTimes(sowing, veggie);
             if (!possibleCropTimes.includes(cropTime)) {
@@ -244,7 +240,9 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
               return;
             } else {
               console.error(
-                `Benötigte Erntemenge (${neededCrop}) ist größer als von bestehendem Satz zu ernten (${grownCrop}). Neuer Satz ${veggies[kind].fullName} wird geplant!`
+                `Benötigte Erntemenge (${neededCrop}) ist größer als von \
+                bestehendem Satz zu ernten (${grownCrop}). Neuer Satz \
+                ${veggies[kind].fullName} wird geplant!`
               );
             }
           }
