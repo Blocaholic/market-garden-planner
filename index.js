@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
 const fs = require('fs');
 
 const Utils = new (function () {
@@ -76,7 +75,7 @@ const Utils = new (function () {
 })();
 
 const Data = new (function () {
-  const formatBoxes = csv => {
+  const _formatBoxes = csv => {
     const arr = Utils.parseCSV(csv);
     const head = arr[0].slice(1);
     const boxes = new Array(arr.length - 1).fill().map(Object);
@@ -91,7 +90,7 @@ const Data = new (function () {
     return Utils.deepFreeze(boxes);
   };
 
-  const formatVeggies = csv => {
+  const _formatVeggies = csv => {
     const arr = Utils.parseCSV(csv);
     const kulturen = {};
     arr[0].slice(1).forEach(id => (kulturen[id] = {}));
@@ -132,12 +131,12 @@ const Data = new (function () {
 
   this.getVeggies = () =>
     Utils.readFile('./data/sortensteckbriefe.csv')
-      .then(formatVeggies)
+      .then(_formatVeggies)
       .catch(console.error);
 
   this.getBoxes = () =>
     Utils.readFile('./data/kistenplanung.csv')
-      .then(formatBoxes)
+      .then(_formatBoxes)
       .catch(console.error);
 })();
 
