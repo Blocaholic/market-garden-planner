@@ -1,21 +1,21 @@
-ID;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46
+id;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46
 Kulturname;Radieschen;Radieschen;Karotte;Salat;Salat;Salat;Salat;Salat;Fenchel;Rote Beete;Rote Beete;Rote Beete;Mairübe;Mairübe;Kohlrabi;Kohlrabi;Weißkohl;Rotkohl;Spitzkohl;Blumenkohl;Blumenkohl;Brokkoli;Wirsing;Grünkohl;Frühlingszwiebel;Frühlingszwiebel;Lauch;Lauch;Lauch;Rettich;Rettich;Erbsen;Erbsen;Bohnen;Gurken;Spinat;Mangold;Rauke;Paprika;Zucchini;Tomate;Aubergine;Stangensellerie;Kräuter;Tomate;Tomate
 Sortenname;Cherry belle;Rudi;Final;Lucinde;Baby Leaf;Endivie;Zuckerhut;Feldsalat;Perfektion;Gesche;Robuschka;Jannis;Golden Ball;Jaune boule d’or;Lanro;Noriko;Juni Riesen;Romica;Ersteling / Express;Odysseus;Neckarperle;Calinaro;Vorbote 3;Halbhoher Krauser;Ishikura Long White;Red Toga;Hilari;starozagorski kamuš;Blaugrüner Winter;Laurin;Runder Schwarzer Winter;Zuckerschoten;Zuckerknackerbsen;;;;;;;Zuboda;Fleisch;;;;Salat;Cocktail
 Reihenabstand;15;15;15;25;6;25;25;15;25;20;20;20;20;20;20;20;35;35;35;35;35;35;35;35;25;25;25;25;25;15;15;30;30;35;75;15;25;;60;60;70;75;25;25;70;70
 Pflanzabstand;3;3;3;30;1;30;30;5;30;5;5;5;5;5;5;5;45;45;45;45;45;45;45;45;3;3;15;15;15;3;3;2;2;15;40;15;30;;25;60;23;40;30;30;23;23
 Vorziehen;nein;nein;nein;ja;nein;ja;ja;ja;ja;ja;ja;ja;nein;nein;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;ja;nein;nein;nein;nein;nein;ja;ja;ja;nein;ja;ja;ja;ja;ja;ja;ja;ja
 Umtopfen;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein;nein
-Keimtemperatur min;;;;15;15;15;15;15;15;15;15;15;;;18;18;15;15;15;15;15;15;15;15;15;15;18;18;18;;;5;5;15;20;5;15;;23;20;20;20;18;15;20;20
-Keimtemperatur max;;;;18;18;18;18;18;20;20;20;20;;;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;;;;;20;25;18;20;;28;25;25;25;20;20;25;25
-Quickpot;;;;84;;84;84;144;77;144;144;144;;;77;77;77;77;77;77;77;77;77;77;144;144;144;144;144;;;;;;15;84;77;;15;15;15;15;77;77;15;15
-Anzuchtzeit;;;;30;;30;30;30;30;30;30;30;;;30;30;30;30;30;30;30;30;30;60;60;60;70;70;70;30;30;;;;30;30;30;;70;30;60;60;56;30;60;60
-Feldquote;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75
-Anzuchtquote;;;;0,75;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;;;;;;0,75;0,75;0,75;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75
-Kulturdauer am Beet;45;45;90;50;30;90;90;60;75;110;110;110;60;60;70;70;75;70;75;70;70;50;70;;100;100;110;160;170;70;50;90;90;70;100;40;100;60;107;100;121;100;133;133;121;121
+minKeimtemp;;;;15;15;15;15;15;15;15;15;15;;;18;18;15;15;15;15;15;15;15;15;15;15;18;18;18;;;5;5;15;20;5;15;;23;20;20;20;18;15;20;20
+maxKeimtemp;;;;18;18;18;18;18;20;20;20;20;;;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;;;;;20;25;18;20;;28;25;25;25;20;20;25;25
+QuickpotGroesse;;;;84;;84;84;144;77;144;144;144;;;77;77;77;77;77;77;77;77;77;77;144;144;144;144;144;;;;;;15;84;77;;15;15;15;15;77;77;15;15
+QuickpotDauer;;;;30;;30;30;30;30;30;30;30;;;30;30;30;30;30;30;30;30;30;60;60;60;70;70;70;30;30;;;;30;30;30;;70;30;60;60;56;30;60;60
+Ueberlebensrate;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75
+Keimrate;;;;0,75;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75;;;;;;0,75;0,75;0,75;;0,75;0,75;0,75;0,75;0,75;0,75;0,75;0,75
+Beetdauer;45;45;90;50;30;90;90;60;75;110;110;110;60;60;70;70;75;70;75;70;70;50;70;;100;100;110;160;170;70;50;90;90;70;100;40;100;60;107;100;121;100;133;133;121;121
 Beettyp;;;Vlies;Tunnel;;;;;;;;;Vlies;Vlies;Vlies / Tunnel;Vlies / Tunnel;;;;Vlies / Tunnel;Vlies / Tunnel;;;;Überwinterung;Überwinterung;Überwinterung ;Überwinterung;Überwinterung;Tunnel;Tunnel;;;;;Vlies;Vlies;;;;;;;;;
-Erntemenge pro Ernte;1;1;1;1;0,005;1;1;0,005;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0,5;1;1;1;1;1;1;1;0,004;0,004;0,075;2,5;1;0,5;0,5;1;2;3;1;0,5;0,5;3;3
+Ernterate;1;1;1;1;0,005;1;1;0,005;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0,5;1;1;1;1;1;1;1;0,004;0,004;0,075;2,5;1;0,5;0,5;1;2;3;1;0,5;0,5;3;3
 Ernteeinheit;Stück;Stück;Stück;Stück;kg;Stück;Stück;kg;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Stück;Bund;Stück;Stück;Stück;Stück;Stück;Stück;Stück;kg;kg;kg;Stück;kg;Bund;Bund;Stück;Stück;Stück;Stück;Bund;Bund;Stück;Stück
-Erntehäufigkeit pro Pflanze;1;1;1;1;3;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;10;1;1;1;1;1;1;1;3;3;8;10;2;5;;11;10;13;10;;25;13;13
+Erntehaeufigkeit;1;1;1;1;3;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;10;1;1;1;1;1;1;1;3;3;8;10;2;5;;11;10;13;10;;25;13;13
 Ernteintervall;;;;;14;;;;;;;;;;;;;;;;;;;14;;;;;;;;3;3;3;3;7;14;;4;3;4;4;14;14;4;4
 Erntezeittoleranz;14;14;50;14;4;14;14;50;14;21;21;21;30;21;14;14;14;14;14;14;14;14;14;21;30;30;30;30;30;14;14;1;1;1;1;10;14;;1;1;1;1;14;14;1;1
 Bemerkungen;Frühjahr und Herbst;Ganzjahr;Ganzjahr;Ganzjahr;Ganzjahr;Herbst;Herbst;Herbst;Frühjahr und Herbst;Ganzjahr;Ganzjahr;Ganzjahr;Frühjahr und Herbst;Frühjahr und Herbst;;;;;;;;;;;;;;;;Ganzjahr;Winter;;;;;;;;;;;;;;;
