@@ -198,6 +198,24 @@ const View = new (function () {
     });
     console.log(`Aussaaten gesamt: ${sowings.length}`);
   };
+  this.saveSowingsAsCsv = (sowings, veggies) => {
+    const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
+    const csv = sowings.reduce((csv, sowing) => {
+      const veggie = veggies[sowing.kind];
+      const quickpotSize = veggie.preGrow ? veggie.quickpotSize : '';
+      const quickpotAmount = Utils.dotToComma(sowing.quickpotAmount);
+      const bedStartDate = Utils.dateToString(sowing.bedStartDate);
+      const bedLength = Utils.dotToComma(sowing.bedLength);
+      const finalCropDate = Utils.dateToString(sowing.finalCropDate);
+      const row = `${Utils.dateToString(sowing.sowingDate)};${
+        sowing.seedAmount
+      };${
+        veggie.fullName
+      };${quickpotAmount};${quickpotSize};${bedStartDate};${bedLength};${finalCropDate}`;
+      return `${csv}\n${row}`;
+    }, head);
+    Utils.writeFile('./data/output/sowings.csv', csv);
+  };
 })();
 
 const planSowings = (veggies, boxes, numberOfBoxes) => {
@@ -291,6 +309,28 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
         });
     });
   });
+  sowings.forEach(sowing => {
+    const veggie = veggies[sowing.kind];
+    sowing.quickpotAmount = veggie.preGrow
+      ? Math.round((sowing.seedAmount / veggie.quickpotSize) * 100) / 100
+      : '';
+    sowing.bedStartDate = veggie.preGrow
+      ? Utils.addDaysToDate(sowing.sowingDate, veggie.quickpotDuration)
+      : sowing.sowingDate;
+    sowing.bedLength =
+      Math.round(
+        ((veggie.preGrow
+          ? sowing.seedAmount * veggie.germinationRate
+          : sowing.seedAmount) /
+          ((100 / veggie.plantingDistance) *
+            Math.floor(75 / veggie.rowSpacing))) *
+          100
+      ) / 100;
+    sowing.finalCropDate = sowing.crops.reduce(
+      (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
+      new Date(0)
+    );
+  });
   return sowings;
 };
 
@@ -300,43 +340,5 @@ const boxesPromise = Data.getBoxes();
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
   const sowings = planSowings(veggies, boxes, 174);
   View.printSowings(sowings, veggies);
-
-  const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
-  const csv = sowings.reduce((csv, plant) => {
-    const veggie = veggies[plant.kind];
-    const quickpotSize = veggie.preGrow ? veggie.quickpotSize : '';
-    const quickpotAmount = Utils.dotToComma(
-      veggie.preGrow
-        ? Math.round((plant.seedAmount / veggie.quickpotSize) * 100) / 100
-        : ''
-    );
-    const bedStartDate = veggie.preGrow
-      ? Utils.dateToString(
-          Utils.addDaysToDate(plant.sowingDate, veggie.quickpotDuration)
-        )
-      : Utils.dateToString(plant.sowingDate);
-    const bedAmount = veggie.preGrow
-      ? plant.seedAmount * veggie.germinationRate
-      : plant.seedAmount;
-    const bedLength = Utils.dotToComma(
-      Math.round(
-        (bedAmount /
-          ((100 / veggie.plantingDistance) *
-            Math.floor(75 / veggie.rowSpacing))) *
-          100
-      ) / 100
-    );
-    const finalCropDate = Utils.dateToString(
-      plant.crops.reduce(
-        (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
-        new Date(0)
-      )
-    );
-    const row = `${Utils.dateToString(plant.sowingDate)};${plant.seedAmount};${
-      veggie.fullName
-    };${quickpotAmount};${quickpotSize};${bedStartDate};${bedLength};${finalCropDate}`;
-    return `${csv}\n${row}`;
-  }, head);
-
-  Utils.writeFile('./data/output/sowings.csv', csv);
+  View.saveSowingsAsCsv(sowings, veggies);
 });
