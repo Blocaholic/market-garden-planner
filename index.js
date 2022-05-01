@@ -12,11 +12,28 @@ const Utils = new (function () {
     return Object.freeze(object);
   };
 
-  this.parseCSV = csv =>
-    csv
+  this.parseCSV = ({
+    csv,
+    separator,
+    objectsInColumns = false,
+    headline = false,
+  }) => {
+    const matrix = csv
       .trim()
       .split('\n')
-      .map(x => x.split(';'));
+      .map(x => x.split(separator));
+    const arrayOfArrays = objectsInColumns ? Utils.transpose(matrix) : matrix;
+    const [headlines, ...objects] = headline
+      ? arrayOfArrays
+      : [[arrayOfArrays[0].map((_, i) => i)], arrayOfArrays];
+    return objects.map(obj => {
+      const result = {};
+      obj.map((x, i) => (result[headlines[i]] = x));
+      return result;
+    });
+  };
+
+  this.transpose = matrix => matrix[0].map((_, i) => matrix.map(row => row[i]));
 
   this.readFile = path =>
     new Promise((resolve, reject) =>
@@ -72,6 +89,8 @@ const Utils = new (function () {
         err ? reject(err) : resolve('File written successful.')
       );
     });
+
+  this.idEquals = id => x => x.id === id;
 })();
 
 const Data = new (function () {
@@ -147,35 +166,32 @@ const Data = new (function () {
   });
 
   const _formatBoxes = csv => {
-    const arr = Utils.parseCSV(csv);
-    const head = arr[0].slice(1);
-    const boxes = new Array(arr.length - 1).fill().map(Object);
-    arr.slice(1).forEach((box, i) => {
-      boxes[i].datum = Utils.stringToDate(box[0]);
-      boxes[i].ingredients = {};
-      box.slice(1).forEach((quantity, j) => {
-        if (quantity)
-          boxes[i].ingredients[head[j]] = Number(Utils.commaToDot(quantity));
-      });
+    const boxes = Utils.parseCSV({
+      csv,
+      separator: ';',
+      headline: true,
     });
-    return Utils.deepFreeze(boxes);
+    return Utils.deepFreeze(
+      boxes.map(box => {
+        const boxObject = {};
+        boxObject.date = Utils.stringToDate(box.date);
+        boxObject.ingredients = Object.entries(box)
+          .filter(x => Number(x[0]))
+          .filter(x => x[1] !== '')
+          .map(x => [Number(x[0]), Number(Utils.commaToDot(x[1]))]);
+        return boxObject;
+      })
+    );
   };
 
   const _formatVeggies = csv => {
-    const arr = Utils.parseCSV(csv);
-    const veggies = {};
-    arr[0].slice(1).forEach(id => (veggies[id] = {}));
-    arr.slice(1).forEach(row => {
-      const rowID = row[0];
-      row
-        .slice(1)
-        .forEach((element, i) => (veggies[arr[0][i + 1]][rowID] = element));
+    const arr = Utils.parseCSV({
+      csv,
+      separator: ';',
+      objectsInColumns: true,
+      headline: true,
     });
-    Object.entries(veggies).forEach(([index, veggie]) => {
-      const veggieObject = new Veggie({id: index, ...veggie});
-      veggies[veggieObject.id] = veggieObject;
-    });
-    return Utils.deepFreeze(veggies);
+    return Utils.deepFreeze(arr.map(veggie => new Veggie(veggie)));
   };
 
   this.getVeggies = () =>
@@ -194,9 +210,12 @@ const View = new (function () {
     console.log(
       data.boxes.map(
         box =>
-          `${box.datum}: ${Object.entries(box.ingredients).reduce(
+          `${box.date}: ${Object.entries(box.ingredients).reduce(
             (prev, curr) =>
-              prev + `${curr[1]} ${data.veggies[curr[0]].fullName}; `,
+              prev +
+              `${curr[1]} ${
+                data.veggies.find(Utils.idEquals(curr[0])).fullName
+              }; `,
             ''
           )}`
       )
@@ -205,7 +224,7 @@ const View = new (function () {
     sowings.forEach(sowing => {
       console.log(
         `Aussaat: ${sowing.seedAmount} ${
-          veggies[sowing.kind].fullName
+          veggies.find(Utils.idEquals(sowing.kind)).fullName
         } am ${Utils.dateToString(sowing.sowingDate)} mit folgenden Ernten:`
       );
       sowing.crops.forEach(crop =>
@@ -219,7 +238,7 @@ const View = new (function () {
   this.saveSowingsAsCsv = (sowings, veggies) => {
     const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
     const csv = sowings.reduce((csv, sowing) => {
-      const veggie = veggies[sowing.kind];
+      const veggie = veggies.find(Utils.idEquals(sowing.kind));
       const quickpotSize = veggie.preGrow ? veggie.quickpotSize : '';
       const quickpotAmount = Utils.dotToComma(sowing.quickpotAmount);
       const bedStartDate = Utils.dateToString(sowing.bedStartDate);
@@ -253,9 +272,9 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
   };
   const sowings = [];
   boxes.forEach(box => {
-    Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
+    box.ingredients.forEach(([kind, amountPerBox]) => {
       let planned = false;
-      const veggie = veggies[kind];
+      const veggie = veggies.find(Utils.idEquals(kind));
       const seedAmount = Math.ceil(
         (amountPerBox * numberOfBoxes) /
           veggie.harvestRate /
@@ -277,16 +296,16 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
             maxDate.setDate(minDate.getDate() + veggie.harvestTolerance);
             const minTime = minDate.getTime();
             const maxTime = maxDate.getTime();
-            const cropTime = box.datum.getTime();
+            const cropTime = box.date.getTime();
             if (cropTime >= minTime && cropTime <= maxTime) {
               sowing.seedAmount += seedAmount;
-              sowing.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              sowing.crops.push([box.date, amountPerBox * numberOfBoxes]);
               planned = true;
             }
             return;
           }
           if (veggie.numberOfHarvests > sowing.crops.length) {
-            const cropTime = box.datum.getTime();
+            const cropTime = box.date.getTime();
             const possibleCropTimes = getPossibleCropTimes(sowing, veggie);
             if (!possibleCropTimes.includes(cropTime)) {
               const cropDate = new Date(cropTime);
@@ -302,7 +321,7 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
               veggie.harvestRate;
             const neededCrop = amountPerBox * numberOfBoxes;
             if (grownCrop >= neededCrop) {
-              sowing.crops.push([box.datum, amountPerBox * numberOfBoxes]);
+              sowing.crops.push([box.date, amountPerBox * numberOfBoxes]);
               planned = true;
               return;
             } else {
@@ -313,9 +332,9 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
           }
         });
 
-      const sowingDate = new Date(box.datum.getTime());
+      const sowingDate = new Date(box.date.getTime());
       sowingDate.setDate(
-        box.datum.getDate() - veggie.bedDuration - veggie.quickpotDuration
+        box.date.getDate() - veggie.bedDuration - veggie.quickpotDuration
       );
 
       if (!planned)
@@ -323,12 +342,12 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
           kind,
           sowingDate,
           seedAmount,
-          crops: [[box.datum, amountPerBox * numberOfBoxes]],
+          crops: [[box.date, amountPerBox * numberOfBoxes]],
         });
     });
   });
   sowings.forEach(sowing => {
-    const veggie = veggies[sowing.kind];
+    const veggie = veggies.find(Utils.idEquals(sowing.kind));
     sowing.quickpotAmount = veggie.preGrow
       ? Math.round((sowing.seedAmount / veggie.quickpotSize) * 100) / 100
       : '';
