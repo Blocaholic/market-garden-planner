@@ -75,6 +75,77 @@ const Utils = new (function () {
 })();
 
 const Data = new (function () {
+  function Veggie({
+    id,
+    culture,
+    variety,
+    rowSpacing,
+    plantingDistance,
+    preGrow,
+    rePot,
+    minGerminationTemp,
+    maxGerminationTemp,
+    quickpotSize,
+    quickpotDuration,
+    survivalRate,
+    germinationRate,
+    bedDuration,
+    bedKind,
+    harvestRate,
+    harvestUnit,
+    numberOfHarvests,
+    harvestInterval,
+    harvestTolerance,
+    comment,
+    description,
+  }) {
+    this.id = Number(id);
+    this.culture = String(culture);
+    this.variety = String(variety || '');
+    this.rowSpacing = Number(rowSpacing);
+    this.plantingDistance = Number(plantingDistance);
+    this.preGrow = Boolean(preGrow === 'ja');
+    this.rePot = Boolean(rePot === 'ja');
+    this.minGerminationTemp = Number(minGerminationTemp) || -Infinity;
+    this.maxGerminationTemp = Number(maxGerminationTemp) || Infinity;
+    this.quickpotSize = Number(quickpotSize);
+    this.quickpotDuration = Number(quickpotDuration);
+    this.survivalRate = Number(Utils.commaToDot(survivalRate || '1'));
+    this.germinationRate = Number(Utils.commaToDot(germinationRate || '1'));
+    this.bedDuration = Number(bedDuration);
+    this.bedKind = String(bedKind || '');
+    this.harvestRate = Number(Utils.commaToDot(harvestRate)) || 0;
+    this.harvestUnit = String(harvestUnit || '');
+    this.numberOfHarvests = Number(numberOfHarvests || 1);
+    this.harvestInterval = Number(harvestInterval) || Infinity;
+    this.harvestInterval =
+      this.harvestInterval <= 7 && this.harvestInterval > 0
+        ? 7
+        : Math.round(this.harvestInterval / 7) * 7;
+    this.harvestTolerance = Number(harvestTolerance);
+    this.comment = String(comment || '');
+    this.description = String(description || '');
+    if (!this.harvestRate) throw 'Erwartete Erntemenge darf nicht Null sein!';
+    Utils.deepFreeze(this);
+  }
+  Object.defineProperties(Veggie.prototype, {
+    fullName: {
+      get() {
+        return `${this.culture} ${this.variety}`;
+      },
+    },
+    isSingleCrop: {
+      get() {
+        return this.numberOfHarvests === 1;
+      },
+    },
+    isMultiCrop: {
+      get() {
+        return this.numberOfHarvests > 1;
+      },
+    },
+  });
+
   const _formatBoxes = csv => {
     const arr = Utils.parseCSV(csv);
     const head = arr[0].slice(1);
@@ -126,36 +197,9 @@ const Data = new (function () {
           (element, i) => (veggies[arr[0][i + 1]][translate[rowID]] = element)
         );
     });
-    Object.entries(veggies).forEach(([, veggie]) => {
-      veggie.rowSpacing = Number(veggie.rowSpacing);
-      veggie.plantingDistance = Number(veggie.plantingDistance);
-      veggie.preGrow = veggie.preGrow === 'ja';
-      veggie.rePot = veggie.rePot === 'ja';
-      veggie.minGerminationTemp =
-        Number(veggie.minGerminationTemp) || -Infinity;
-      veggie.maxGerminationTemp = Number(veggie.maxGerminationTemp) || Infinity;
-      veggie.quickpotSize = Number(veggie.quickpotSize);
-      veggie.quickpotDuration = Number(veggie.quickpotDuration);
-      veggie.survivalRate = Number(
-        Utils.commaToDot(veggie.survivalRate || '1')
-      );
-      veggie.germinationRate = Number(
-        Utils.commaToDot(veggie.germinationRate || '1')
-      );
-      veggie.bedDuration = Number(veggie.bedDuration);
-      veggie.harvestRate = Number(Utils.commaToDot(veggie.harvestRate));
-      veggie.numberOfHarvests = Number(veggie.numberOfHarvests);
-      veggie.harvestInterval = Number(veggie.harvestInterval);
-      veggie.harvestInterval =
-        veggie.harvestInterval <= 7 && veggie.harvestInterval > 0
-          ? 7
-          : Math.round(veggie.harvestInterval / 7) * 7;
-      veggie.harvestTolerance = Number(veggie.harvestTolerance);
-      veggie.fullName = `${veggie.culture} ${veggie.variety}`;
-      veggie.isSingleCrop = veggie.numberOfHarvests === 1;
-      veggie.isMultiCrop = veggie.numberOfHarvests > 1;
-      if (veggie.harvestRate === 0)
-        throw 'Erwartete Erntemenge darf nicht Null sein!';
+    Object.entries(veggies).forEach(([index, veggie]) => {
+      const veggieObject = new Veggie({id: index, ...veggie});
+      veggies[veggieObject.id] = veggieObject;
     });
     return Utils.deepFreeze(veggies);
   };
@@ -219,7 +263,6 @@ const View = new (function () {
 })();
 
 const planSowings = (veggies, boxes, numberOfBoxes) => {
-  const sowings = [];
   const getPossibleCropTimes = (sowing, veggie) => {
     let tempDate = new Date(sowing.sowingDate.getTime());
     tempDate.setDate(
@@ -234,6 +277,7 @@ const planSowings = (veggies, boxes, numberOfBoxes) => {
     }
     return possibleCropTimes;
   };
+  const sowings = [];
   boxes.forEach(box => {
     Object.entries(box.ingredients).forEach(([kind, amountPerBox]) => {
       let planned = false;
