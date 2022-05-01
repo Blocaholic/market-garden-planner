@@ -93,7 +93,7 @@ const Data = new (function () {
     Beettyp: bedKind,
     Ernterate: harvestRate,
     Ernteeinheit: harvestUnit,
-    Erntehauefigkeit: numberOfHarvests,
+    Erntehaeufigkeit: numberOfHarvests,
     Ernteintervall: harvestInterval,
     Erntezeittoleranz: harvestTolerance,
     Bemerkungen: comment,
