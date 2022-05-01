@@ -77,27 +77,27 @@ const Utils = new (function () {
 const Data = new (function () {
   function Veggie({
     id,
-    culture,
-    variety,
-    rowSpacing,
-    plantingDistance,
-    preGrow,
-    rePot,
-    minGerminationTemp,
-    maxGerminationTemp,
-    quickpotSize,
-    quickpotDuration,
-    survivalRate,
-    germinationRate,
-    bedDuration,
-    bedKind,
-    harvestRate,
-    harvestUnit,
-    numberOfHarvests,
-    harvestInterval,
-    harvestTolerance,
-    comment,
-    description,
+    Kulturname: culture,
+    Sortenname: variety,
+    Reihenabstand: rowSpacing,
+    Pflanzabstand: plantingDistance,
+    Vorziehen: preGrow,
+    Umtopfen: rePot,
+    minKeimtemp: minGerminationTemp,
+    maxKeimtemp: maxGerminationTemp,
+    QuickpotGroesse: quickpotSize,
+    QuickpotDauer: quickpotDuration,
+    Ueberlebensrate: survivalRate,
+    Keimrate: germinationRate,
+    Beetdauer: bedDuration,
+    Beettyp: bedKind,
+    Ernterate: harvestRate,
+    Ernteeinheit: harvestUnit,
+    Erntehauefigkeit: numberOfHarvests,
+    Ernteintervall: harvestInterval,
+    Erntezeittoleranz: harvestTolerance,
+    Bemerkungen: comment,
+    Sortenbeschreibung: description,
   }) {
     this.id = Number(id);
     this.culture = String(culture);
@@ -164,38 +164,12 @@ const Data = new (function () {
   const _formatVeggies = csv => {
     const arr = Utils.parseCSV(csv);
     const veggies = {};
-    const translate = {
-      id: 'id',
-      Kulturname: 'culture',
-      Sortenname: 'variety',
-      Reihenabstand: 'rowSpacing',
-      Pflanzabstand: 'plantingDistance',
-      Vorziehen: 'preGrow',
-      Umtopfen: 'rePot',
-      minKeimtemp: 'minGerminationTemp',
-      maxKeimtemp: 'maxGerminationTemp',
-      QuickpotGroesse: 'quickpotSize',
-      QuickpotDauer: 'quickpotDuration',
-      Ueberlebensrate: 'survivalRate',
-      Keimrate: 'germinationRate',
-      Beetdauer: 'bedDuration',
-      Beettyp: 'bedKind',
-      Ernterate: 'harvestRate',
-      Ernteeinheit: 'harvestUnit',
-      Erntehaeufigkeit: 'numberOfHarvests',
-      Ernteintervall: 'harvestInterval',
-      Erntezeittoleranz: 'harvestTolerance',
-      Bemerkungen: 'comment',
-      Sortenbeschreibung: 'description',
-    };
     arr[0].slice(1).forEach(id => (veggies[id] = {}));
     arr.slice(1).forEach(row => {
       const rowID = row[0];
       row
         .slice(1)
-        .forEach(
-          (element, i) => (veggies[arr[0][i + 1]][translate[rowID]] = element)
-        );
+        .forEach((element, i) => (veggies[arr[0][i + 1]][rowID] = element));
     });
     Object.entries(veggies).forEach(([index, veggie]) => {
       const veggieObject = new Veggie({id: index, ...veggie});
