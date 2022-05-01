@@ -165,6 +165,12 @@ const Data = new (function () {
     },
   });
 
+  function Box({date, ingredients}) {
+    this.date = date;
+    this.ingredients = ingredients;
+    Utils.deepFreeze(this);
+  }
+
   const _formatBoxes = csv => {
     const boxes = Utils.parseCSV({
       csv,
@@ -173,13 +179,11 @@ const Data = new (function () {
     });
     return Utils.deepFreeze(
       boxes.map(box => {
-        const boxObject = {};
-        boxObject.date = Utils.stringToDate(box.date);
-        boxObject.ingredients = Object.entries(box)
+        const ingredients = Object.entries(box)
           .filter(x => Number(x[0]))
           .filter(x => x[1] !== '')
           .map(x => [Number(x[0]), Number(Utils.commaToDot(x[1]))]);
-        return boxObject;
+        return new Box({date: Utils.stringToDate(box.date), ingredients});
       })
     );
   };
