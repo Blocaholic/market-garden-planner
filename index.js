@@ -2,6 +2,193 @@
 'use strict';
 const fs = require('fs');
 
+function Veggie({
+  id,
+  Kulturname: culture,
+  Sortenname: variety,
+  Reihenabstand: rowSpacing,
+  Pflanzabstand: plantingDistance,
+  Vorziehen: preGrow,
+  Umtopfen: rePot,
+  minKeimtemp: minGerminationTemp,
+  maxKeimtemp: maxGerminationTemp,
+  QuickpotGroesse: quickpotSize,
+  QuickpotDauer: quickpotDuration,
+  Ueberlebensrate: survivalRate,
+  Keimrate: germinationRate,
+  Beetdauer: bedDuration,
+  Beettyp: bedKind,
+  Ernterate: harvestRate,
+  Ernteeinheit: harvestUnit,
+  Erntehaeufigkeit: numberOfHarvests,
+  Ernteintervall: harvestInterval,
+  Erntezeittoleranz: harvestTolerance,
+  Bemerkungen: comment,
+  Sortenbeschreibung: description,
+}) {
+  this.id = Number(id);
+  this.culture = String(culture);
+  this.variety = String(variety || '');
+  this.rowSpacing = Number(rowSpacing);
+  this.plantingDistance = Number(plantingDistance);
+  this.preGrow = Boolean(preGrow === 'ja');
+  this.rePot = Boolean(rePot === 'ja');
+  this.minGerminationTemp = Number(minGerminationTemp) || -Infinity;
+  this.maxGerminationTemp = Number(maxGerminationTemp) || Infinity;
+  this.quickpotSize = Number(quickpotSize);
+  this.quickpotDuration = Number(quickpotDuration);
+  this.survivalRate = Number(Utils.commaToDot(survivalRate || '1'));
+  this.germinationRate = Number(Utils.commaToDot(germinationRate || '1'));
+  this.bedDuration = Number(bedDuration);
+  this.bedKind = String(bedKind || '');
+  this.harvestRate = Number(Utils.commaToDot(harvestRate)) || 0;
+  this.harvestUnit = String(harvestUnit || '');
+  this.numberOfHarvests = Number(numberOfHarvests || 1);
+  this.harvestInterval = Number(harvestInterval) || Infinity;
+  this.harvestInterval =
+    this.harvestInterval <= 7 && this.harvestInterval > 0
+      ? 7
+      : Math.round(this.harvestInterval / 7) * 7;
+  this.harvestTolerance = Number(harvestTolerance);
+  this.comment = String(comment || '');
+  this.description = String(description || '');
+  if (!this.harvestRate) throw 'Erwartete Erntemenge darf nicht Null sein!';
+  Utils.deepFreeze(this);
+}
+Object.defineProperties(Veggie.prototype, {
+  fullName: {
+    get() {
+      return `${this.culture} ${this.variety}`;
+    },
+  },
+  isSingleCrop: {
+    get() {
+      return this.numberOfHarvests === 1;
+    },
+  },
+  isMultiCrop: {
+    get() {
+      return this.numberOfHarvests > 1;
+    },
+  },
+});
+
+function Crop(date, veggie, amount) {
+  if (!veggie instanceof Veggie)
+    throw new Error('veggie must be of type Veggie');
+  this.date = date;
+  this.veggie = veggie;
+  this.amount = amount;
+  Utils.deepFreeze(this);
+}
+
+function Box(ingredients) {
+  this.ingredients = ingredients;
+  Utils.deepFreeze(this);
+}
+
+function Sowing({veggie, sowingDate, seedAmount, crops}) {
+  if (!veggie instanceof Veggie)
+    throw new Error('veggie must be of type Veggie');
+  if (crops.constructor !== Array) throw new Error('crops must be an Array');
+  crops.forEach(crop => {
+    if (!crop instanceof Crop) throw new Error('crop must be of type Crop');
+  });
+  if (sowingDate.constructor !== Date)
+    throw new Error('sowingDate must be of type Date');
+  if (seedAmount.constructor !== Number)
+    throw new Error('seedAmount must be of type Number');
+  this.veggie = veggie;
+  this.sowingDate = new Date(sowingDate.getTime());
+  this.seedAmount = seedAmount;
+  this.crops = [...crops];
+}
+Object.defineProperties(Sowing.prototype, {
+  quickpotAmount: {
+    get() {
+      return this.veggie.preGrow
+        ? Math.round((this.seedAmount / this.veggie.quickpotSize) * 100) / 100
+        : 0;
+    },
+  },
+  bedStartDate: {
+    get() {
+      return this.veggie.preGrow
+        ? Utils.addDaysToDate(this.sowingDate, this.veggie.quickpotDuration)
+        : this.sowingDate;
+    },
+  },
+  bedLength: {
+    get() {
+      return (
+        Math.round(
+          ((this.veggie.preGrow
+            ? this.seedAmount * this.veggie.germinationRate
+            : this.seedAmount) /
+            ((100 / this.veggie.plantingDistance) *
+              Math.floor(75 / this.veggie.rowSpacing))) *
+            100
+        ) / 100
+      );
+    },
+  },
+  finalCropDate: {
+    get() {
+      return sowing.crops.reduce(
+        (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
+        new Date(0)
+      );
+    },
+  },
+  availableCropDates: {
+    get() {
+      let tempDate = new Date(this.sowingDate.getTime());
+      tempDate.setDate(
+        tempDate.getDate() +
+          this.veggie.quickpotDuration +
+          this.veggie.bedDuration
+      );
+      const firstPossibleCropDate = new Date(tempDate.getTime());
+      const availableCropDates = [
+        firstPossibleCropDate,
+        ...Array.from(Array(this.veggie.numberOfHarvests - 1)).reduce(
+          (acc, _) => [
+            ...acc,
+            new Date(
+              tempDate.setDate(tempDate.getDate() + this.veggie.harvestInterval)
+            ),
+          ],
+          []
+        ),
+      ].filter(
+        date =>
+          !this.crops.map(crop => crop.date.getTime()).includes(date.getTime())
+      );
+      return availableCropDates;
+    },
+  },
+  minHarvestDate: {
+    get() {
+      const tempDate = new Date(this.sowingDate.getTime());
+      tempDate.setDate(
+        this.sowingDate.getDate() +
+          this.veggie.bedDuration +
+          this.veggie.quickpotDuration
+      );
+      return tempDate;
+    },
+  },
+  maxHarvestDate: {
+    get() {
+      const tempDate = new Date(this.minHarvestDate.getTime());
+      tempDate.setDate(
+        this.minHarvestDate.getDate() + this.veggie.harvestTolerance
+      );
+      return tempDate;
+    },
+  },
+});
+
 const Utils = new (function () {
   this.deepFreeze = object => {
     const propNames = Object.getOwnPropertyNames(object);
@@ -94,83 +281,6 @@ const Utils = new (function () {
 })();
 
 const Data = new (function () {
-  function Veggie({
-    id,
-    Kulturname: culture,
-    Sortenname: variety,
-    Reihenabstand: rowSpacing,
-    Pflanzabstand: plantingDistance,
-    Vorziehen: preGrow,
-    Umtopfen: rePot,
-    minKeimtemp: minGerminationTemp,
-    maxKeimtemp: maxGerminationTemp,
-    QuickpotGroesse: quickpotSize,
-    QuickpotDauer: quickpotDuration,
-    Ueberlebensrate: survivalRate,
-    Keimrate: germinationRate,
-    Beetdauer: bedDuration,
-    Beettyp: bedKind,
-    Ernterate: harvestRate,
-    Ernteeinheit: harvestUnit,
-    Erntehaeufigkeit: numberOfHarvests,
-    Ernteintervall: harvestInterval,
-    Erntezeittoleranz: harvestTolerance,
-    Bemerkungen: comment,
-    Sortenbeschreibung: description,
-  }) {
-    this.id = Number(id);
-    this.culture = String(culture);
-    this.variety = String(variety || '');
-    this.rowSpacing = Number(rowSpacing);
-    this.plantingDistance = Number(plantingDistance);
-    this.preGrow = Boolean(preGrow === 'ja');
-    this.rePot = Boolean(rePot === 'ja');
-    this.minGerminationTemp = Number(minGerminationTemp) || -Infinity;
-    this.maxGerminationTemp = Number(maxGerminationTemp) || Infinity;
-    this.quickpotSize = Number(quickpotSize);
-    this.quickpotDuration = Number(quickpotDuration);
-    this.survivalRate = Number(Utils.commaToDot(survivalRate || '1'));
-    this.germinationRate = Number(Utils.commaToDot(germinationRate || '1'));
-    this.bedDuration = Number(bedDuration);
-    this.bedKind = String(bedKind || '');
-    this.harvestRate = Number(Utils.commaToDot(harvestRate)) || 0;
-    this.harvestUnit = String(harvestUnit || '');
-    this.numberOfHarvests = Number(numberOfHarvests || 1);
-    this.harvestInterval = Number(harvestInterval) || Infinity;
-    this.harvestInterval =
-      this.harvestInterval <= 7 && this.harvestInterval > 0
-        ? 7
-        : Math.round(this.harvestInterval / 7) * 7;
-    this.harvestTolerance = Number(harvestTolerance);
-    this.comment = String(comment || '');
-    this.description = String(description || '');
-    if (!this.harvestRate) throw 'Erwartete Erntemenge darf nicht Null sein!';
-    Utils.deepFreeze(this);
-  }
-  Object.defineProperties(Veggie.prototype, {
-    fullName: {
-      get() {
-        return `${this.culture} ${this.variety}`;
-      },
-    },
-    isSingleCrop: {
-      get() {
-        return this.numberOfHarvests === 1;
-      },
-    },
-    isMultiCrop: {
-      get() {
-        return this.numberOfHarvests > 1;
-      },
-    },
-  });
-
-  function Box({date, ingredients}) {
-    this.date = date;
-    this.ingredients = ingredients;
-    Utils.deepFreeze(this);
-  }
-
   const _formatBoxes = csv => {
     const boxes = Utils.parseCSV({
       csv,
@@ -182,8 +292,12 @@ const Data = new (function () {
         const ingredients = Object.entries(box)
           .filter(x => Number(x[0]))
           .filter(x => x[1] !== '')
-          .map(x => [Number(x[0]), Number(Utils.commaToDot(x[1]))]);
-        return new Box({date: Utils.stringToDate(box.date), ingredients});
+          .map(x => [
+            Utils.stringToDate(box.date),
+            Number(x[0]),
+            Number(Utils.commaToDot(x[1])),
+          ]);
+        return new Box(ingredients);
       })
     );
   };
@@ -224,21 +338,37 @@ const View = new (function () {
           )}`
       )
     );
-  this.printSowings = (sowings, veggies) => {
-    sowings.forEach(sowing => {
+
+  this.printSowings = sowings => {
+    sowings.map(sowing => {
       console.log(
-        `Aussaat: ${sowing.seedAmount} ${
-          veggies.find(Utils.idEquals(sowing.kind)).fullName
-        } am ${Utils.dateToString(sowing.sowingDate)} mit folgenden Ernten:`
+        `Aussaat von ${sowing.seedAmount} ${
+          sowing.veggie.fullName
+        } am ${Utils.dateToString(sowing.sowingDate)} mit ${
+          sowing.veggie.numberOfHarvests
+        } möglichen ${
+          sowing.veggie.numberOfHarvests > 1 ? 'Ernten' : 'Ernte'
+        } insgesamt.`
       );
-      sowing.crops.forEach(crop =>
+      console.log(`Geplante Ernten:`);
+      sowing.crops.map(crop =>
         console.log(
-          `${Utils.dateToString(crop[0])}: ${Math.round(crop[1] * 100) / 100}`
+          `${Utils.dateToString(crop.date)}\t${crop.amount} ${
+            crop.veggie.harvestUnit
+          }`
         )
       );
+      console.log(`Noch verfügbare Erntetermine:`);
+      sowing.availableCropDates.length > 0
+        ? sowing.availableCropDates.map(date =>
+            console.log(Utils.dateToString(date))
+          )
+        : console.log('keine');
+      console.log('\n');
     });
-    console.log(`Aussaaten gesamt: ${sowings.length}`);
+    console.log(`Insgesamt geplante Aussaaten: ${sowings.length}`);
   };
+
   this.saveSowingsAsCsv = (sowings, veggies) => {
     const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
     const csv = sowings.reduce((csv, sowing) => {
@@ -259,127 +389,92 @@ const View = new (function () {
   };
 })();
 
-const planSowings = (veggies, boxes, numberOfBoxes) => {
-  const getPossibleCropTimes = (sowing, veggie) => {
-    let tempDate = new Date(sowing.sowingDate.getTime());
-    tempDate.setDate(
-      tempDate.getDate() + veggie.quickpotDuration + veggie.bedDuration
-    );
-    let possibleCropTimes = [tempDate.getTime()];
-    const plannedCropTimes = sowing.crops.map(crop => crop[0].getTime());
-    for (let i = 1; i < veggie.numberOfHarvests; i++) {
-      tempDate.setDate(tempDate.getDate() + veggie.harvestInterval);
-      if (!plannedCropTimes.includes(tempDate.getTime()))
-        possibleCropTimes.push(tempDate.getTime());
-    }
-    return possibleCropTimes;
-  };
-  const sowings = [];
-  boxes.forEach(box => {
-    box.ingredients.forEach(([kind, amountPerBox]) => {
-      let planned = false;
-      const veggie = veggies.find(Utils.idEquals(kind));
-      const seedAmount = Math.ceil(
-        (amountPerBox * numberOfBoxes) /
-          veggie.harvestRate /
-          veggie.survivalRate /
-          veggie.germinationRate
+const planSowing = (crop, sowings) => {
+  const veggie = crop.veggie;
+  const seedAmount = Math.ceil(
+    crop.amount /
+      veggie.harvestRate /
+      veggie.survivalRate /
+      veggie.germinationRate
+  );
+  if (crop.veggie.isMultiCrop) {
+    const compatibleSowing = sowings
+      .filter(sowing => sowing.veggie === veggie)
+      .find(sowing =>
+        sowing.availableCropDates
+          .map(x => x.getTime())
+          .includes(crop.date.getTime())
       );
-      sowings
-        .filter(sowing => sowing.kind === kind)
-        .forEach(sowing => {
-          if (planned) return;
-          if (veggie.isSingleCrop) {
-            const minDate = new Date(sowing.sowingDate.getTime());
-            minDate.setDate(
-              sowing.sowingDate.getDate() +
-                veggie.bedDuration +
-                veggie.quickpotDuration
-            );
-            const maxDate = new Date(minDate.getTime());
-            maxDate.setDate(minDate.getDate() + veggie.harvestTolerance);
-            const minTime = minDate.getTime();
-            const maxTime = maxDate.getTime();
-            const cropTime = box.date.getTime();
-            if (cropTime >= minTime && cropTime <= maxTime) {
-              sowing.seedAmount += seedAmount;
-              sowing.crops.push([box.date, amountPerBox * numberOfBoxes]);
-              planned = true;
-            }
-            return;
-          }
-          if (veggie.numberOfHarvests > sowing.crops.length) {
-            const cropTime = box.date.getTime();
-            const possibleCropTimes = getPossibleCropTimes(sowing, veggie);
-            if (!possibleCropTimes.includes(cropTime)) {
-              const cropDate = new Date(cropTime);
-              const possibleCropDates = possibleCropTimes
-                .map(x => new Date(x))
-                .map(x => Utils.dateToString(x));
-              return;
-            }
-            const grownCrop =
-              sowing.seedAmount *
-              veggie.germinationRate *
-              veggie.survivalRate *
-              veggie.harvestRate;
-            const neededCrop = amountPerBox * numberOfBoxes;
-            if (grownCrop >= neededCrop) {
-              sowing.crops.push([box.date, amountPerBox * numberOfBoxes]);
-              planned = true;
-              return;
-            } else {
-              console.error(`\
+    if (compatibleSowing) {
+      const grownCrop =
+        compatibleSowing.seedAmount *
+        veggie.germinationRate *
+        veggie.survivalRate *
+        veggie.harvestRate;
+      if (grownCrop >= crop.amount) {
+        const updatedSowing = new Sowing(compatibleSowing);
+        updatedSowing.crops.push(crop);
+        return sowings.map(sowing =>
+          sowing === compatibleSowing ? updatedSowing : sowing
+        );
+      } else {
+        console.warn(`\
 Benötigte Erntemenge (${neededCrop}) ist größer als von bestehendem Satz zu \
 ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
-            }
-          }
-        });
-
-      const sowingDate = new Date(box.date.getTime());
-      sowingDate.setDate(
-        box.date.getDate() - veggie.bedDuration - veggie.quickpotDuration
+      }
+    }
+  }
+  if (crop.veggie.isSingleCrop) {
+    const compatibleSowing = sowings
+      .filter(sowing => sowing.veggie === veggie)
+      .find(
+        sowing =>
+          crop.date >= sowing?.minHarvestDate &&
+          crop.date <= sowing?.maxHarvestDate
       );
+    if (compatibleSowing) {
+      const updatedSowing = new Sowing(compatibleSowing);
+      updatedSowing.seedAmount += seedAmount;
+      updatedSowing.crops.push(crop);
+      return sowings.map(sowing =>
+        sowing === compatibleSowing ? updatedSowing : sowing
+      );
+    }
+  }
 
-      if (!planned)
-        sowings.push({
-          kind,
-          sowingDate,
-          seedAmount,
-          crops: [[box.date, amountPerBox * numberOfBoxes]],
-        });
-    });
+  const sowingDate = new Date(crop.date.getTime());
+  sowingDate.setDate(
+    crop.date.getDate() - veggie.bedDuration - veggie.quickpotDuration
+  );
+  const newSowing = new Sowing({
+    veggie,
+    sowingDate,
+    seedAmount,
+    crops: [crop],
   });
-  sowings.forEach(sowing => {
-    const veggie = veggies.find(Utils.idEquals(sowing.kind));
-    sowing.quickpotAmount = veggie.preGrow
-      ? Math.round((sowing.seedAmount / veggie.quickpotSize) * 100) / 100
-      : '';
-    sowing.bedStartDate = veggie.preGrow
-      ? Utils.addDaysToDate(sowing.sowingDate, veggie.quickpotDuration)
-      : sowing.sowingDate;
-    sowing.bedLength =
-      Math.round(
-        ((veggie.preGrow
-          ? sowing.seedAmount * veggie.germinationRate
-          : sowing.seedAmount) /
-          ((100 / veggie.plantingDistance) *
-            Math.floor(75 / veggie.rowSpacing))) *
-          100
-      ) / 100;
-    sowing.finalCropDate = sowing.crops.reduce(
-      (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
-      new Date(0)
-    );
-  });
-  return sowings;
+  return [...sowings, newSowing];
 };
 
 const veggiesPromise = Data.getVeggies();
 const boxesPromise = Data.getBoxes();
 
 Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
-  const sowings = planSowings(veggies, boxes, 174);
-  View.printSowings(sowings, veggies);
-  View.saveSowingsAsCsv(sowings, veggies);
+  const numberOfBoxes = 174;
+  const crops = boxes
+    .flatMap(box => box.ingredients)
+    .map(
+      ([date, veggieId, amount]) =>
+        new Crop(
+          date,
+          veggies.find(Utils.idEquals(veggieId)),
+          amount * numberOfBoxes
+        )
+    );
+  const sowings = crops.reduce(
+    (sowings, crop) => planSowing(crop, sowings),
+    []
+  );
+
+  View.printSowings(sowings);
+  //View.saveSowingsAsCsv(sowings, veggies);
 });
