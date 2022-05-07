@@ -134,8 +134,8 @@ Object.defineProperties(Sowing.prototype, {
   },
   finalCropDate: {
     get() {
-      return sowing.crops.reduce(
-        (prev, curr) => (curr[0].getTime() > prev.getTime() ? curr[0] : prev),
+      return this.crops.reduce(
+        (date, crop) => (crop.date > date ? crop.date : date),
         new Date(0)
       );
     },
@@ -369,10 +369,10 @@ const View = new (function () {
     console.log(`Insgesamt geplante Aussaaten: ${sowings.length}`);
   };
 
-  this.saveSowingsAsCsv = (sowings, veggies) => {
+  this.saveSowingsAsCsv = sowings => {
     const head = `Aussaat Datum;Aussaat Menge;Sorte;Quickpot Menge;Quickpot Größe;Start Datum Beet;Länge Beet(m);letzte Ernte;`;
     const csv = sowings.reduce((csv, sowing) => {
-      const veggie = veggies.find(Utils.idEquals(sowing.kind));
+      const veggie = sowing.veggie;
       const quickpotSize = veggie.preGrow ? veggie.quickpotSize : '';
       const quickpotAmount = Utils.dotToComma(sowing.quickpotAmount);
       const bedStartDate = Utils.dateToString(sowing.bedStartDate);
@@ -476,5 +476,5 @@ Promise.all([veggiesPromise, boxesPromise]).then(([veggies, boxes]) => {
   );
 
   View.printSowings(sowings);
-  //View.saveSowingsAsCsv(sowings, veggies);
+  View.saveSowingsAsCsv(sowings);
 });
