@@ -2,7 +2,26 @@
 'use strict';
 const fs = require('fs');
 
-const myErr = message => new Error(`\x1b[31m\x1b[1m${message}\x1b[0m`);
+class MGError extends Error {
+  constructor(message = '', value, ...args) {
+    super(message, ...args);
+    this.message = message;
+    this.value = value;
+    this.name = 'MarketGardenError';
+  }
+}
+
+const logError = e => {
+  const head = `${e.name} ${e.message} \n`;
+  const stack = e.stack.slice(head.length);
+  console.error(
+    `\x1b[41m\x1b[37m\x1b[1m${e.name}:\x1b[0m \x1b[31m\x1b[1m${e.message}\x1b[0m`
+  );
+  console.error(stack);
+  console.error('### Start Value ' + '#'.repeat(64));
+  console.error(e.value);
+  console.error('### End Value ' + '#'.repeat(66));
+};
 
 function Veggie({
   id,
@@ -55,7 +74,7 @@ function Veggie({
   this.comment = String(comment || '');
   this.description = String(description || '');
   if (!this.harvestRate)
-    throw myErr('Erwartete Erntemenge darf nicht Null sein!');
+    throw new Error('Erwartete Erntemenge darf nicht Null sein!');
   Utils.deepFreeze(this);
 }
 Object.defineProperties(Veggie.prototype, {
@@ -77,7 +96,8 @@ Object.defineProperties(Veggie.prototype, {
 });
 
 function Crop(date, veggie, amount) {
-  if (!veggie instanceof Veggie) throw myErr('veggie must be of type Veggie');
+  if (!veggie instanceof Veggie)
+    throw new Error('veggie must be of type Veggie');
   this.date = date;
   this.veggie = veggie;
   this.amount = amount;
@@ -86,13 +106,12 @@ function Crop(date, veggie, amount) {
 
 function Box(ingredients) {
   if (ingredients.constructor !== Array)
-    throw myErr('ingredients must be an Array');
+    throw new Error('ingredients must be an Array');
   ingredients.map(ingredient => {
     if (ingredient.constructor !== Crop)
-      throw myErr(
-        `Each ingredient must be of type "Crop", but is of type "${
-          ingredient.constructor.name
-        }":\n\t${JSON.stringify(ingredient)}`
+      throw new MGError(
+        `Each ingredient must be of type "Crop", but is of type "${ingredient.constructor.name}"`,
+        {ingredient}
       );
   });
   this.ingredients = ingredients;
@@ -100,15 +119,16 @@ function Box(ingredients) {
 }
 
 function Sowing({veggie, sowingDate, seedAmount, crops}) {
-  if (!veggie instanceof Veggie) throw myErr('veggie must be of type Veggie');
-  if (crops.constructor !== Array) throw myErr('crops must be an Array');
+  if (!veggie instanceof Veggie)
+    throw new Error('veggie must be of type Veggie');
+  if (crops.constructor !== Array) throw new Error('crops must be an Array');
   crops.forEach(crop => {
-    if (!crop instanceof Crop) throw myErr('crop must be of type Crop');
+    if (!crop instanceof Crop) throw new Error('crop must be of type Crop');
   });
   if (sowingDate.constructor !== Date)
-    throw myErr('sowingDate must be of type Date');
+    throw new Error('sowingDate must be of type Date');
   if (seedAmount.constructor !== Number)
-    throw myErr('seedAmount must be of type Number');
+    throw new Error('seedAmount must be of type Number');
   this.veggie = veggie;
   this.sowingDate = new Date(sowingDate.getTime());
   this.seedAmount = seedAmount;
@@ -470,23 +490,18 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
 };
 
 (async () => {
-  try {
-    const veggies = await Data.getVeggies();
-    const boxes = await Data.getBoxes(veggies);
-    const numberOfBoxes = 174;
-    const crops = boxes
-      .flatMap(box => box.ingredients)
-      .map(
-        ({date, veggie, amount}) =>
-          new Crop(date, veggie, amount * numberOfBoxes)
-      );
-    const sowings = crops.reduce(
-      (sowings, crop) => planSowing(crop, sowings),
-      []
+  const veggies = await Data.getVeggies();
+  const boxes = await Data.getBoxes(veggies);
+  const numberOfBoxes = 174;
+  const crops = boxes
+    .flatMap(box => box.ingredients)
+    .map(
+      ({date, veggie, amount}) => new Crop(date, veggie, amount * numberOfBoxes)
     );
-    View.printSowings(sowings);
-    View.saveSowingsAsCsv(sowings);
-  } catch (e) {
-    console.error(e);
-  }
-})();
+  const sowings = crops.reduce(
+    (sowings, crop) => planSowing(crop, sowings),
+    []
+  );
+  View.printSowings(sowings);
+  View.saveSowingsAsCsv(sowings);
+})().catch(e => logError(e));
