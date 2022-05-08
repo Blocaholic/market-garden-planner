@@ -398,7 +398,7 @@ const View = new (function () {
             console.log(Utils.dateToString(date))
           )
         : console.log('keine');
-      console.log('\n');
+      console.log('');
     });
     console.log(`Insgesamt geplante Aussaaten: ${sowings.length}`);
   };
