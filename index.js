@@ -138,7 +138,14 @@ Object.defineProperties(Sowing.prototype, {
   quickpotAmount: {
     get() {
       return this.veggie.preGrow
-        ? Math.round((this.seedAmount / this.veggie.quickpotSize) * 100) / 100
+        ? Math.ceil(this.seedAmount / this.veggie.quickpotSize)
+        : 0;
+    },
+  },
+  emptyQuickpotSlots: {
+    get() {
+      return this.veggie.preGrow
+        ? this.quickpotAmount * this.veggie.quickpotSize - this.seedAmount
         : 0;
     },
   },
@@ -384,6 +391,16 @@ const View = new (function () {
           sowing.veggie.numberOfHarvests > 1 ? 'Ernten' : 'Ernte'
         } insgesamt.`
       );
+      if (sowing.veggie.preGrow)
+        console.log(
+          `${sowing.quickpotAmount} Quickpots (Größe ${
+            sowing.veggie.quickpotSize
+          }) vom ${Utils.dateToString(
+            sowing.sowingDate
+          )} bis ${Utils.dateToString(sowing.bedStartDate)}. Freie Slots: ${
+            sowing.emptyQuickpotSlots
+          }`
+        );
       console.log(`Geplante Ernten:`);
       sowing.crops.map(crop =>
         console.log(
@@ -502,6 +519,79 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
     (sowings, crop) => planSowing(crop, sowings),
     []
   );
-  View.printSowings(sowings);
-  View.saveSowingsAsCsv(sowings);
+  //////////////////////////////////////////////////////////
+  const preGrowSowings = sowings.filter(sowing => sowing.veggie.preGrow);
+  const quickpots = {};
+  const quickpotChanges = preGrowSowings
+    .reduce((quickpotChanges, sowing) => {
+      const startDemand = {
+        date: new Date(sowing.sowingDate.getTime()),
+        veggie: sowing.veggie.fullName,
+        size: sowing.veggie.quickpotSize,
+        amount: sowing.quickpotAmount,
+      };
+      const endDemand = {
+        date: new Date(sowing.bedStartDate.getTime()),
+        veggie: sowing.veggie.fullName,
+        size: sowing.veggie.quickpotSize,
+        amount: -sowing.quickpotAmount,
+      };
+      return [startDemand, endDemand, ...quickpotChanges];
+    }, [])
+    .sort((a, b) => a.date - b.date)
+    .reduce((quickpotChanges, change) => {
+      quickpots[change.size] = quickpots[change.size]
+        ? quickpots[change.size] + change.amount
+        : change.amount;
+      const newChange = {
+        ...quickpots,
+        sum: Object.values(quickpots).reduce((acc, curr) => acc + curr, 0),
+        ...change,
+      };
+      return [...quickpotChanges, newChange];
+    }, []);
+  console.table(quickpotChanges);
+  console.log(
+    `Maximaler Quickpot-Bedarf: ${Math.max(...quickpotChanges.map(x => x.sum))}`
+  );
+  Object.keys(quickpots).forEach(x =>
+    console.log(
+      `Größe ${x}: ${Math.max(...quickpotChanges.map(y => y[x] || 0))} Stück`
+    )
+  );
+  const sumQuickpotDemand = Object.keys(quickpots)
+    .map(x => Math.max(...quickpotChanges.map(y => y[x] || 0)))
+    .reduce((acc, curr) => acc + curr, 0);
+  console.log(`Summe: ${sumQuickpotDemand}`);
+  /////////////////////////////////////////////////////////////////
+  const bedChanges = sowings
+    .reduce((bedChanges, sowing) => {
+      const startDemand = {
+        date: new Date(sowing.bedStartDate.getTime()),
+        veggie: sowing.veggie.fullName,
+        amount: sowing.bedLength,
+      };
+      const endDemand = {
+        date: new Date(sowing.finalCropDate.getTime()),
+        veggie: sowing.veggie.fullName,
+        amount: -sowing.bedLength,
+      };
+      return [startDemand, endDemand, ...bedChanges];
+    }, [])
+    .sort((a, b) => a.date - b.date)
+    .reduce((bedChanges, change) => {
+      const lastBedLength = bedChanges[bedChanges.length - 1]?.bedLength || 0;
+      const newChange = {
+        bedLength: Math.round((lastBedLength + change.amount) * 100) / 100,
+        ...change,
+      };
+      return [...bedChanges, newChange];
+    }, []);
+  console.table(bedChanges);
+  console.log(
+    `Maximaler Beet-Bedarf: ${Math.max(...bedChanges.map(x => x.bedLength))} m`
+  );
+  /////////////////////////////////////////////////////////////////
+  //View.printSowings(sowings);
+  //View.saveSowingsAsCsv(sowings);
 })().catch(e => logError(e));
