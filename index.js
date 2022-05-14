@@ -438,6 +438,29 @@ const View = new (function () {
     }, head);
     Utils.writeFile('./data/output/sowings.csv', csv);
   };
+
+  this.printQuickpotDemand = quickpotDemand => {
+    console.table(quickpotDemand.changes);
+    console.log(
+      `Maximale Summe gleichzeitig belegter Quickpots: ${quickpotDemand.maxOccupied}`
+    );
+    quickpotDemand.sizes.forEach(size =>
+      console.log(
+        `Größe ${size}: ${quickpotDemand.stockRequirement[size]} Stück`
+      )
+    );
+    console.log(
+      `Summe: ${quickpotDemand.sizes.reduce(
+        (sum, size) => sum + quickpotDemand.stockRequirement[size],
+        0
+      )}`
+    );
+  };
+
+  this.printBedDemand = bedDemand => {
+    console.table(bedDemand.changes);
+    console.log(`Maximaler Beet-Bedarf: ${bedDemand.max} m`);
+  };
 })();
 
 const planSowing = (crop, sowings) => {
@@ -506,23 +529,10 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
   return [...sowings, newSowing];
 };
 
-(async () => {
-  const veggies = await Data.getVeggies();
-  const boxes = await Data.getBoxes(veggies);
-  const numberOfBoxes = 174;
-  const crops = boxes
-    .flatMap(box => box.ingredients)
-    .map(
-      ({date, veggie, amount}) => new Crop(date, veggie, amount * numberOfBoxes)
-    );
-  const sowings = crops.reduce(
-    (sowings, crop) => planSowing(crop, sowings),
-    []
-  );
-  //////////////////////////////////////////////////////////
-  const preGrowSowings = sowings.filter(sowing => sowing.veggie.preGrow);
+const getQuickpotDemand = sowings => {
   const quickpots = {};
-  const quickpotChanges = preGrowSowings
+  const changes = sowings
+    .filter(sowing => sowing.veggie.preGrow)
     .reduce((quickpotChanges, sowing) => {
       const startDemand = {
         date: new Date(sowing.sowingDate.getTime()),
@@ -550,22 +560,18 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
       };
       return [...quickpotChanges, newChange];
     }, []);
-  console.table(quickpotChanges);
-  console.log(
-    `Maximaler Quickpot-Bedarf: ${Math.max(...quickpotChanges.map(x => x.sum))}`
-  );
-  Object.keys(quickpots).forEach(x =>
-    console.log(
-      `Größe ${x}: ${Math.max(...quickpotChanges.map(y => y[x] || 0))} Stück`
-    )
-  );
-  const sumQuickpotDemand = Object.keys(quickpots)
-    .map(x => Math.max(...quickpotChanges.map(y => y[x] || 0)))
-    .reduce((acc, curr) => acc + curr, 0);
-  console.log(`Summe: ${sumQuickpotDemand}`);
-  /////////////////////////////////////////////////////////////////
-  const bedChanges = sowings
-    .reduce((bedChanges, sowing) => {
+  const sizes = Object.keys(quickpots);
+  const maxOccupied = Math.max(...changes.map(x => x.sum));
+  const stockRequirement = sizes.reduce((req, size) => {
+    req[size] = Math.max(...changes.map(change => change[size] || 0));
+    return req;
+  }, {});
+  return {changes, sizes, maxOccupied, stockRequirement};
+};
+
+const getBedDemand = sowings => {
+  const changes = sowings
+    .reduce((changes, sowing) => {
       const startDemand = {
         date: new Date(sowing.bedStartDate.getTime()),
         veggie: sowing.veggie.fullName,
@@ -576,22 +582,39 @@ ernten (${grownCrop}). Neuer Satz ${veggie.fullName} wird geplant!`);
         veggie: sowing.veggie.fullName,
         amount: -sowing.bedLength,
       };
-      return [startDemand, endDemand, ...bedChanges];
+      return [startDemand, endDemand, ...changes];
     }, [])
     .sort((a, b) => a.date - b.date)
-    .reduce((bedChanges, change) => {
-      const lastBedLength = bedChanges[bedChanges.length - 1]?.bedLength || 0;
+    .reduce((changes, change) => {
+      const lastBedLength = changes[changes.length - 1]?.bedLength || 0;
       const newChange = {
         bedLength: Math.round((lastBedLength + change.amount) * 100) / 100,
         ...change,
       };
-      return [...bedChanges, newChange];
+      return [...changes, newChange];
     }, []);
-  console.table(bedChanges);
-  console.log(
-    `Maximaler Beet-Bedarf: ${Math.max(...bedChanges.map(x => x.bedLength))} m`
+  const max = Math.max(...changes.map(x => x.bedLength));
+  return {changes, max};
+};
+
+(async () => {
+  const veggies = await Data.getVeggies();
+  const boxes = await Data.getBoxes(veggies);
+  const numberOfBoxes = 174;
+  const crops = boxes
+    .flatMap(box => box.ingredients)
+    .map(
+      ({date, veggie, amount}) => new Crop(date, veggie, amount * numberOfBoxes)
+    );
+  const sowings = crops.reduce(
+    (sowings, crop) => planSowing(crop, sowings),
+    []
   );
+  const quickpotDemand = getQuickpotDemand(sowings);
+  const bedDemand = getBedDemand(sowings);
   /////////////////////////////////////////////////////////////////
-  //View.printSowings(sowings);
+  View.printSowings(sowings);
+  View.printQuickpotDemand(quickpotDemand);
+  View.printBedDemand(bedDemand);
   //View.saveSowingsAsCsv(sowings);
 })().catch(e => logError(e));
