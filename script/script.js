@@ -613,8 +613,8 @@ const getBedDemand = sowings => {
   const quickpotDemand = getQuickpotDemand(sowings);
   const bedDemand = getBedDemand(sowings);
   /////////////////////////////////////////////////////////////////
-  View.printSowings(sowings);
-  View.printQuickpotDemand(quickpotDemand);
-  View.printBedDemand(bedDemand);
+  //View.printSowings(sowings);
+  //View.printQuickpotDemand(quickpotDemand);
+  //View.printBedDemand(bedDemand);
   //View.saveSowingsAsCsv(sowings);
 })().catch(e => logError(e));
