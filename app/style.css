@@ -1,0 +1,136 @@
+input[type='text'] {
+  width: 50px;
+}
+
+h3 {
+  margin: 0;
+}
+
+.wait {
+  height: 100vh;
+}
+
+.wait,
+.wait * {
+  cursor: wait !important;
+}
+
+.button {
+  display: inline-block;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 0px 4px;
+  margin: 4px;
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: rgb(250, 250, 250);
+  border-color: rgb(150, 150, 150);
+}
+
+.closeSymbol {
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.head {
+  font-weight: bold;
+}
+
+.planMultiBoxes__h3,
+.addBox__h3 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cropsWrapper {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  column-gap: 10px;
+}
+
+.planMultiBoxes__inputWrapper {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+}
+
+.box {
+  border: 2px solid black;
+  display: inline-block;
+  margin: 5px;
+}
+
+.box__date {
+  border: 0px none transparent;
+}
+
+.sowing,
+.planMultiBoxes__wrapper,
+.addBox__wrapper {
+  display: table;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.sowing > * {
+  margin: 6px;
+}
+
+.wrapper3columns {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 10px;
+}
+
+.quickpots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 56px);
+  gap: 8px;
+}
+
+.quickpot {
+  display: grid;
+}
+
+.quickpot15 {
+  grid-template-columns: repeat(3, 8px);
+}
+
+.quickpot77 {
+  grid-template-columns: repeat(7, 8px);
+}
+
+.quickpot84 {
+  grid-template-columns: repeat(7, 8px);
+}
+
+.quickpot144 {
+  grid-template-columns: repeat(9, 8px);
+}
+
+.slot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid black;
+}
+
+.slot--empty {
+  background-color: red;
+}
+
+.slot--filled {
+  background-color: green;
+}
+
+.mirror {
+  display: inline-block;
+  transform: rotate(180deg);
+}

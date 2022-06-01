@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Reinwiese - Market Garden</title>
+  <link rel="stylesheet"
+        href="style.css">
+  <script src="js/boxes.mjs"
+          type="module"></script>
+</head>
+<body>
+  <h1>Market Garden Planner</h1>
+  <p>174 Gemüsekisten pro Woche</p>
+  <hr>
+  <h2>Gemüsekisten</h2>
+  <div id="boxes__wrapper"
+       class="boxes__wrapper">
+  </div>
+  <div class="planMultiBoxes__wrapper"
+       id="planMultiBoxes__wrapper">
+    <h3 id="planMultiBoxes__h3"
+        class="planMultiBoxes__h3">Serie planen
+      <span class="closeSymbol"
+            id="planMultiBoxes__close">&#65291;</span>
+    </h3>
+    <div class="planMultiBoxes__inputWrapper"
+         id="planMultiBoxes__inputWrapper">
+      <label for="firstBoxDay">Erste Gemüsekiste</label>
+      <input type="date"
+             name="firstBoxDay"
+             id="firstBoxDay">
+      <label for="lastBoxDay">Letzte Gemüsekiste</label>
+      <input type="date"
+             name="lastBoxDay"
+             id="lastBoxDay">
+      <label for="boxInterval">Intervall</label>
+      <select name="boxInterval"
+              id="boxInterval">
+        <option value="7">wöchentlich</option>
+        <option value="14">2-wöchig</option>
+        <option value="21">3-wöchig</option>
+        <option value="28">4-wöchig</option>
+      </select>
+    </div>
+    <div class="planMultiBoxes__dates"
+         id="planMultiBoxes__dates"></div>
+    <div id="planMultiBoxes__saveButton"
+         class="button">0 Kisten Hinzufügen</div>
+  </div>
+  <div class="addBox__wrapper"
+       id="addBox__wrapper">
+    <h3 id="addBox__h3"
+        class="addBox__h3">Kiste hinzufügen
+      <span class="closeSymbol"
+            id="addBox__close">&#65291;</span>
+    </h3>
+    <div class="addBox__inputWrapper"
+         id="addBox__inputWrapper">
+      <label for="addBox__inputYear">Jahr</label>
+      <select name="addBox__inputYear"
+              id="addBox__inputYear">
+        <option value="2022">2022</option>
+      </select>
+      <label for="addBox__inputDate">Datum</label>
+      <select name="addBox__inputDate"
+              id="addBox__inputDate">
+        <option value="22-05-2022">22.05.2022</option>
+      </select>
+    </div>
+    <div id="addBox__saveButton"
+         class="button">1 Kiste Hinzufügen</div>
+  </div>
+  <hr>
+  <h2>Aussaaten</h2>
+  <div class="sowing"
+       id="sowing">
+    <div id="veggie">
+      <h3 id="veggieName"></h3>
+      <select name="culture"
+              id="culture"></select>
+      <select name="variety"
+              id="variety"></select>
+    </div>
+    <div>Aussaat-Datum: <span>29.06.1981</span></div>
+    <div class="wrapper3columns"
+         id="sowingInfos">
+      <label for="boxAmount">Inhalt Kiste</label>
+      <input type="text"
+             name="boxAmount"
+             id="boxAmount">
+      <div id="harvestUnit"></div>
+      <label for="seedAmount">Aussaat Menge</label>
+      <input type="text"
+             name="seedAmount"
+             id="seedAmount">
+      <div></div>
+      <label for="bedLength">Beet-Länge (m)</label>
+      <input type="text"
+             name="bedLength"
+             id="bedLength">
+      <div></div>
+      <label for="quickpotAmount">Quickpots</label>
+      <input type="text"
+             name="quickpotAmount"
+             id="quickpotAmount">
+      <div id="quickpotSize"></div>
+    </div>
+    <div id="quickpotImages"
+         class="quickpots">
+    </div>
+    <div class="cropsWrapper">
+      <div class="head">Ernte-Termin</div>
+      <div class="head">Inhalt Kiste</div>
+      <div class="head">frei pro Kiste</div>
+      <div class="head">Überproduktion</div>
+      <div class="head">Summe</div>
+      <div></div>
+
+      <div>Do, 26.05.2022</div>
+      <div>
+        <input type="text"
+               name=""
+               id=""
+               value="175"> g
+      </div>
+      <div>0 g</div>
+      <div>0,0 kg</div>
+      <div>30,5 kg</div>
+      <input type="checkbox"
+             name="useCropDateXX"
+             id="useCropDateXX"
+             checked>
+
+      <div>Do, 02.06.2022</div>
+      <div>
+        <input type="text"
+               name=""
+               id=""
+               value="100"> g
+      </div>
+      <div>75 g</div>
+      <div>13,1 kg</div>
+      <div>30,5 kg</div>
+      <input type="checkbox"
+             name="useCropDateXX"
+             id="useCropDateXX"
+             checked>
+
+      <div>Do, 09.06.2022</div>
+      <div>
+        <input type="text"
+               name=""
+               id=""
+               value="175"> g
+      </div>
+      <div>0 g</div>
+      <div>0,0 kg</div>
+      <div>30,5 kg</div>
+      <input type="checkbox"
+             name="useCropDateXX"
+             id="useCropDateXX"
+             checked>
+
+      <div>Do, 16.06.2022</div>
+      <div>
+        <input type="text"
+               name=""
+               id=""
+               value="0"> g
+      </div>
+      <div>175 g</div>
+      <div>30,5 kg</div>
+      <div>30,5 kg</div>
+      <input type="checkbox"
+             name="useCropDateXX"
+             id="useCropDateXX">
+
+      <div>Do, 23.06.2022</div>
+      <div>
+        <input type="text"
+               name=""
+               id=""
+               value="175"> g
+      </div>
+      <div>0 g</div>
+      <div>0,0 kg</div>
+      <div>30,5 kg</div>
+      <input type="checkbox"
+             name="useCropDateXX"
+             id="useCropDateXX"
+             checked>
+
+    </div>
+    <div class="button"
+         id="resetSowingForm">Reset</div>
+    <div class="button"
+         id="saveSowing">Speichern</div>
+  </div>
+</body>
+</html>
