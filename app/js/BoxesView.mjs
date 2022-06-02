@@ -25,12 +25,23 @@ const handleMultiBoxSave = handler => {
   );
 };
 
-const handleAddBox = handler => {
-  // Show as button
-  // if button is clicked, ask for year
-  // if year is set, ask for date
-  // if date is set, show save button
-  // if save button is clicked => handler(date)
+const handleAddBox = (handler, boxes) => {
+  const weekday = boxes[0].date.getDay();
+  $('addBox__inputYear').addEventListener('change', e => {
+    const year = e.target.value;
+    $('addBox__inputYear').style.display = 'none';
+    $('addBox__inputYearLabel').style.display = 'none';
+    $('addBox__inputDate').style.display = '';
+    $('addBox__inputDateLabel').style.display = '';
+    // show all possible days of year as options in addBox__inputDate
+  });
+  $('addBox__inputDate').addEventListener(
+    'change',
+    _ => ($('addBox__saveButton').style.display = '')
+  );
+  $('addBox__saveButton').addEventListener('click', _ =>
+    handler(boxes, new Date($('addBox__inputDate').value))
+  );
 };
 
 const handleBoxAmount = handler => {
@@ -88,6 +99,10 @@ const hideMultiBoxForm = () => {
   $('planMultiBoxes__wrapper').style.display = 'none';
 };
 
+const hideAddBox = () => {
+  $('addBox__wrapper').style.display = 'none';
+};
+
 const openMultiBox = () => {
   $('planMultiBoxes__close').style.display = '';
   $('planMultiBoxes__inputWrapper').style.display = '';
@@ -118,7 +133,6 @@ const closeMultiBox = e => {
 const openAddBox = () => {
   $('addBox__close').style.display = '';
   $('addBox__inputWrapper').style.display = '';
-  $('addBox__saveButton').style.display = '';
   $('addBox__h3').classList.remove('button');
   $('addBox__wrapper').style.borderColor = '';
   $('addBox__wrapper').style.margin = '';
@@ -131,6 +145,8 @@ const closeAddBox = e => {
   $('addBox__inputDate').value = '';
   $('addBox__close').style.display = 'none';
   $('addBox__inputWrapper').style.display = 'none';
+  $('addBox__inputDate').style.display = 'none';
+  $('addBox__inputDateLabel').style.display = 'none';
   $('addBox__saveButton').style.display = 'none';
   $('addBox__h3').classList.add('button');
   $('addBox__wrapper').style.borderColor = 'transparent';
@@ -269,6 +285,7 @@ export {
   renderBoxPreview,
   renderBoxes,
   hideMultiBoxForm,
+  hideAddBox,
   handleMultiBoxPreview,
   handleMultiBoxSave,
   handleAddBox,

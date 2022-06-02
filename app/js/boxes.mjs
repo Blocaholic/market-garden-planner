@@ -147,7 +147,8 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
   saveBoxes(newBoxes);
 };
 
-const addBox = (boxes, box) => {
+const addBox = (boxes, newBoxDate) => {
+  const box = new Box(newBoxDate, []);
   saveBoxes(
     [...boxes, box].sort((a, b) => a.date.getTime() - b.date.getTime())
   );
@@ -182,19 +183,15 @@ const boxes = await fetchJson(
   })
 );
 
-//const datum = new Date();
-//const crop = new Crop(datum, veggies[42], 42);
-//const box = new Box(datum, [crop, crop, crop]);
-//console.log(JSON.stringify([box, box, box]));
-
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();
+  if (boxes.length === 0) View.hideAddBox();
   View.renderBoxes(boxes);
   View.renderBoxPreview([]);
   View.renderSowingForm({cultures});
   View.handleMultiBoxPreview(multiBoxPreview);
   View.handleMultiBoxSave(saveMultiBoxSeries);
-  View.handleAddBox(addBox);
+  View.handleAddBox(addBox, boxes);
   View.handleCulture(updateOnCulture);
   View.handleVariety(updateOnVariety);
   View.handleBoxAmount(updateOnBoxAmount);
