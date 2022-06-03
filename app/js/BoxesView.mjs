@@ -1,4 +1,4 @@
-import {commaToDot, dotToComma, dateToString} from './Utils.mjs';
+import {commaToDot, dotToComma, dateToString, addDaysToDate} from './Utils.mjs';
 
 const $ = id => document.getElementById(id);
 const $$ = query => document.querySelectorAll(query);
@@ -25,8 +25,20 @@ const handleMultiBoxSave = handler => {
   );
 };
 
+// GEHÖRT HIER NICHT HIN!!!
+const getAllDatesOfWeekdayOfYear = (weekday, year) => {
+  let allDaysInYear = [];
+  let tempDate = new Date(`${year}-01-01`);
+  tempDate.setHours(0, 0, 0, 0);
+  while (tempDate.getFullYear() === year) {
+    allDaysInYear.push(tempDate);
+    tempDate = new Date(addDaysToDate(tempDate, 1));
+  }
+  return allDaysInYear.filter(date => date.getDay() === weekday);
+};
+
 const handleAddBox = (handler, boxes) => {
-  const weekday = boxes[0].date.getDay();
+  const weekday = boxes[0]?.date.getDay();
   $('addBox__inputYear').addEventListener('change', e => {
     const year = e.target.value;
     $('addBox__inputYear').style.display = 'none';
@@ -34,6 +46,13 @@ const handleAddBox = (handler, boxes) => {
     $('addBox__inputDate').style.display = '';
     $('addBox__inputDateLabel').style.display = '';
     // show all possible days of year as options in addBox__inputDate
+    const boxTimes = boxes.map(box => box.date.getTime());
+    const possibleDates = getAllDatesOfWeekdayOfYear(
+      weekday,
+      Number(year)
+    ).filter(date => !boxTimes.includes(date.getTime()));
+    console.dir(possibleDates);
+    //
   });
   $('addBox__inputDate').addEventListener(
     'change',

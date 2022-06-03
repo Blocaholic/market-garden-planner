@@ -159,6 +159,7 @@ function Box(date, ingredients = []) {
       );
   });
   this.date = new Date(date.getTime());
+  this.date.setHours(0, 0, 0, 0);
   this.ingredients = [...ingredients];
   Utils.deepFreeze(this);
 }
