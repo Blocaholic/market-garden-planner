@@ -40,19 +40,20 @@ const getAllDatesOfWeekdayOfYear = (weekday, year) => {
 const handleAddBox = (handler, boxes) => {
   const weekday = boxes[0]?.date.getDay();
   $('addBox__inputYear').addEventListener('change', e => {
-    const year = e.target.value;
-    $('addBox__inputYear').style.display = 'none';
-    $('addBox__inputYearLabel').style.display = 'none';
+    const year = Number(e.target.value);
+    $('addBox__saveButton').style.display = 'none';
     $('addBox__inputDate').style.display = '';
     $('addBox__inputDateLabel').style.display = '';
-    // show all possible days of year as options in addBox__inputDate
     const boxTimes = boxes.map(box => box.date.getTime());
-    const possibleDates = getAllDatesOfWeekdayOfYear(
-      weekday,
-      Number(year)
-    ).filter(date => !boxTimes.includes(date.getTime()));
-    console.dir(possibleDates);
-    //
+    const possibleDates = getAllDatesOfWeekdayOfYear(weekday, year).filter(
+      date => !boxTimes.includes(date.getTime())
+    );
+    const dateOptions = possibleDates.map(
+      date => `<option value="${date}">${dateToString(date)}</option>`
+    );
+    $(
+      'addBox__inputDate'
+    ).innerHTML = `<option selected></option>${dateOptions}`;
   });
   $('addBox__inputDate').addEventListener(
     'change',
@@ -150,6 +151,12 @@ const closeMultiBox = e => {
 };
 
 const openAddBox = () => {
+  const currentYear = new Date().getFullYear();
+  const next30years = [...Array(30)].map((_, key) => key + currentYear);
+  const yearOptions = next30years
+    .map(year => `<option value="${year}">${year}</option>`)
+    .join('');
+  $('addBox__inputYear').innerHTML = `<option selected></option>${yearOptions}`;
   $('addBox__close').style.display = '';
   $('addBox__inputWrapper').style.display = '';
   $('addBox__h3').classList.remove('button');
@@ -165,6 +172,7 @@ const closeAddBox = e => {
   $('addBox__close').style.display = 'none';
   $('addBox__inputWrapper').style.display = 'none';
   $('addBox__inputDate').style.display = 'none';
+  $('addBox__inputDate').innerHTML = '';
   $('addBox__inputDateLabel').style.display = 'none';
   $('addBox__saveButton').style.display = 'none';
   $('addBox__h3').classList.add('button');
