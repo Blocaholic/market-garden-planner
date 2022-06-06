@@ -32,7 +32,7 @@ const getAllDatesOfWeekdayOfYear = (weekday, year) => {
   tempDate.setHours(0, 0, 0, 0);
   while (tempDate.getFullYear() === year) {
     allDaysInYear.push(tempDate);
-    tempDate = new Date(addDaysToDate(tempDate, 1));
+    tempDate = addDaysToDate(tempDate, 1);
   }
   return allDaysInYear.filter(date => date.getDay() === weekday);
 };
