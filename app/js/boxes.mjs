@@ -1,11 +1,6 @@
 import {Box, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
-import {
-  idEquals,
-  addDaysToDate,
-  daysBetweenDates,
-  dateToString,
-} from './Utils.mjs';
+import {idEquals, addDaysToDate, daysBetweenDates} from './Utils.mjs';
 
 const fetchJson = async url => await fetch(url).then(x => x.json());
 
