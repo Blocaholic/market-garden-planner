@@ -28,6 +28,15 @@ const dateToString = date => {
   return `${dd}.${mm}.${yyyy}`;
 };
 
+const stringToDate = string => {
+  const dd = string.substr(0, 2);
+  const mm = string.substr(3, 2);
+  const yyyy = string.substr(6, 4);
+  const date = new Date(`${yyyy}-${mm}-${dd}`);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
 const addDaysToDate = (origin, days) => {
   if (origin.constructor.name !== 'Date')
     throw 'First Property of "addDaysToDate()" has to be instance of "Date"';
@@ -47,6 +56,7 @@ export {
   dotToComma,
   idEquals,
   dateToString,
+  stringToDate,
   addDaysToDate,
   daysBetweenDates,
 };

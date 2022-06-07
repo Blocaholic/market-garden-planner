@@ -74,6 +74,7 @@
   </div>
   <hr>
   <h2>Aussaaten</h2>
+  <code id="sowings"></code>
   <div class="sowing"
        id="sowing">
     <div id="veggie">
@@ -83,7 +84,12 @@
       <select name="variety"
               id="variety"></select>
     </div>
-    <div>Aussaat-Datum: <span>29.06.1981</span></div>
+    <div id="sowingForm__sowingDateWrapper">Aussaat-Datum:
+      <span id="sowingForm__sowingDate"></span>
+    </div>
+    <div id="sowingForm__firstCropDateWrapper">Erster Ernte-Termin:
+      <span id="sowingForm__firstCropDate"></span>
+    </div>
     <div class="wrapper3columns"
          id="sowingInfos">
       <label for="boxAmount">Inhalt Kiste</label>
@@ -110,7 +116,8 @@
     <div id="quickpotImages"
          class="quickpots">
     </div>
-    <div class="cropsWrapper">
+    <div class="cropsWrapper"
+         id="sowingForm__cropsWrapper">
       <div class="head">Ernte-Termin</div>
       <div class="head">Inhalt Kiste</div>
       <div class="head">frei pro Kiste</div>

@@ -1,4 +1,10 @@
-import {commaToDot, dotToComma, dateToString, addDaysToDate} from './Utils.mjs';
+import {
+  commaToDot,
+  dotToComma,
+  dateToString,
+  stringToDate,
+  addDaysToDate,
+} from './Utils.mjs';
 
 const $ = id => document.getElementById(id);
 const $$ = query => document.querySelectorAll(query);
@@ -238,6 +244,16 @@ const renderSowingForm = data => {
     $('harvestUnit').innerHTML = data.veggie.harvestUnit;
     $('quickpotSize').innerHTML = `Größe ${data.veggie.quickpotSize}`;
     $('sowingInfos').style.display = '';
+    const firstCropDate = stringToDate(
+      $('sowingForm__firstCropDate').innerHTML
+    );
+
+    const sowingDate = addDaysToDate(
+      firstCropDate,
+      -(data.veggie.quickpotDuration + data.veggie.bedDuration)
+    );
+    $('sowingForm__sowingDate').innerHTML = dateToString(sowingDate);
+    $('sowingForm__sowingDateWrapper').style.display = '';
     return;
   }
   if (data.culture && data.varieties) {
@@ -270,6 +286,13 @@ const renderSowingForm = data => {
 };
 
 const renderBoxes = boxes => {
+  const showSowingForm = e => {
+    $('sowingForm__firstCropDate').innerHTML =
+      e.target.parentNode.querySelector('.box__date').innerHTML;
+    $('sowingForm__sowingDateWrapper').style.display = 'none';
+    $('sowingForm__cropsWrapper').style.display = 'none';
+    $('sowing').style.display = '';
+  };
   const boxesHtml = boxes
     .map(box => {
       const ingredientsHtml = box.ingredients
@@ -284,12 +307,19 @@ const renderBoxes = boxes => {
       const boxHtml = `<div class="box">
     <div class="box__date">${dateToString(box.date)}</div>
     <table>${ingredientsHtml}</table>
-    <div class="button">&#65291; Gemüse</div>
+    <div class="button box__addVeggieButton">&#65291; Gemüse</div>
   </div>`;
       return boxHtml;
     })
     .join('');
   $('boxes__wrapper').innerHTML = boxesHtml;
+  $$('.box__addVeggieButton').forEach(button =>
+    button.addEventListener('click', showSowingForm)
+  );
+};
+
+const renderSowings = sowings => {
+  $('sowings').innerHTML = sowings;
 };
 
 const showEieruhr = () => {
@@ -311,6 +341,7 @@ export {
   renderQuickpots,
   renderBoxPreview,
   renderBoxes,
+  renderSowings,
   hideMultiBoxForm,
   hideAddBox,
   handleMultiBoxPreview,

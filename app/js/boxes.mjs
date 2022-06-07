@@ -158,9 +158,9 @@ const veggies = await fetchJson(
 
 const cultures = new Set(veggies.map(v => v.culture).sort());
 
-/* const sowings = await fetchJson(
+const sowings = await fetchJson(
   'https://marketgardenapi.reinwiese.de/sowings.php'
-).then(data => data.map(sowing => new Sowing(sowing))); */
+).then(data => data.map(sowing => new Sowing(sowing)));
 
 const boxes = await fetchJson(
   'https://marketgardenapi.reinwiese.de/boxes.php'
@@ -184,6 +184,7 @@ const boxes = await fetchJson(
   View.renderBoxes(boxes);
   View.renderBoxPreview([]);
   View.renderSowingForm({cultures});
+  View.renderSowings(sowings);
   View.handleMultiBoxPreview(multiBoxPreview);
   View.handleMultiBoxSave(saveMultiBoxSeries);
   View.handleAddBox(addBox, boxes);
