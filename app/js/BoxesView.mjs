@@ -213,8 +213,8 @@ const renderQuickpots = (size, filledSlots) => {
   const filledSlotHtml = '<div class="slot slot--filled"></div>';
   const emptySlotHtml = '<div class="slot slot--empty"></div>';
   const buttonsHtml = `<div>
-      <button id="floorQuickpot">-<div class="mirror">&#x2935;</div></button>
-      <button id="ceilQuickpot">+&#x2935;</button>
+      <div class="button" id="floorQuickpot">-<div class="mirror">&#x2935;</div></div>
+      <div class="button" id="ceilQuickpot">+&#x2935;</div>
     </div>`;
   const filledQuickpotHtml = `<div class="quickpot quickpot${size}">${filledSlotHtml.repeat(
     size
