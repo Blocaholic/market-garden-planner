@@ -212,7 +212,7 @@ const renderQuickpots = (size, filledSlots) => {
   const emptySlots = filledSlots % size ? size - (filledSlots % size) : 0;
   const filledSlotHtml = '<div class="slot slot--filled"></div>';
   const emptySlotHtml = '<div class="slot slot--empty"></div>';
-  const buttonsHtml = `<div>
+  const buttonsHtml = `<div class="quickpots__buttonWrapper">
       <div class="button" id="floorQuickpot">-<div class="mirror">&#x2935;</div></div>
       <div class="button" id="ceilQuickpot">+&#x2935;</div>
     </div>`;
@@ -247,13 +247,13 @@ const renderSowingForm = data => {
     const firstCropDate = stringToDate(
       $('sowingForm__firstCropDate').innerHTML
     );
-
     const sowingDate = addDaysToDate(
       firstCropDate,
       -(data.veggie.quickpotDuration + data.veggie.bedDuration)
     );
     $('sowingForm__sowingDate').innerHTML = dateToString(sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
+
     return;
   }
   if (data.culture && data.varieties) {

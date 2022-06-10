@@ -104,39 +104,43 @@ h3 {
 
 .wrapper3columns {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(3, max-content);
   column-gap: 10px;
 }
 
 .quickpots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 56px);
+  display: flex;
   gap: 8px;
+  flex-flow: row wrap;
+}
+
+.quickpots__buttonWrapper {
+  width: 56px;
 }
 
 .quickpot {
   display: grid;
+  width: 56px;
+  height: 96px;
 }
 
 .quickpot15 {
-  grid-template-columns: repeat(3, 8px);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .quickpot77 {
-  grid-template-columns: repeat(7, 8px);
+  grid-template-columns: repeat(7, 1fr);
 }
 
 .quickpot84 {
-  grid-template-columns: repeat(7, 8px);
+  grid-template-columns: repeat(7, 1fr);
 }
 
 .quickpot144 {
-  grid-template-columns: repeat(9, 8px);
+  grid-template-columns: repeat(9, 1fr);
 }
 
 .slot {
-  width: 6px;
-  height: 6px;
   border: 1px solid black;
 }
 
