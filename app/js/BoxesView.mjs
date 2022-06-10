@@ -281,6 +281,8 @@ const renderSowingForm = data => {
     $('variety').style.display = 'none';
     $('culture').innerHTML = `<option>Kultur auswählen</option>${options}`;
     $('culture').style.display = '';
+    $('sowingForm__sowingDate').innerHTML = '';
+    $('sowingForm__sowingDateWrapper').style.display = 'none';
     return;
   }
 };
