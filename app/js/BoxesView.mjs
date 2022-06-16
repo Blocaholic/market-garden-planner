@@ -230,10 +230,11 @@ const renderQuickpots = (size, filledSlots) => {
 
 const renderSowingForm = data => {
   if (data.veggie) {
+    const veggie = data.veggie;
     $('culture').style.display = 'none';
     $('variety').style.display = 'none';
-    $('variety').value = data.veggie.id;
-    $('veggieName').innerHTML = data.veggie.fullName;
+    $('variety').value = veggie.id;
+    $('veggieName').innerHTML = veggie.fullName;
     $('veggieName').style.display = '';
     $('boxAmount').value = dotToComma(
       Math.round(data.boxAmount * 1000) / 1000 || 0
@@ -241,15 +242,15 @@ const renderSowingForm = data => {
     $('seedAmount').value = data.seedAmount || 0;
     $('bedLength').value = dotToComma(data.bedLength || 0);
     $('quickpotAmount').value = dotToComma(data.quickpotAmount || 0);
-    $('harvestUnit').innerHTML = data.veggie.harvestUnit;
-    $('quickpotSize').innerHTML = `Größe ${data.veggie.quickpotSize}`;
+    $('harvestUnit').innerHTML = veggie.harvestUnit;
+    $('quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
     $('sowingInfos').style.display = '';
     const firstCropDate = stringToDate(
       $('sowingForm__firstCropDate').innerHTML
     );
     const sowingDate = addDaysToDate(
       firstCropDate,
-      -(data.veggie.quickpotDuration + data.veggie.bedDuration)
+      -(veggie.quickpotDuration + veggie.bedDuration)
     );
     $('sowingForm__sowingDate').innerHTML = dateToString(sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
