@@ -284,6 +284,7 @@ const renderSowingForm = data => {
     $('culture').style.display = '';
     $('sowingForm__sowingDate').innerHTML = '';
     $('sowingForm__sowingDateWrapper').style.display = 'none';
+    $('sowingForm__firstCropDateWrapper').style.display = 'none';
     return;
   }
 };
