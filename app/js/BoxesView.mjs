@@ -113,10 +113,20 @@ const handleFloorQuickpot = handler =>
   );
 
 const handleCulture = handler =>
-  $('culture')?.addEventListener('change', e => handler(e.target.value));
+  $('culture')?.addEventListener('change', e =>
+    handler({
+      culture: e.target.value,
+      firstCropDate: stringToDate($('sowingForm__firstCropDate').innerHTML),
+    })
+  );
 
 const handleVariety = handler =>
-  $('variety')?.addEventListener('change', e => handler(e.target.value));
+  $('variety')?.addEventListener('change', e =>
+    handler({
+      veggieId: e.target.value,
+      firstCropDate: stringToDate($('sowingForm__firstCropDate').innerHTML),
+    })
+  );
 
 const handleResetSowingForm = handler =>
   $('resetSowingForm').addEventListener('click', handler);

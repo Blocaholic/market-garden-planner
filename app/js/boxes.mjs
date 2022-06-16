@@ -77,7 +77,7 @@ const updateOnQuickpotAmount = (quickpotAmount, veggieId) => {
   updateSowingForm(seedAmount, veggieId);
 };
 
-const updateOnCulture = culture => {
+const updateOnCulture = ({culture, firstCropDate}) => {
   const varieties = new Set(
     veggies
       .filter(v => v.culture === culture)
@@ -87,12 +87,23 @@ const updateOnCulture = culture => {
       .sort()
   );
   View.renderSowingForm({culture, varieties});
-  if (varieties.size === 1) updateOnVariety([...varieties][0].id);
+  if (varieties.size === 1)
+    updateOnVariety({veggieId: [...varieties][0].id, firstCropDate});
 };
 
-const updateOnVariety = id => {
-  const veggie = veggies.find(idEquals(id));
-  View.renderSowingForm({veggie});
+const updateOnVariety = ({veggieId, firstCropDate}) => {
+  const veggie = veggies.find(idEquals(veggieId));
+  const sowingDate = addDaysToDate(
+    firstCropDate,
+    -(veggie.quickpotDuration + veggie.bedDuration)
+  );
+  const sowing = new Sowing({
+    veggie,
+    sowingDate,
+    seedAmount: 0,
+    crops: [],
+  });
+  View.renderSowingForm({veggie, sowing, numberOfBoxes});
 };
 
 const resetSowingForm = () => View.renderSowingForm({cultures});
