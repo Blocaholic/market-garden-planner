@@ -50,6 +50,17 @@ const addDaysToDate = (origin, days) => {
 const daysBetweenDates = (firstDate, lastDate) =>
   Math.round((lastDate - firstDate) / (1000 * 60 * 60 * 24));
 
+const getDatesInRange = ({firstDate, lastDate, interval = 1}) => {
+  if (firstDate > lastDate) return [];
+  const numberOfDates =
+    Math.floor(daysBetweenDates(firstDate, lastDate) / interval) + 1;
+  const dates = Array.from(Array(numberOfDates - 1)).reduce(
+    (dates, _) => [...dates, addDaysToDate(dates.at(-1), interval)],
+    [firstDate]
+  );
+  return dates;
+};
+
 export {
   deepFreeze,
   commaToDot,
@@ -59,5 +70,6 @@ export {
   stringToDate,
   addDaysToDate,
   daysBetweenDates,
+  getDatesInRange,
 };
 export * as default from './Utils.mjs';

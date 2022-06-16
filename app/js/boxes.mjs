@@ -1,6 +1,6 @@
 import {Box, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
-import {idEquals, addDaysToDate, daysBetweenDates} from './Utils.mjs';
+import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
 
 const fetchJson = async url => await fetch(url).then(x => x.json());
 
@@ -96,17 +96,6 @@ const updateOnVariety = id => {
 };
 
 const resetSowingForm = () => View.renderSowingForm({cultures});
-
-const getDatesInRange = ({firstDate, lastDate, interval = 1}) => {
-  if (firstDate > lastDate) return [];
-  const numberOfDates =
-    Math.floor(daysBetweenDates(firstDate, lastDate) / interval) + 1;
-  const dates = Array.from(Array(numberOfDates - 1)).reduce(
-    (dates, _) => [...dates, addDaysToDate(dates.at(-1), interval)],
-    [firstDate]
-  );
-  return dates;
-};
 
 const multiBoxPreview = ({firstDay, lastDay, interval}) => {
   const dates =
