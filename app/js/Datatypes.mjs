@@ -169,7 +169,52 @@ function Sowing({veggie, sowingDate, seedAmount, crops}) {
   this.sowingDate = new Date(sowingDate.getTime());
   this.seedAmount = seedAmount;
   this.crops = [...crops];
+  crops.map(crop => {
+    if (
+      Utils.dateToWeekday(crop.date) !==
+      Utils.dateToWeekday(this.possibleCropDates[0])
+    ) {
+      throw new Error(
+        'Der Wochentag der tatsächlichen Ernte stimmt nicht mit dem Wochentag der möglichen Ernte überein.'
+      );
+    }
+  });
   Utils.deepFreeze(this);
 }
+
+Object.defineProperties(Sowing.prototype, {
+  possibleCropDates: {
+    get() {
+      const veggie = this.veggie;
+      const firstDate = Utils.addDaysToDate(
+        this.sowingDate,
+        veggie.quickpotDuration + veggie.bedDuration
+      );
+
+      const multiCropResult = () =>
+        [...Array(veggie.numberOfHarvests - 1)].reduce(
+          (acc, _) => [
+            ...acc,
+            Utils.addDaysToDate(acc.at(-1), veggie.harvestInterval),
+          ],
+          [firstDate]
+        );
+
+      const singleCropResult = () => {
+        const lastDate = Utils.addDaysToDate(
+          firstDate,
+          veggie.harvestTolerance
+        );
+        return Utils.getDatesInRange({
+          firstDate,
+          lastDate,
+          interval: 7,
+        });
+      };
+
+      return veggie.isMultiCrop ? multiCropResult() : singleCropResult();
+    },
+  },
+});
 
 export {Veggie, Crop, Box, Sowing};
