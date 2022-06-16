@@ -18,6 +18,10 @@ input[type='text'] {
   width: 50px;
 }
 
+label {
+  text-align: right;
+}
+
 h3 {
   margin: 0;
 }
@@ -66,7 +70,7 @@ h3 {
 
 .cropsWrapper {
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto;
+  grid-template-columns: repeat(6, max-content);
   column-gap: 10px;
 }
 
