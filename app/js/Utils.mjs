@@ -28,6 +28,9 @@ const dateToString = date => {
   return `${dd}.${mm}.${yyyy}`;
 };
 
+const dateToWeekday = date =>
+  ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][date.getDay()];
+
 const stringToDate = string => {
   const dd = string.substr(0, 2);
   const mm = string.substr(3, 2);
@@ -67,6 +70,7 @@ export {
   dotToComma,
   idEquals,
   dateToString,
+  dateToWeekday,
   stringToDate,
   addDaysToDate,
   daysBetweenDates,
