@@ -236,6 +236,9 @@ const renderSowingForm = data => {
     $('variety').value = veggie.id;
     $('veggieName').innerHTML = veggie.fullName;
     $('veggieName').style.display = '';
+    $('boxAmount').labels[0].textContent = veggie.isSingleCrop
+      ? 'Erntemenge gesamt'
+      : 'Erntemenge pro Ernte';
     $('boxAmount').value = dotToComma(
       Math.round(data.boxAmount * 1000) / 1000 || 0
     );
