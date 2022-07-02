@@ -44,12 +44,20 @@ const updateSowingForm = (seedAmount, veggieId) => {
   const quickpotAmount = veggie.preGrow
     ? Math.ceil(seedAmount / veggie.quickpotSize)
     : 0;
+  const sowing = new Sowing({
+    veggie,
+    sowingDate,
+    seedAmount: 0,
+    crops: [],
+  });
   View.renderSowingForm({
     veggie,
+    sowing,
     boxAmount,
     seedAmount,
     bedLength,
     quickpotAmount,
+    numberOfBoxes,
   });
   if (veggie.preGrow) {
     View.renderQuickpots(veggie.quickpotSize, seedAmount);

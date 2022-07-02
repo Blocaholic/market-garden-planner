@@ -2,6 +2,7 @@ import {
   commaToDot,
   dotToComma,
   dateToString,
+  dateToWeekday,
   stringToDate,
   addDaysToDate,
 } from './Utils.mjs';
@@ -239,6 +240,11 @@ const renderQuickpots = (size, filledSlots) => {
 };
 
 const renderSowingForm = data => {
+  // INSERT:     if(data.sowing) { ... return; }
+  // INSTEAD OF: if (data.veggie) { ... }
+  if (data.sowing) {
+    console.log(data.sowing.possibleCropDates);
+  }
   if (data.veggie) {
     const veggie = data.veggie;
     $('culture').style.display = 'none';
@@ -249,9 +255,8 @@ const renderSowingForm = data => {
     $('boxAmount').labels[0].textContent = veggie.isSingleCrop
       ? 'Erntemenge gesamt'
       : 'Erntemenge pro Ernte';
-    $('boxAmount').value = dotToComma(
-      Math.round(data.boxAmount * 1000) / 1000 || 0
-    );
+    const boxAmount = dotToComma(Math.round(data.boxAmount * 1000) / 1000 || 0);
+    $('boxAmount').value = boxAmount;
     $('seedAmount').value = data.seedAmount || 0;
     $('bedLength').value = dotToComma(data.bedLength || 0);
     $('quickpotAmount').value = dotToComma(data.quickpotAmount || 0);
@@ -267,7 +272,34 @@ const renderSowingForm = data => {
     );
     $('sowingForm__sowingDate').innerHTML = dateToString(sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
-
+    $('sowingForm__cropsWrapper').style.display = '';
+    const head = `<div class="head">Ernte-Termin</div>
+    <div class="head">Inhalt Kiste</div>
+    <div class="head">frei pro Kiste</div>
+    <div class="head">Überproduktion</div>
+    <div class="head">Summe</div>
+    <input type="checkbox">`;
+    const rows = data.sowing.possibleCropDates
+      .map(
+        date => `<div>${dateToWeekday(date)}, ${dateToString(date)}</div>
+    <div>
+      <input type="text"
+             name=""
+             id=""
+             value="${boxAmount}"> ${veggie.harvestUnit}
+    </div>
+    <div>0 ${veggie.harvestUnit}</div>
+    <div>0 ${veggie.harvestUnit}</div>
+    <div>${dotToComma((data.boxAmount || 0) * data.numberOfBoxes)} ${
+          veggie.harvestUnit
+        }</div>
+    <input type="checkbox"
+           name="useCropDateXX"
+           id="useCropDateXX"
+           checked>`
+      )
+      .join('');
+    $('sowingForm__cropsWrapper').innerHTML = head + rows;
     return;
   }
   if (data.culture && data.varieties) {
