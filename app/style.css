@@ -1,17 +1,13 @@
-@font-face {
-  font-family: Unifont;
-  src: url('unifont-14.0.04.ttf');
-}
 body {
-  color: rgb(0, 255, 51);
-  background-color: rgb(25, 25, 25);
-  font-family: Unifont, monospace;
+  color: rgb(189, 198, 207);
+  background-color: rgb(32, 33, 36);
+  font-family: monospace;
 }
 
 input,
 select {
-  color: rgb(0, 255, 51);
-  background-color: rgb(25, 25, 25);
+  color: rgb(189, 198, 207);
+  background-color: rgb(32, 33, 36);
 }
 
 input[type='text'] {
