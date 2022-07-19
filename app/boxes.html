@@ -77,6 +77,8 @@
   <code id="sowings"></code>
   <div class="sowing"
        id="sowing">
+    <span class="closeSymbol"
+          id="sowingForm__close">&#65291;</span>
     <div id="veggie">
       <h3 id="veggieName"></h3>
       <select name="culture"
@@ -92,11 +94,16 @@
     </div>
     <div class="wrapper3columns"
          id="sowingInfos">
-      <label for="boxAmount">Erntemenge</label>
+      <label for="cropAmount">Erntemenge</label>
+      <input type="text"
+             name="cropAmount"
+             id="cropAmount">
+      <div id="harvestUnit"></div>
+      <label for="boxAmount">Inhalt Kiste</label>
       <input type="text"
              name="boxAmount"
              id="boxAmount">
-      <div id="harvestUnit"></div>
+      <div id="boxAmountHarvestUnit"></div>
       <label for="seedAmount">Aussaat Menge</label>
       <input type="text"
              name="seedAmount"

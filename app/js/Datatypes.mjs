@@ -125,9 +125,9 @@ function Crop(date, veggie, amount) {
     throw new Error(
       `Crop.constructor: "amount" must be convertable to a Number, but it's value "${amount}" is not.`
     );
-  if (Number(amount) <= 0)
+  if (Number(amount) < 0)
     throw new Error(
-      `Crop.constructor: "Number(amount)" must be greater than 0, but is "${Number(
+      `Crop.constructor: "Number(amount)" must not be less than 0, but is "${Number(
         amount
       )}"!`
     );
@@ -213,6 +213,45 @@ Object.defineProperties(Sowing.prototype, {
       };
 
       return veggie.isMultiCrop ? multiCropResult() : singleCropResult();
+    },
+  },
+  cropAmount: {
+    get() {
+      const veggie = this.veggie;
+      return (
+        this.seedAmount *
+        veggie.germinationRate *
+        veggie.survivalRate *
+        veggie.harvestRate
+      );
+    },
+  },
+  bedLength: {
+    get() {
+      return (
+        Math.round(
+          ((this.veggie.preGrow
+            ? this.seedAmount * this.veggie.germinationRate
+            : this.seedAmount) /
+            ((100 / this.veggie.plantingDistance) *
+              Math.floor(75 / this.veggie.rowSpacing))) *
+            100
+        ) / 100
+      );
+    },
+  },
+  quickpotAmount: {
+    get() {
+      return this.veggie.preGrow
+        ? Math.ceil(this.seedAmount / this.veggie.quickpotSize)
+        : 0;
+    },
+  },
+  emptyQuickpotSlots: {
+    get() {
+      return this.veggie.preGrow
+        ? this.quickpotAmount * this.veggie.quickpotSize - this.seedAmount
+        : 0;
     },
   },
 });

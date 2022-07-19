@@ -14,77 +14,6 @@ const postAsJson = (url, data) =>
 const convertToVeggieDatatype = jsonArray =>
   jsonArray.map(item => new Veggie(item));
 
-const floorQuickpot = (quickpotAmount, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const seedAmount = (quickpotAmount - 1) * veggie.quickpotSize;
-  updateSowingForm(seedAmount, veggieId);
-};
-
-const ceilQuickpot = (quickpotAmount, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const seedAmount = quickpotAmount * veggie.quickpotSize;
-  updateSowingForm(seedAmount, veggieId);
-};
-
-const updateSowingForm = (seedAmount, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const boxAmount =
-    (seedAmount *
-      veggie.germinationRate *
-      veggie.survivalRate *
-      veggie.harvestRate) /
-    numberOfBoxes;
-  const bedLength =
-    Math.round(
-      ((veggie.preGrow ? seedAmount * veggie.germinationRate : seedAmount) /
-        ((100 / veggie.plantingDistance) *
-          Math.floor(75 / veggie.rowSpacing))) *
-        100
-    ) / 100;
-  const quickpotAmount = veggie.preGrow
-    ? Math.ceil(seedAmount / veggie.quickpotSize)
-    : 0;
-  const sowing = new Sowing({
-    veggie,
-    sowingDate,
-    seedAmount: 0,
-    crops: [],
-  });
-  View.renderSowingForm({
-    veggie,
-    sowing,
-    boxAmount,
-    seedAmount,
-    bedLength,
-    quickpotAmount,
-    numberOfBoxes,
-  });
-  if (veggie.preGrow) {
-    View.renderQuickpots(veggie.quickpotSize, seedAmount);
-    View.handleCeilQuickpot(ceilQuickpot);
-    View.handleFloorQuickpot(floorQuickpot);
-  }
-};
-
-const updateOnBoxAmount = (boxAmount, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const cropAmount = boxAmount * numberOfBoxes;
-  const seedAmount = veggie.toSeedAmount({cropAmount});
-  updateSowingForm(seedAmount, veggieId);
-};
-
-const updateOnBedLength = (bedLength, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const seedAmount = veggie.toSeedAmount({bedLength});
-  updateSowingForm(seedAmount, veggieId);
-};
-
-const updateOnQuickpotAmount = (quickpotAmount, veggieId) => {
-  const veggie = veggies.find(idEquals(veggieId));
-  const seedAmount = veggie.toSeedAmount({quickpotAmount});
-  updateSowingForm(seedAmount, veggieId);
-};
-
 const updateOnCulture = ({culture, firstCropDate}) => {
   const varieties = new Set(
     veggies
@@ -111,10 +40,8 @@ const updateOnVariety = ({veggieId, firstCropDate}) => {
     seedAmount: 0,
     crops: [],
   });
-  View.renderSowingForm({veggie, sowing, numberOfBoxes});
+  View.renderSowingForm({sowing, numberOfBoxes});
 };
-
-const resetSowingForm = () => View.renderSowingForm({cultures});
 
 const multiBoxPreview = ({firstDay, lastDay, interval}) => {
   const dates =
@@ -155,6 +82,52 @@ const addBox = (boxes, newBoxDate) => {
   saveBoxes(
     [...boxes, box].sort((a, b) => a.date.getTime() - b.date.getTime())
   );
+};
+
+const updateSowingForm = ({
+  target,
+  veggieId,
+  sowingDate,
+  cropAmount,
+  boxAmount,
+  seedAmount,
+  bedLength,
+  quickpotAmount,
+  crops,
+  syncedCrops,
+}) => {
+  const veggie = veggies.find(idEquals(veggieId));
+  if (target === 'quickpotAmount')
+    seedAmount = quickpotAmount * veggie.quickpotSize;
+  else if (target === 'bedLength')
+    seedAmount = veggie.toSeedAmount({bedLength});
+  else if (target === 'cropAmount')
+    seedAmount = veggie.toSeedAmount({cropAmount});
+  else if (target === 'boxAmount')
+    seedAmount = veggie.toSeedAmount({cropAmount: boxAmount * numberOfBoxes});
+  else if (target === 'floorQuickpot')
+    seedAmount = (quickpotAmount - 1) * veggie.quickpotSize;
+  else if (target === 'ceilQuickpot')
+    seedAmount = quickpotAmount * veggie.quickpotSize;
+  const tempSowing = new Sowing({veggie, sowingDate, seedAmount, crops: []});
+  const newCrops = crops.map(
+    (crop, i) =>
+      new Crop(
+        crop.date,
+        veggie,
+        syncedCrops[i + 1]
+          ? (Math.floor((tempSowing.cropAmount / numberOfBoxes) * 100) / 100) *
+            numberOfBoxes
+          : crop.boxAmount * numberOfBoxes
+      )
+  );
+  const sowing = new Sowing({
+    veggie,
+    sowingDate,
+    seedAmount,
+    crops: newCrops,
+  });
+  View.renderSowingForm({sowing, numberOfBoxes, syncedCrops});
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -198,10 +171,6 @@ const boxes = await fetchJson(
   View.handleAddBox(addBox, boxes);
   View.handleCulture(updateOnCulture);
   View.handleVariety(updateOnVariety);
-  View.handleBoxAmount(updateOnBoxAmount);
-  View.handleSeedAmount(updateSowingForm);
-  View.handleBedLength(updateOnBedLength);
-  View.handleQuickpotAmount(updateOnQuickpotAmount);
-  View.handleResetSowingForm(resetSowingForm);
+  View.handleChangeSowingForm(updateSowingForm);
   View.init();
 })();
