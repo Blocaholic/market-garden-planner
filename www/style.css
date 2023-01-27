@@ -18,6 +18,12 @@ label {
   text-align: right;
 }
 
+h1,
+h2,
+h3 {
+  font-family: 'Love Ya Like A Sister';
+}
+
 h3 {
   margin: 0;
 }

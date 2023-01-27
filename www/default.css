@@ -1,0 +1,159 @@
+@charset "utf-8";
+
+/** RESET *********************************************************************/
+
+*:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
+  all: unset;
+  display: revert;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  cursor: revert;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+textarea {
+  white-space: revert;
+}
+
+:where([hidden]) {
+  display: none;
+}
+
+:where([contenteditable]) {
+  -moz-user-modify: read-write;
+  -webkit-user-modify: read-write;
+  overflow-wrap: break-word;
+  -webkit-line-break: after-white-space;
+  line-break: after-white-space;
+}
+
+:where([draggable='true']) {
+  -webkit-user-drag: element;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1.2;
+}
+
+/** ELEMENT DEFAULTS **********************************************************/
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: monospace;
+  font-size: 1.4rem;
+}
+
+nav {
+  color: rgb(32, 33, 36);
+  background-color: #52a230;
+  font-size: 1.6rem;
+}
+
+main {
+  padding: 1rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Love Ya Like A Sister';
+}
+
+h1 {
+  font-size: 6rem;
+}
+
+h2 {
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-weight: bold;
+}
+
+/** CLASS STYLES **************************************************************/
+
+.header__logoWrapper {
+  display: inline-block;
+  padding: 1rem 1.5rem;
+  margin-right: 5rem;
+  height: 10rem;
+}
+
+.header__logoImage {
+  height: 80px;
+}
+
+.header__h1Wrapper {
+  display: inline-block;
+  height: 10rem;
+  vertical-align: top;
+}
+
+.header__h1 {
+  display: block;
+  height: 6rem;
+  margin: 2rem 0;
+}
+
+.header__mainNav {
+  padding-left: 20rem;
+}
+
+.header__mainNavLi {
+  display: inline-block;
+  margin-right: 3rem;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.header__mainNavLi--active {
+  text-decoration: underline;
+}
+
+.header__mainNavLi:hover,
+.header__mainNavLi--active:hover {
+  color: #6d4b41;
+}
