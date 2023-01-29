@@ -108,8 +108,6 @@ const handleChangeSowingForm = handler => {
         : event.target.id,
     veggieId: $('variety').value,
     sowingDate: stringToDate($('sowingForm__sowingDate').innerHTML),
-    cropAmount: commaToDot($('cropAmount').value),
-    boxAmount: commaToDot($('boxAmount').value),
     seedAmount: commaToDot($('seedAmount').value),
     bedLength: commaToDot($('bedLength').value),
     quickpotAmount: commaToDot($('quickpotAmount').value),
@@ -119,12 +117,6 @@ const handleChangeSowingForm = handler => {
   HANDLER.changeSowingForm = handler
     ? event => handler(getSowingFormData(event))
     : HANDLER.changeSowingForm;
-  $('cropAmount').addEventListener('change', HANDLER.changeSowingForm);
-  $('cropAmount').setAttribute('autocomplete', 'off');
-  $('cropAmount').addEventListener('click', e => e.target.select());
-  $('boxAmount').addEventListener('change', HANDLER.changeSowingForm);
-  $('boxAmount').setAttribute('autocomplete', 'off');
-  $('boxAmount').addEventListener('click', e => e.target.select());
   $('seedAmount').addEventListener('change', HANDLER.changeSowingForm);
   $('seedAmount').setAttribute('autocomplete', 'off');
   $('seedAmount').addEventListener('click', e => e.target.select());
@@ -168,14 +160,9 @@ const showSowingForm = e => {
 };
 
 const resetSowingForm = () => {
-  $('cropAmount').labels[0].style.display = 'none';
-  $('cropAmount').style.display = 'none';
-  $('harvestUnit').style.display = 'none';
   $('sowingForm__cropsWrapper').innerHTML = '';
   $('sowingForm__cropsWrapper').style.display = 'none';
   $('quickpotImages').innerHTML = '';
-  $('cropAmount').value = 0;
-  $('boxAmount').value = 0;
   $('seedAmount').value = 0;
   $('bedLength').value = 0;
   $('quickpotAmount').value = 0;
@@ -318,16 +305,9 @@ const renderSowingForm = data => {
     $('sowingForm__sowingDate').innerHTML = dateToString(sowing.sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
     // sowingInfos
-    $('cropAmount').labels[0].textContent = veggie.isSingleCrop
-      ? 'Erntemenge gesamt'
-      : 'Erntemenge pro Ernte';
     const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
     const roundedBoxAmount =
       Math.floor((sowing.cropAmount / numberOfBoxes) * 100) / 100 || 0;
-    $('cropAmount').value = roundedCropAmount;
-    $('harvestUnit').innerHTML = veggie.harvestUnit;
-    $('boxAmountHarvestUnit').innerHTML = veggie.harvestUnit;
-    $('boxAmount').value = roundedBoxAmount;
     $('seedAmount').value = sowing.seedAmount;
     $('bedLength').value = sowing.bedLength;
     $('quickpotAmount').value = sowing.quickpotAmount;
@@ -342,8 +322,6 @@ const renderSowingForm = data => {
       $('quickpotAmount').labels[0].style.display = 'none';
     }
     $('sowingInfos').style.display = '';
-    styleNumber($('cropAmount'));
-    styleNumber($('boxAmount'));
     styleNumber($('seedAmount'));
     styleNumber($('bedLength'));
     styleNumber($('quickpotAmount'));
