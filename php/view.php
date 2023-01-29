@@ -8,7 +8,7 @@ function renderContent($target, $error) {
     return '<h2>Kistenplanung</h2>';
   }
   if($target == 'reports') {
-    return '<h2>Auswertungen</h2><img src="/images/logo.svg">';
+    return '<h2>Auswertungen</h2><img src="https://reinwiese.de/images/logo.svg">';
   }
   if($target == 'home') {
     return '<h2>Welcome home</h2>';
