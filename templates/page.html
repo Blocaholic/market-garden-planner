@@ -7,7 +7,9 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet"
-        href="default.css">
+        href="https://reinwiese.de/css/default.css">
+  <link rel="stylesheet"
+        href="/css/style.css">
   <link rel="icon"
         href="https://reinwiese.de/images/logo.svg"
         type="image/svg+xml">
@@ -16,16 +18,25 @@
 </head>
 <body>
   <header>
-    <div class="header__logoWrapper">
-      <img src="https://reinwiese.de/images/logo.svg"
-           alt="Hof Reinwiese Logo"
-           class="header__logoImage">
-    </div>
-    <div class="header__h1Wrapper">
-      <h1 class="header__h1">Gemüsekisten-Planer</h1>
-    </div>
-    <nav class="header__mainNav">
-      <ul>
+    <a href="?target=home">
+      <div class="header__brand">
+        <img src="https://reinwiese.de/images/logo.svg"
+             alt="Hof Reinwiese Logo"
+             class="header__brandImage">
+        <div class="header__brandName">Gemüsekisten-Planer</div>
+      </div>
+    </a>
+    <input type="checkbox"
+           id="header__navToggle"
+           class="header__navToggle">
+    <nav class="header__nav">
+      <label for="header__navToggle"
+             class="header__navToggleButton">
+        <span class="header__navToggleButtonBar"></span>
+        <span class="header__navToggleButtonBar"></span>
+        <span class="header__navToggleButtonBar"></span>
+      </label>
+      <ul class="header__navUl">
         [%nav%]
       </ul>
     </nav>
