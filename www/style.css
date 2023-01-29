@@ -1,3 +1,15 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Love Ya Like A Sister';
+  src: url('https://reinwiese.de/LoveYaLikeASister-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://reinwiese.de/Inter-VariableFont_slnt\,wght.ttf');
+}
+
 body {
   color: rgb(189, 198, 207);
   background-color: rgb(32, 33, 36);
