@@ -50,11 +50,16 @@ label {
 }
  */
 
-.box__addVeggieButton {
+.box__addVeggieButton,
+.box__addVeggieButton:link,
+.box__addVeggieButton:visited,
+.box__addVeggieButton:hover,
+.box__addVeggieButton:active {
   padding: 0px 4px;
   margin: 4px;
   border-radius: 0.3rem;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .closeSymbol {
