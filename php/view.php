@@ -2,7 +2,7 @@
 
 function renderContent($target, $error) {
   if(!$_SESSION['isValidUser']) {
-    return $error.'<h2>Login-Formular</h2>';
+    return $error.'<h1>Login-Formular</h1>';
   }
   if(file_exists('../templates/content/'.$target.'.html')) {
     return file_get_contents("../templates/content/".$target.".html");
