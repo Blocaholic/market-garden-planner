@@ -176,6 +176,7 @@ const resetSowingForm = () => {
   $('sowingForm__firstCropDateWrapper').style.display = 'none';
   $('culture').selectedIndex = 0;
   $('variety').selectedIndex = 0;
+  $('sowing').scrollIntoView();
 };
 
 const openMultiBox = () => {
