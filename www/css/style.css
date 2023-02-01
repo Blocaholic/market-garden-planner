@@ -130,6 +130,18 @@ label {
   padding-right: 25px;
 }
 
+.addBox__h3,
+.addBox__h3:hover,
+.addBox__h3:active,
+.addBox__h3:link,
+.addBox__h3:visited {
+  margin-top: 0;
+}
+
+.addBox__wrapper {
+  margin-top: 2.4rem;
+}
+
 .sowing > * {
   margin: 6px;
 }

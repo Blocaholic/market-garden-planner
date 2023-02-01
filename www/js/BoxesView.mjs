@@ -215,7 +215,6 @@ const openAddBox = () => {
   $('addBox__inputWrapper').style.display = '';
   $('addBox__h3').classList.remove('button');
   $('addBox__wrapper').style.borderColor = '';
-  $('addBox__wrapper').style.margin = '';
   $('addBox__wrapper').style.padding = '';
 };
 
@@ -231,7 +230,6 @@ const closeAddBox = e => {
   $('addBox__saveButton').style.display = 'none';
   $('addBox__h3').classList.add('button');
   $('addBox__wrapper').style.borderColor = 'transparent';
-  $('addBox__wrapper').style.margin = '0';
   $('addBox__wrapper').style.padding = '0';
 };
 
