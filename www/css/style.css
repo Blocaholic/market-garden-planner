@@ -88,6 +88,12 @@ label {
   justify-content: space-between;
 }
 
+.planMultiBoxes__h3,
+.addBox__h3,
+.addSowing__h3 {
+  margin-top: 0;
+}
+
 .cropsWrapper {
   display: grid;
   grid-template-columns: repeat(6, max-content);
