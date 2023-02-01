@@ -111,7 +111,12 @@ label {
 .addBox__h3:hover,
 .addBox__h3:active,
 .addBox__h3:link,
-.addBox__h3:visited {
+.addBox__h3:visited,
+.addBoxes__h3,
+.addBoxes__h3:hover,
+.addBoxes__h3:active,
+.addBoxes__h3:link,
+.addBoxes__h3:visited {
   margin-top: 0;
 }
 
