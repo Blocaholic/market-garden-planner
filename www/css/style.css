@@ -142,6 +142,9 @@ label {
 
 .quickpots__buttonWrapper {
   width: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .quickpot {
@@ -181,4 +184,9 @@ label {
 .mirror {
   display: inline-block;
   transform: rotate(180deg);
+}
+
+#floorQuickpot,
+#ceilQuickpot {
+  margin: 0;
 }
