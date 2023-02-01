@@ -290,11 +290,6 @@ const renderSowingForm = data => {
   if (data.sowing && data.numberOfBoxes) {
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
-    if (veggie.isSingleCrop) {
-      $('cropAmount').labels[0].style.display = '';
-      $('cropAmount').style.display = '';
-      $('harvestUnit').style.display = '';
-    }
     $('culture').style.display = 'none';
     $('variety').style.display = 'none';
     $('variety').value = veggie.id;
