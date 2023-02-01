@@ -157,6 +157,7 @@ const showSowingForm = e => {
   $('sowingForm__sowingDateWrapper').style.display = 'none';
   $('sowingForm__cropsWrapper').style.display = 'none';
   $('sowing').style.display = '';
+  $('sowing').scrollIntoView();
 };
 
 const resetSowingForm = () => {
@@ -373,6 +374,7 @@ const renderSowingForm = data => {
     $$('.sowingForm__roundedCropAmount').forEach(el => styleNumber(el));
     $('sowingForm__cropsWrapper').style.display = '';
     handleChangeSowingForm();
+    $('sowing').scrollIntoView();
     return;
   }
   if (data.culture && data.varieties) {
@@ -384,6 +386,7 @@ const renderSowingForm = data => {
     $('culture').style.display = 'none';
     $('variety').innerHTML = `<option>Sorte auswählen</option>${options}`;
     $('variety').style.display = '';
+    $('sowing').scrollIntoView();
     return;
   }
   if (data.cultures) {
@@ -393,6 +396,7 @@ const renderSowingForm = data => {
       .join('');
     $('culture').innerHTML = `<option>Kultur auswählen</option>${options}`;
     $('resetSowingForm').addEventListener('click', resetSowingForm);
+    $('sowing').scrollIntoView();
     return;
   }
 };
