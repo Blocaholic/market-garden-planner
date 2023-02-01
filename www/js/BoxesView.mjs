@@ -25,7 +25,7 @@ const handleMultiBoxPreview = handler => {
 };
 
 const handleMultiBoxSave = handler => {
-  $('planMultiBoxes__saveButton').addEventListener('click', _ =>
+  $('addBoxes__saveButton').addEventListener('click', _ =>
     handler({
       firstDay: $('firstBoxDay').value,
       lastDay: $('lastBoxDay').value,
@@ -139,7 +139,7 @@ const handleChangeSowingForm = handler => {
 };
 
 const hideMultiBoxForm = () => {
-  $('planMultiBoxes__wrapper').style.display = 'none';
+  $('addBoxes__wrapper').style.display = 'none';
 };
 
 const hideAddBox = () => {
@@ -178,14 +178,14 @@ const resetSowingForm = () => {
 };
 
 const openMultiBox = () => {
-  $('planMultiBoxes__close').style.display = '';
-  $('planMultiBoxes__inputWrapper').style.display = '';
-  $('planMultiBoxes__dates').style.display = '';
-  $('planMultiBoxes__saveButton').style.display = '';
-  $('planMultiBoxes__h3').classList.remove('button');
-  $('planMultiBoxes__wrapper').style.borderColor = '';
-  $('planMultiBoxes__wrapper').style.margin = '';
-  $('planMultiBoxes__wrapper').style.padding = '';
+  $('addBoxes__close').style.display = '';
+  $('addBoxes__inputWrapper').style.display = '';
+  $('addBoxes__dates').style.display = '';
+  $('addBoxes__h3').classList.remove('button');
+  $('addBoxes__saveButton').style.display = '';
+  $('addBoxes__wrapper').style.borderColor = '';
+  $('addBoxes__wrapper').style.margin = '';
+  $('addBoxes__wrapper').style.padding = '';
 };
 
 const closeMultiBox = e => {
@@ -194,14 +194,14 @@ const closeMultiBox = e => {
   $('lastBoxDay').value = '';
   $('boxInterval').value = 7;
   renderBoxPreview([]);
-  $('planMultiBoxes__close').style.display = 'none';
-  $('planMultiBoxes__inputWrapper').style.display = 'none';
-  $('planMultiBoxes__dates').style.display = 'none';
-  $('planMultiBoxes__saveButton').style.display = 'none';
-  $('planMultiBoxes__h3').classList.add('button');
-  $('planMultiBoxes__wrapper').style.borderColor = 'transparent';
-  $('planMultiBoxes__wrapper').style.margin = '0';
-  $('planMultiBoxes__wrapper').style.padding = '0';
+  $('addBoxes__close').style.display = 'none';
+  $('addBoxes__inputWrapper').style.display = 'none';
+  $('addBoxes__dates').style.display = 'none';
+  $('addBoxes__saveButton').style.display = 'none';
+  $('addBoxes__h3').classList.add('button');
+  $('addBoxes__wrapper').style.borderColor = 'transparent';
+  $('addBoxes__wrapper').style.margin = '0';
+  $('addBoxes__wrapper').style.padding = '0';
 };
 
 const openAddBox = () => {
@@ -235,13 +235,13 @@ const closeAddBox = e => {
 
 const renderBoxPreview = dates => {
   const numberOfBoxes = dates.length;
-  $('planMultiBoxes__saveButton').style.color =
+  $('addBoxes__saveButton').style.color =
     numberOfBoxes === 0 ? 'rgb(170,170,170)' : 'rgb(0,0,0)';
   const buttonText =
     numberOfBoxes === 1
       ? `1 Kiste hinzufügen`
       : `${numberOfBoxes} Kisten hinzufügen`;
-  $('planMultiBoxes__saveButton').innerHTML = buttonText;
+  $('addBoxes__saveButton').innerHTML = buttonText;
   const datesHtml = dates
     .reduce(
       (datesString, date, i, self) =>
@@ -251,7 +251,7 @@ const renderBoxPreview = dates => {
       []
     )
     .join(' ');
-  $('planMultiBoxes__dates').innerHTML = datesHtml;
+  $('addBoxes__dates').innerHTML = datesHtml;
 };
 
 const renderQuickpots = (size, filledSlots) => {
@@ -437,9 +437,9 @@ const showEieruhr = () => {
 };
 
 const init = () => {
-  $('planMultiBoxes__h3').addEventListener('click', openMultiBox);
-  $('planMultiBoxes__close').addEventListener('click', closeMultiBox);
-  $('planMultiBoxes__close').click();
+  $('addBoxes__h3').addEventListener('click', openMultiBox);
+  $('addBoxes__close').addEventListener('click', closeMultiBox);
+  $('addBoxes__close').click();
   $('addBox__h3').addEventListener('click', openAddBox);
   $('addBox__close').addEventListener('click', closeAddBox);
   $('addBox__close').click();

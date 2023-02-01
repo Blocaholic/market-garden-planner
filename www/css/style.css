@@ -50,18 +50,6 @@ label {
 }
  */
 
-.box__addVeggieButton,
-.box__addVeggieButton:link,
-.box__addVeggieButton:visited,
-.box__addVeggieButton:hover,
-.box__addVeggieButton:active {
-  padding: 0px 4px;
-  margin: 4px;
-  border-radius: 0.3rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .closeSymbol {
   position: absolute;
   top: 3px;
@@ -82,13 +70,13 @@ label {
   font-weight: bold;
 }
 
-.planMultiBoxes__h3,
+.addBoxes__h3,
 .addBox__h3 {
   display: flex;
   justify-content: space-between;
 }
 
-.planMultiBoxes__h3,
+.addBoxes__h3,
 .addBox__h3,
 .addSowing__h3 {
   margin-top: 0;
@@ -100,26 +88,14 @@ label {
   column-gap: 10px;
 }
 
-.planMultiBoxes__inputWrapper {
+.addBoxes__inputWrapper {
   display: grid;
   grid-template-columns: auto auto;
   column-gap: 10px;
 }
 
-.box {
-  border: 2px solid rgb(100, 100, 100);
-  border-radius: 5px;
-  display: inline-block;
-  margin: 5px;
-  padding: 5px;
-}
-
-.box__date {
-  border: 0px none transparent;
-}
-
 .sowing,
-.planMultiBoxes__wrapper,
+.addBoxes__wrapper,
 .addBox__wrapper {
   position: relative;
   display: table;
@@ -208,4 +184,31 @@ label {
 #floorQuickpot,
 #ceilQuickpot {
   margin: 0;
+}
+
+/*#################################################################*/
+
+/* BOXES */
+.box {
+  border: 2px solid rgb(100, 100, 100);
+  border-radius: 5px;
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+}
+
+.box__date {
+  border: 0px none transparent;
+}
+
+.box__addVeggieButton,
+.box__addVeggieButton:link,
+.box__addVeggieButton:visited,
+.box__addVeggieButton:hover,
+.box__addVeggieButton:active {
+  padding: 0px 4px;
+  margin: 4px;
+  border-radius: 0.3rem;
+  font-weight: bold;
+  cursor: pointer;
 }
