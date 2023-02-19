@@ -132,7 +132,7 @@ const updateSowingForm = ({
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const numberOfBoxes = 174;
+const numberOfBoxes = 50;
 const veggies = await fetchJson(
   'https://marketgardenapi.reinwiese.de/veggies.php'
 ).then(convertToVeggieDatatype);
