@@ -252,7 +252,7 @@ Object.defineProperties(Sowing.prototype, {
     get() {
       return this.veggie.preGrow
         ? Math.ceil(
-            this.seedAmount / this.veggie.quickpotSize / this.seedsPerPot
+            this.seedAmount / this.veggie.quickpotSize / this.veggie.seedsPerPot
           )
         : 0;
     },
@@ -261,7 +261,7 @@ Object.defineProperties(Sowing.prototype, {
     get() {
       return this.veggie.preGrow
         ? this.quickpotAmount * this.veggie.quickpotSize -
-            this.seedAmount / this.seedsPerPot
+            this.seedAmount / this.veggie.seedsPerPot
         : 0;
     },
   },
