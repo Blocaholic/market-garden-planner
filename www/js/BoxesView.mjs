@@ -326,7 +326,11 @@ const renderSowingForm = data => {
     styleNumber($('seedAmount'));
     styleNumber($('bedLength'));
     styleNumber($('quickpotAmount'));
-    if (veggie.preGrow) renderQuickpots(veggie.quickpotSize, sowing.seedAmount);
+    if (veggie.preGrow)
+      renderQuickpots(
+        veggie.quickpotSize,
+        sowing.seedAmount / veggie.seedsPerPot
+      );
     // crops
     const head = `<div class="head">Ernte-Termin</div>
     <div class="head">Inhalt Kiste</div>
