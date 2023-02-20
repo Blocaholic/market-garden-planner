@@ -2,6 +2,7 @@ import Utils from './Utils.mjs';
 
 function Veggie({
   id,
+  category,
   culture,
   variety,
   rowSpacing,
@@ -12,6 +13,7 @@ function Veggie({
   maxGerminationTemp,
   quickpotSize,
   quickpotDuration,
+  seedsPerPot,
   survivalRate,
   germinationRate,
   bedDuration,
@@ -23,8 +25,14 @@ function Veggie({
   harvestTolerance,
   comment,
   description,
+  sellingPricePerUnit,
 }) {
+  if (!harvestRate)
+    throw new Error('Erwartete Erntemenge darf nicht Null sein!');
+  if (!sellingPricePerUnit)
+    throw new Error('VerkaufspreisProEinheit darf nicht Null sein!');
   this.id = Number(id);
+  this.category = String(category);
   this.culture = String(culture);
   this.variety = String(variety || '(Standard)');
   this.rowSpacing = Number(rowSpacing);
@@ -35,6 +43,7 @@ function Veggie({
   this.maxGerminationTemp = Number(maxGerminationTemp) || Infinity;
   this.quickpotSize = Number(quickpotSize);
   this.quickpotDuration = Number(quickpotDuration);
+  this.seedsPerPot = Number(Utils.commaToDot(seedsPerPot || '1'));
   this.survivalRate = Number(Utils.commaToDot(survivalRate || '1'));
   this.germinationRate = Number(Utils.commaToDot(germinationRate || '1'));
   this.bedDuration = Number(bedDuration);
@@ -50,8 +59,7 @@ function Veggie({
   this.harvestTolerance = Number(harvestTolerance);
   this.comment = String(comment || '');
   this.description = String(description || '');
-  if (!this.harvestRate)
-    throw new Error('Erwartete Erntemenge darf nicht Null sein!');
+  this.sellingPricePerUnit = Number(Utils.commaToDot(sellingPricePerUnit));
   Utils.deepFreeze(this);
 }
 Object.defineProperties(Veggie.prototype, {
