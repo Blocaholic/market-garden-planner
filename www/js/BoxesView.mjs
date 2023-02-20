@@ -374,7 +374,13 @@ const renderSowingForm = data => {
            ${syncedCrop ? 'checked' : ''}>`;
       })
       .join('');
-    $('sowingForm__cropsWrapper').innerHTML = head + rows;
+    const finalRow = `<div>Summe</div>
+    <div>Menge Einheit</div>
+    <div>unused Einheit</div>
+    <div>über Einheit</div>
+    <div>Summe Einheit</div>
+    <div></div>`;
+    $('sowingForm__cropsWrapper').innerHTML = head + rows + finalRow;
     $$('.sowingForm__boxAmount').forEach(el => styleNumber(el));
     $$('.sowingForm__unusedPerBox').forEach(el => styleNumber(el));
     $$('.sowingForm__overProduction').forEach(el => styleNumber(el));
