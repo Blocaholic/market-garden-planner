@@ -98,7 +98,7 @@ const updateSowingForm = ({
 }) => {
   const veggie = veggies.find(idEquals(veggieId));
   if (target === 'quickpotAmount')
-    seedAmount = quickpotAmount * veggie.quickpotSize;
+    seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   else if (target === 'bedLength')
     seedAmount = veggie.toSeedAmount({bedLength});
   else if (target === 'cropAmount')
@@ -106,9 +106,10 @@ const updateSowingForm = ({
   else if (target === 'boxAmount')
     seedAmount = veggie.toSeedAmount({cropAmount: boxAmount * numberOfBoxes});
   else if (target === 'floorQuickpot')
-    seedAmount = (quickpotAmount - 1) * veggie.quickpotSize;
+    seedAmount =
+      (quickpotAmount - 1) * veggie.quickpotSize * veggie.seedsPerPot;
   else if (target === 'ceilQuickpot')
-    seedAmount = quickpotAmount * veggie.quickpotSize;
+    seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const tempSowing = new Sowing({veggie, sowingDate, seedAmount, crops: []});
   const newCrops = crops.map(
     (crop, i) =>

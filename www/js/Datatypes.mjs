@@ -96,7 +96,7 @@ Object.defineProperties(Veggie.prototype, {
 });
 Veggie.prototype.toSeedAmount = function (x) {
   if (x.hasOwnProperty('quickpotAmount'))
-    return Math.floor(x.quickpotAmount * this.quickpotSize);
+    return Math.floor(x.quickpotAmount * this.quickpotSize * this.seedsPerPot);
   if (x.hasOwnProperty('bedLength'))
     return Math.floor(
       (this.preGrow
@@ -251,14 +251,17 @@ Object.defineProperties(Sowing.prototype, {
   quickpotAmount: {
     get() {
       return this.veggie.preGrow
-        ? Math.ceil(this.seedAmount / this.veggie.quickpotSize)
+        ? Math.ceil(
+            this.seedAmount / this.veggie.quickpotSize / this.seedsPerPot
+          )
         : 0;
     },
   },
   emptyQuickpotSlots: {
     get() {
       return this.veggie.preGrow
-        ? this.quickpotAmount * this.veggie.quickpotSize - this.seedAmount
+        ? this.quickpotAmount * this.veggie.quickpotSize -
+            this.seedAmount / this.seedsPerPot
         : 0;
     },
   },
