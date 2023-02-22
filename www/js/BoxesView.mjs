@@ -302,6 +302,11 @@ const renderSowingForm = data => {
     $('veggieName').style.display = '';
   };
 
+  const showSowingDate = date => {
+    $('sowingForm__sowingDate').innerHTML = dateToString(date);
+    $('sowingForm__sowingDateWrapper').style.display = '';
+  };
+
   const hideCultureSelect = () => {
     $('culture').style.display = 'none';
   };
@@ -328,8 +333,7 @@ const renderSowingForm = data => {
     hideVarietySelect();
     setVarietySelectValue(veggie.id);
     showVeggieName(veggie.fullName);
-    $('sowingForm__sowingDate').innerHTML = dateToString(sowing.sowingDate);
-    $('sowingForm__sowingDateWrapper').style.display = '';
+    showSowingDate(sowing.sowingDate);
     // sowingInfos
     const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
     const roundedBoxAmount =
