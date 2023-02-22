@@ -325,19 +325,21 @@ const renderSowingForm = data => {
     hideSowingForm();
   });
 
-  // execute
+  // culture and variety are selected
   if (varietyIsSelected()) {
+    // variables
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
+    const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
+    /* const roundedBoxAmount =
+      Math.floor((sowing.cropAmount / numberOfBoxes) * 100) / 100 || 0; */
+    // execute
     hideCultureSelect();
     hideVarietySelect();
     setVarietySelectValue(veggie.id);
     showVeggieName(veggie.fullName);
     showSowingDate(sowing.sowingDate);
     // sowingInfos
-    const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
-    const roundedBoxAmount =
-      Math.floor((sowing.cropAmount / numberOfBoxes) * 100) / 100 || 0;
     $('seedAmount').value = sowing.seedAmount;
     $('bedLength').value = sowing.bedLength;
     $('quickpotAmount').value = sowing.quickpotAmount;
