@@ -302,6 +302,10 @@ const renderSowingForm = data => {
     $('veggieName').style.display = '';
   };
 
+  const hideCultureSelect = () => {
+    $('culture').style.display = 'none';
+  };
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -312,7 +316,7 @@ const renderSowingForm = data => {
   if (varietyIsSelected()) {
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
-    $('culture').style.display = 'none';
+    hideCultureSelect();
     $('variety').style.display = 'none';
     $('variety').value = veggie.id;
     showVeggieName(veggie.fullName);
@@ -411,7 +415,7 @@ const renderSowingForm = data => {
       .map(variety => `<option value="${variety.id}">${variety.name}</option>`)
       .join('');
     showVeggieName(data.culture);
-    $('culture').style.display = 'none';
+    hideCultureSelect();
     $('variety').innerHTML = `<option>Sorte auswählen</option>${options}`;
     $('variety').style.display = '';
     return;
