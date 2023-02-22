@@ -306,6 +306,10 @@ const renderSowingForm = data => {
     $('culture').style.display = 'none';
   };
 
+  const hideVarietySelect = () => {
+    $('variety').style.display = 'none';
+  };
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -317,7 +321,7 @@ const renderSowingForm = data => {
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
     hideCultureSelect();
-    $('variety').style.display = 'none';
+    hideVarietySelect();
     $('variety').value = veggie.id;
     showVeggieName(veggie.fullName);
     $('sowingForm__sowingDate').innerHTML = dateToString(sowing.sowingDate);
