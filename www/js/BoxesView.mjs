@@ -310,6 +310,10 @@ const renderSowingForm = data => {
     $('variety').style.display = 'none';
   };
 
+  const setVarietySelectValue = selected => {
+    $('variety').value = selected;
+  };
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -322,7 +326,7 @@ const renderSowingForm = data => {
     const veggie = sowing.veggie;
     hideCultureSelect();
     hideVarietySelect();
-    $('variety').value = veggie.id;
+    setVarietySelectValue(veggie.id);
     showVeggieName(veggie.fullName);
     $('sowingForm__sowingDate').innerHTML = dateToString(sowing.sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
