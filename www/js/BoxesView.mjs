@@ -297,6 +297,11 @@ const renderSowingForm = data => {
   const cultureIsSelected = () => data.culture && data.varieties;
   const nothingIsSelected = () => data.cultures;
 
+  const showVeggieName = veggieName => {
+    $('veggieName').innerHTML = veggieName;
+    $('veggieName').style.display = '';
+  };
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -310,8 +315,7 @@ const renderSowingForm = data => {
     $('culture').style.display = 'none';
     $('variety').style.display = 'none';
     $('variety').value = veggie.id;
-    $('veggieName').innerHTML = veggie.fullName;
-    $('veggieName').style.display = '';
+    showVeggieName(veggie.fullName);
     $('sowingForm__sowingDate').innerHTML = dateToString(sowing.sowingDate);
     $('sowingForm__sowingDateWrapper').style.display = '';
     // sowingInfos
@@ -406,8 +410,7 @@ const renderSowingForm = data => {
     const options = [...data.varieties]
       .map(variety => `<option value="${variety.id}">${variety.name}</option>`)
       .join('');
-    $('veggieName').innerHTML = data.culture;
-    $('veggieName').style.display = '';
+    showVeggieName(data.culture);
     $('culture').style.display = 'none';
     $('variety').innerHTML = `<option>Sorte auswählen</option>${options}`;
     $('variety').style.display = '';
