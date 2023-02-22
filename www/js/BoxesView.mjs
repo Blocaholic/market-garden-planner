@@ -284,6 +284,7 @@ const renderQuickpots = (size, filledSlots) => {
 };
 
 const renderSowingForm = data => {
+  // helper functions
   const styleNumber = element => {
     const value =
       element.value !== undefined ? element.value : element.innerHTML;
@@ -291,10 +292,14 @@ const renderSowingForm = data => {
     element.value = dotToComma(element.value);
     element.innerHTML = dotToComma(element.innerHTML);
   };
+
+  // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
     hideSowingForm();
   });
+
+  // execute
   if (data.sowing && data.numberOfBoxes) {
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
