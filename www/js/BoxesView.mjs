@@ -293,6 +293,10 @@ const renderSowingForm = data => {
     element.innerHTML = dotToComma(element.innerHTML);
   };
 
+  const varietyIsSelected = () => data.sowing && data.numberOfBoxes;
+  const cultureIsSelected = () => data.culture && data.varieties;
+  const nothingIsSelected = () => data.cultures;
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -300,7 +304,7 @@ const renderSowingForm = data => {
   });
 
   // execute
-  if (data.sowing && data.numberOfBoxes) {
+  if (varietyIsSelected()) {
     const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
     const veggie = sowing.veggie;
     $('culture').style.display = 'none';
@@ -338,15 +342,15 @@ const renderSowingForm = data => {
       );
     // crops
     const head = `<div class="head">Ernte-Termin</div>
-    <div class="head">Inhalt Kiste</div>
-    <div class="head">frei pro Kiste</div>
-    <div class="head">Überproduktion</div>
-    <div class="head">Summe</div>
-    <input type="checkbox"
-           name="syncCrop--all"
-           id="syncCrop--all"
-           class="sowingForm__syncCropCheckbox"
-           ${syncedCrops[0] ? 'checked' : ''}>`;
+      <div class="head">Inhalt Kiste</div>
+      <div class="head">frei pro Kiste</div>
+      <div class="head">Überproduktion</div>
+      <div class="head">Summe</div>
+      <input type="checkbox"
+             name="syncCrop--all"
+             id="syncCrop--all"
+             class="sowingForm__syncCropCheckbox"
+             ${syncedCrops[0] ? 'checked' : ''}>`;
     const rows = sowing.possibleCropDates
       .map((date, index) => {
         const syncedCrop = syncedCrops[index + 1];
@@ -360,35 +364,35 @@ const renderSowingForm = data => {
         const overProduction =
           Math.round(unusedPerBox * numberOfBoxes * 100) / 100;
         return `<div>${dateToWeekday(date)}, ${dateToString(date)}</div>
-    <div>
-      <input type="text"
-             name=""
-             id="sowingForm__boxAmount--${dateToString(date)}"
-             class="sowingForm__boxAmount"
-             value="${dotToComma(boxAmount)}"> ${veggie.harvestUnit}
-    </div>
-    <div><span class="sowingForm__unusedPerBox">${
-      Math.floor(unusedPerBox * 100) / 100
-    }</span> ${veggie.harvestUnit}</div>
-    <div><span class="sowingForm__overProduction">${overProduction}</span> ${
+      <div>
+        <input type="text"
+               name=""
+               id="sowingForm__boxAmount--${dateToString(date)}"
+               class="sowingForm__boxAmount"
+               value="${dotToComma(boxAmount)}"> ${veggie.harvestUnit}
+      </div>
+      <div><span class="sowingForm__unusedPerBox">${
+        Math.floor(unusedPerBox * 100) / 100
+      }</span> ${veggie.harvestUnit}</div>
+      <div><span class="sowingForm__overProduction">${overProduction}</span> ${
           veggie.harvestUnit
         }</div>
-    <div><span class="sowingForm__roundedCropAmount">${roundedCropAmount}</span> ${
+      <div><span class="sowingForm__roundedCropAmount">${roundedCropAmount}</span> ${
           veggie.harvestUnit
         }</div>
-    <input type="checkbox"
-           name="syncCrop--${dateToString(date)}"
-           id="syncCrop--${dateToString(date)}"
-           class="sowingForm__syncCropCheckbox"
-           ${syncedCrop ? 'checked' : ''}>`;
+      <input type="checkbox"
+             name="syncCrop--${dateToString(date)}"
+             id="syncCrop--${dateToString(date)}"
+             class="sowingForm__syncCropCheckbox"
+             ${syncedCrop ? 'checked' : ''}>`;
       })
       .join('');
     const finalRow = `<div>Summe</div>
-    <div>Menge Einheit</div>
-    <div>unused Einheit</div>
-    <div>über Einheit</div>
-    <div>Summe Einheit</div>
-    <div></div>`;
+      <div>Menge Einheit</div>
+      <div>unused Einheit</div>
+      <div>über Einheit</div>
+      <div>Summe Einheit</div>
+      <div></div>`;
     $('sowingForm__cropsWrapper').innerHTML = head + rows + finalRow;
     $$('.sowingForm__boxAmount').forEach(el => styleNumber(el));
     $$('.sowingForm__unusedPerBox').forEach(el => styleNumber(el));
@@ -398,7 +402,7 @@ const renderSowingForm = data => {
     handleChangeSowingForm();
     return;
   }
-  if (data.culture && data.varieties) {
+  if (cultureIsSelected()) {
     const options = [...data.varieties]
       .map(variety => `<option value="${variety.id}">${variety.name}</option>`)
       .join('');
@@ -409,7 +413,7 @@ const renderSowingForm = data => {
     $('variety').style.display = '';
     return;
   }
-  if (data.cultures) {
+  if (nothingIsSelected()) {
     resetSowingForm();
     const options = [...data.cultures]
       .map(culture => `<option value="${culture}">${culture}</option>`)
