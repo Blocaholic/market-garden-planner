@@ -319,6 +319,26 @@ const renderSowingForm = data => {
     $('variety').value = selected;
   };
 
+  const showQuickpotInfos = (veggie, sowing) => {
+    $('quickpotAmount').value = sowing.quickpotAmount;
+    $('quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
+    $('quickpotAmount').style.display = '';
+    $('quickpotSize').style.display = '';
+    $('quickpotAmount').labels[0].style.display = '';
+    renderQuickpots(
+      veggie.quickpotSize,
+      sowing.seedAmount / veggie.seedsPerPot
+    );
+  };
+
+  const hideQuickpotInfos = () => {
+    $('quickpotAmount').value = 0;
+    $('quickpotSize').innerHTML = ``;
+    $('quickpotAmount').style.display = 'none';
+    $('quickpotSize').style.display = 'none';
+    $('quickpotAmount').labels[0].style.display = 'none';
+  };
+
   // event listeners
   $('sowingForm__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -342,26 +362,11 @@ const renderSowingForm = data => {
     // sowingInfos
     $('seedAmount').value = sowing.seedAmount;
     $('bedLength').value = sowing.bedLength;
-    $('quickpotAmount').value = sowing.quickpotAmount;
-    $('quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
-    if (veggie.preGrow) {
-      $('quickpotAmount').style.display = '';
-      $('quickpotSize').style.display = '';
-      $('quickpotAmount').labels[0].style.display = '';
-    } else {
-      $('quickpotAmount').style.display = 'none';
-      $('quickpotSize').style.display = 'none';
-      $('quickpotAmount').labels[0].style.display = 'none';
-    }
-    $('sowingInfos').style.display = '';
     styleNumber($('seedAmount'));
     styleNumber($('bedLength'));
     styleNumber($('quickpotAmount'));
-    if (veggie.preGrow)
-      renderQuickpots(
-        veggie.quickpotSize,
-        sowing.seedAmount / veggie.seedsPerPot
-      );
+    $('sowingInfos').style.display = '';
+    veggie.preGrow ? showQuickpotInfos(veggie, sowing) : hideQuickpotInfos();
     // crops
     const head = `<div class="head">Ernte-Termin</div>
       <div class="head">Inhalt Kiste</div>
