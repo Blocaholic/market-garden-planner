@@ -11,3 +11,5 @@
 ## Prio B
 
 ## Issues
+
+- Quickpot-Images haben fehlenden Pot, wenn mehrere Samen pro Pot gesät werden.
