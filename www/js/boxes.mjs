@@ -19,7 +19,7 @@ const updateOnCulture = ({culture, firstCropDate}) => {
     veggies
       .filter(v => v.culture === culture)
       .map(v => {
-        return {id: v.id, name: v.variety};
+        return {id: v.id, name: v.variety, bedDuration: v.bedDuration};
       })
       .sort()
   );
@@ -74,7 +74,7 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
           interval: Number(interval),
         });
   const newBoxes = dates.map(date => new Box(date));
-  saveBoxes(newBoxes);
+  saveBoxes(newBoxesquickpot);
 };
 
 const addBox = (boxes, newBoxDate) => {

@@ -426,7 +426,10 @@ const renderSowingForm = data => {
   }
   if (cultureIsSelected()) {
     const options = [...data.varieties]
-      .map(variety => `<option value="${variety.id}">${variety.name}</option>`)
+      .map(
+        variety =>
+          `<option value="${variety.id}">${variety.name} (Beetdauer: ${variety.bedDuration} Tage)</option>`
+      )
       .join('');
     showVeggieName(data.culture);
     hideCultureSelect();
