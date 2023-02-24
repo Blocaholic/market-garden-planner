@@ -262,7 +262,10 @@ const renderBoxPreview = dates => {
   $('addBoxes__dates').innerHTML = datesHtml;
 };
 
-const renderQuickpots = (size, filledSlots) => {
+const renderQuickpots = (veggie, seedAmount) => {
+  const size = veggie.quickpotSize;
+  const filledSlots = seedAmount / veggie.seedsPerPot;
+
   if (filledSlots <= 0) return;
   const emptySlots = filledSlots % size ? size - (filledSlots % size) : 0;
   const filledSlotHtml = '<div class="slot slot--filled"></div>';
@@ -325,10 +328,7 @@ const renderSowingForm = data => {
     $('quickpotAmount').style.display = '';
     $('quickpotSize').style.display = '';
     $('quickpotAmount').labels[0].style.display = '';
-    renderQuickpots(
-      veggie.quickpotSize,
-      sowing.seedAmount / veggie.seedsPerPot
-    );
+    renderQuickpots(veggie, sowing.seedAmount);
   };
 
   const hideQuickpotInfos = () => {
@@ -378,6 +378,7 @@ const renderSowingForm = data => {
              id="syncCrop--all"
              class="sowingForm__syncCropCheckbox"
              ${syncedCrops[0] ? 'checked' : ''}>`;
+
     const rows = sowing.possibleCropDates
       .map((date, index) => {
         const syncedCrop = syncedCrops[index + 1];
@@ -414,12 +415,14 @@ const renderSowingForm = data => {
              ${syncedCrop ? 'checked' : ''}>`;
       })
       .join('');
+
     const finalRow = `<div>Summe</div>
       <div>Menge Einheit</div>
       <div>unused Einheit</div>
       <div>über Einheit</div>
       <div>Summe Einheit</div>
       <div></div>`;
+
     $('sowingForm__cropsWrapper').innerHTML = head + rows + finalRow;
     $$('.sowingForm__boxAmount').forEach(el => styleNumber(el));
     $$('.sowingForm__unusedPerBox').forEach(el => styleNumber(el));
@@ -499,7 +502,6 @@ const init = () => {
 
 export {
   renderSowingForm,
-  renderQuickpots,
   renderBoxPreview,
   renderBoxes,
   renderSowings,
