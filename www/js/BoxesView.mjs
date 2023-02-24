@@ -265,7 +265,6 @@ const renderBoxPreview = dates => {
 const renderQuickpots = (veggie, seedAmount) => {
   const size = veggie.quickpotSize;
   const filledSlots = Math.ceil(seedAmount / veggie.seedsPerPot);
-
   if (filledSlots <= 0) return;
   const emptySlots = filledSlots % size ? size - (filledSlots % size) : 0;
   const filledSlotHtml = '<div class="slot slot--filled"></div>';
