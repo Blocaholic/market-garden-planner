@@ -62,52 +62,54 @@
 <hr>
 <h1>Aussaaten</h1>
 <code id="sowings"></code>
-<div class="sowing"
-     id="sowing">
-  <span class="closeSymbol"
-        id="sowingForm__close">&#65291;</span>
-  <div id="veggie">
-    <h3 id="veggieName"
-        class="addSowing__veggieName"></h3>
-    <select name="culture"
-            id="culture"></select>
-    <select name="variety"
-            id="variety"></select>
+<!--NEW CODE-->
+<div class="addSowing"
+     id="addSowing">
+  <span class="__closeSymbol"
+        id="addSowing__close">&#65291;</span>
+  <div id="addSowing__veggieWrapper">
+    <h2 id="addSowing__veggieName"
+        class="addSowing__veggieName"></h2>
+    <select name="addSowing__culture"
+            id="addSowing__culture"></select>
+    <select name="addSowing__variety"
+            id="addSowing__variety"></select>
   </div>
-  <div id="sowingForm__sowingDateWrapper">Aussaat-Datum:
-    <span id="sowingForm__sowingDate"></span>
+  <div id="addSowing__dateWrapper">Aussaat-Datum:
+    <span id="addSowing__date"></span>
   </div>
-  <div id="sowingForm__firstCropDateWrapper">Erster Ernte-Termin:
-    <span id="sowingForm__firstCropDate"></span>
+  <div id="addSowing__firstCropDateWrapper">Erster Ernte-Termin:
+    <span id="addSowing__firstCropDate"></span>
   </div>
-  <div class="wrapper3columns"
-       id="sowingInfos">
-    <label for="seedAmount">Aussaat Menge</label>
-    <input type="text"
-           name="seedAmount"
-           id="seedAmount">
-    <div></div>
-    <label for="bedLength">Beet-Länge (m)</label>
-    <input type="text"
-           name="bedLength"
-           id="bedLength">
-    <div></div>
-    <label for="quickpotAmount">Quickpots</label>
-    <input type="text"
-           name="quickpotAmount"
-           id="quickpotAmount">
-    <div id="quickpotSize"></div>
-  </div>
-  <div id="quickpotImages"
-       class="quickpots">
-  </div>
-  <div class="cropsWrapper"
-       id="sowingForm__cropsWrapper">
-  </div>
-  <a href="#"
-     class="button"
-     id="resetSowingForm">Reset</a>
-  <a href="#"
-     class="button button--attention"
-     id="saveSowing">Speichern</a>
 </div>
+<!--OLD CODE-->
+<div class="wrapper3columns"
+     id="sowingInfos">
+  <label for="seedAmount">Aussaat Menge</label>
+  <input type="text"
+         name="seedAmount"
+         id="seedAmount">
+  <div></div>
+  <label for="bedLength">Beet-Länge (m)</label>
+  <input type="text"
+         name="bedLength"
+         id="bedLength">
+  <div></div>
+  <label for="quickpotAmount">Quickpots</label>
+  <input type="text"
+         name="quickpotAmount"
+         id="quickpotAmount">
+  <div id="quickpotSize"></div>
+</div>
+<div id="quickpotImages"
+     class="quickpots">
+</div>
+<div class="cropsWrapper"
+     id="sowingForm__cropsWrapper">
+</div>
+<a href="#"
+   class="button"
+   id="resetSowingForm">Reset</a>
+<a href="#"
+   class="button button--attention"
+   id="saveSowing">Speichern</a>
