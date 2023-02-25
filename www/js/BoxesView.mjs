@@ -74,7 +74,7 @@ const handleAddBox = (handler, boxes) => {
 };
 
 const handleCulture = handler =>
-  $('culture')?.addEventListener('change', e => {
+  $('addSowing__culture')?.addEventListener('change', e => {
     handler({
       culture: e.target.value,
       firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
