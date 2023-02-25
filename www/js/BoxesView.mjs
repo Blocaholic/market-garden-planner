@@ -98,8 +98,8 @@ const handleChangeSowingForm = handler => {
     }));
   const getSowingFormData = event => ({
     target:
-      event.target.id === 'floorQuickpotArrow'
-        ? 'floorQuickpot'
+      event.target.id === 'quickpots__floorArrow'
+        ? 'quickpots__floor'
         : event.target.id,
     veggieId: $('addSowing__variety').value,
     sowingDate: stringToDate($('addSowing__date').innerHTML),
@@ -131,7 +131,7 @@ const handleChangeSowingForm = handler => {
   $('addSowing__quickpotAmount').addEventListener('click', e =>
     e.target.select()
   );
-  $('floorQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
+  $('quickpots__floor')?.addEventListener('click', HANDLER.changeSowingForm);
   $('ceilQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
   $$('.addSowing__amountPerBox').forEach(crop => {
     crop.addEventListener('change', HANDLER.changeSowingForm);
@@ -273,7 +273,7 @@ const renderQuickpots = (veggie, seedAmount) => {
   const emptySlotHtml =
     '<div class="quickpots__slot quickpots__slot--empty"></div>';
   const buttonsHtml = `<div class="quickpots__actionsWrapper">
-      <div class="button" id="floorQuickpot">-<div class="mirror" id="floorQuickpotArrow">&#x2935;</div></div>
+      <div class="button" id="quickpots__floor">-<div class="mirror" id="quickpots__floorArrow">&#x2935;</div></div>
       <div class="button" id="ceilQuickpot">+&#x2935;</div>
     </div>`;
   const filledQuickpotHtml = `<div class="quickpots__quickpot quickpots__quickpot${size}">${filledSlotHtml.repeat(

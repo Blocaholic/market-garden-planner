@@ -148,7 +148,7 @@ label {
   transform: rotate(180deg);
 }
 
-#floorQuickpot,
+#quickpots__floor,
 #ceilQuickpot {
   margin: 0;
 }
