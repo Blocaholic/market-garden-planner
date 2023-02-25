@@ -25,7 +25,7 @@ const handleMultiBoxPreview = handler => {
 };
 
 const handleMultiBoxSave = handler => {
-  $('addBoxes__saveButton').addEventListener('click', _ =>
+  $('addBoxes__save').addEventListener('click', _ =>
     handler({
       firstDay: $('addBoxes__firstDay').value,
       lastDay: $('addBoxes__lastDay').value,
@@ -191,7 +191,7 @@ const openMultiBox = () => {
   $('addBoxes__inputWrapper').style.display = '';
   $('addBoxes__dates').style.display = '';
   $('addBoxes__h3').classList.remove('button');
-  $('addBoxes__saveButton').style.display = '';
+  $('addBoxes__save').style.display = '';
   $('addBoxes__wrapper').style.borderColor = '';
   $('addBoxes__wrapper').style.margin = '';
   $('addBoxes__wrapper').style.padding = '';
@@ -206,7 +206,7 @@ const closeMultiBox = e => {
   $('addBoxes__close').style.display = 'none';
   $('addBoxes__inputWrapper').style.display = 'none';
   $('addBoxes__dates').style.display = 'none';
-  $('addBoxes__saveButton').style.display = 'none';
+  $('addBoxes__save').style.display = 'none';
   $('addBoxes__h3').classList.add('button');
   $('addBoxes__wrapper').style.borderColor = 'transparent';
   $('addBoxes__wrapper').style.margin = '0';
@@ -244,13 +244,13 @@ const closeAddBox = e => {
 
 const renderBoxPreview = dates => {
   const numberOfBoxes = dates.length;
-  $('addBoxes__saveButton').style.color =
+  $('addBoxes__save').style.color =
     numberOfBoxes === 0 ? 'rgb(170,170,170)' : 'rgb(0,0,0)';
   const buttonText =
     numberOfBoxes === 1
       ? `1 Kiste hinzufügen`
       : `${numberOfBoxes} Kisten hinzufügen`;
-  $('addBoxes__saveButton').innerHTML = buttonText;
+  $('addBoxes__save').innerHTML = buttonText;
   const datesHtml = dates
     .reduce(
       (datesString, date, i, self) =>
