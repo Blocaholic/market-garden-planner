@@ -94,7 +94,6 @@ const updateSowingForm = ({
   bedLength,
   quickpotAmount,
   crops,
-  syncedCrops,
 }) => {
   const veggie = veggies.find(idEquals(veggieId));
   if (target === 'quickpotAmount')
@@ -112,15 +111,7 @@ const updateSowingForm = ({
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const tempSowing = new Sowing({veggie, sowingDate, seedAmount, crops: []});
   const newCrops = crops.map(
-    (crop, i) =>
-      new Crop(
-        crop.date,
-        veggie,
-        syncedCrops[i + 1]
-          ? (Math.floor((tempSowing.cropAmount / numberOfBoxes) * 100) / 100) *
-            numberOfBoxes
-          : crop.boxAmount * numberOfBoxes
-      )
+    (crop, i) => new Crop(crop.date, veggie, crop.boxAmount * numberOfBoxes)
   );
   const sowing = new Sowing({
     veggie,
@@ -128,7 +119,7 @@ const updateSowingForm = ({
     seedAmount,
     crops: newCrops,
   });
-  View.renderSowingForm({sowing, numberOfBoxes, syncedCrops});
+  View.renderSowingForm({sowing, numberOfBoxes});
 };
 
 ////////////////////////////////////////////////////////////////////////////////
