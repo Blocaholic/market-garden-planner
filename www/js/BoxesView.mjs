@@ -111,9 +111,12 @@ const handleChangeSowingForm = handler => {
   HANDLER.changeSowingForm = handler
     ? event => handler(getSowingFormData(event))
     : HANDLER.changeSowingForm;
-  $('seedAmount').addEventListener('change', HANDLER.changeSowingForm);
-  $('seedAmount').setAttribute('autocomplete', 'off');
-  $('seedAmount').addEventListener('click', e => e.target.select());
+  $('addSowing__seedAmount').addEventListener(
+    'change',
+    HANDLER.changeSowingForm
+  );
+  $('addSowing__seedAmount').setAttribute('autocomplete', 'off');
+  $('addSowing__seedAmount').addEventListener('click', e => e.target.select());
   $('bedLength').addEventListener('change', HANDLER.changeSowingForm);
   $('bedLength').setAttribute('autocomplete', 'off');
   $('bedLength').addEventListener('click', e => e.target.select());
