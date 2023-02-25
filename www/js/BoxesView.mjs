@@ -268,8 +268,10 @@ const renderQuickpots = (veggie, seedAmount) => {
   const filledSlots = Math.ceil(seedAmount / veggie.seedsPerPot);
   if (filledSlots <= 0) return;
   const emptySlots = filledSlots % size ? size - (filledSlots % size) : 0;
-  const filledSlotHtml = '<div class="slot slot--filled"></div>';
-  const emptySlotHtml = '<div class="slot slot--empty"></div>';
+  const filledSlotHtml =
+    '<div class="quickpots__slot quickpots__slot--filled"></div>';
+  const emptySlotHtml =
+    '<div class="quickpots__slot quickpots__slot--empty"></div>';
   const buttonsHtml = `<div class="quickpots__buttonWrapper">
       <div class="button" id="floorQuickpot">-<div class="mirror" id="floorQuickpotArrow">&#x2935;</div></div>
       <div class="button" id="ceilQuickpot">+&#x2935;</div>

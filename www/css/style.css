@@ -131,15 +131,15 @@ label {
   grid-template-columns: repeat(9, 1fr);
 }
 
-.slot {
+.quickpots__slot {
   border: 1px solid black;
 }
 
-.slot--empty {
+.quickpots__slot--empty {
   background-color: red;
 }
 
-.slot--filled {
+.quickpots__slot--filled {
   background-color: green;
 }
 
