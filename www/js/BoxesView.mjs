@@ -16,11 +16,11 @@ const handleMultiBoxPreview = handler => {
   const myFunc = _ =>
     handler({
       firstDay: $('addBoxes__firstDay').value,
-      lastDay: $('lastBoxDay').value,
+      lastDay: $('addBoxes__lastDay').value,
       interval: $('boxInterval').value,
     });
   $('addBoxes__firstDay').addEventListener('change', myFunc);
-  $('lastBoxDay').addEventListener('change', myFunc);
+  $('addBoxes__lastDay').addEventListener('change', myFunc);
   $('boxInterval').addEventListener('change', myFunc);
 };
 
@@ -28,7 +28,7 @@ const handleMultiBoxSave = handler => {
   $('addBoxes__saveButton').addEventListener('click', _ =>
     handler({
       firstDay: $('addBoxes__firstDay').value,
-      lastDay: $('lastBoxDay').value,
+      lastDay: $('addBoxes__lastDay').value,
       interval: $('boxInterval').value,
     })
   );
@@ -200,7 +200,7 @@ const openMultiBox = () => {
 const closeMultiBox = e => {
   e.stopPropagation();
   $('addBoxes__firstDay').value = '';
-  $('lastBoxDay').value = '';
+  $('addBoxes__lastDay').value = '';
   $('boxInterval').value = 7;
   renderBoxPreview([]);
   $('addBoxes__close').style.display = 'none';
