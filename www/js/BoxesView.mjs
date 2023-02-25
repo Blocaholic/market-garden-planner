@@ -83,7 +83,7 @@ const handleCulture = handler =>
   });
 
 const handleVariety = handler =>
-  $('variety')?.addEventListener('change', e =>
+  $('addSowing__variety')?.addEventListener('change', e =>
     handler({
       veggieId: e.target.value,
       firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
@@ -101,7 +101,7 @@ const handleChangeSowingForm = handler => {
       event.target.id === 'floorQuickpotArrow'
         ? 'floorQuickpot'
         : event.target.id,
-    veggieId: $('variety').value,
+    veggieId: $('addSowing__variety').value,
     sowingDate: stringToDate($('addSowing__date').innerHTML),
     seedAmount: commaToDot($('addSowing__seedAmount').value),
     bedLength: commaToDot($('addSowing__bedLength').value),
