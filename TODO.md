@@ -10,4 +10,8 @@
 
 ## Prio B
 
+- Bei Kisten-Serien-Planung: Anzahl Wochen als mögliches Eingabe-Feld + Live-Anzeige
+- Gemüsekisten löschbar machen
+- Aussaat-Planung: Zurück-Button bei Mengen-Änderung
+
 ## Issues
