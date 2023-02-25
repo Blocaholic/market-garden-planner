@@ -170,7 +170,7 @@ const resetSowingForm = (e = undefined) => {
   }
   $('addSowing__cropsWrapper').innerHTML = '';
   $('addSowing__cropsWrapper').style.display = 'none';
-  $('quickpotImages').innerHTML = '';
+  $('quickpots').innerHTML = '';
   $('addSowing__seedAmount').value = 0;
   $('addSowing__bedLength').value = 0;
   $('addSowing__quickpotAmount').value = 0;
@@ -282,7 +282,7 @@ const renderQuickpots = (veggie, seedAmount) => {
         size - emptySlots
       )}${emptySlotHtml.repeat(emptySlots)}</div>${buttonsHtml}`
     : '';
-  $('quickpotImages').innerHTML =
+  $('quickpots').innerHTML =
     filledQuickpotHtml.repeat(Math.floor(filledSlots / size)) + partialQuickpot;
 };
 
