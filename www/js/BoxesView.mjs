@@ -48,7 +48,7 @@ const getAllDatesOfWeekdayOfYear = (weekday, year) => {
 
 const handleAddBox = (handler, boxes) => {
   const weekday = boxes[0]?.date.getDay();
-  $('addBox__inputYear').addEventListener('change', e => {
+  $('addBox__year').addEventListener('change', e => {
     const year = Number(e.target.value);
     $('addBox__save').style.display = 'none';
     $('addBox__inputDate').style.display = '';
@@ -219,7 +219,7 @@ const openAddBox = () => {
   const yearOptions = next30years
     .map(year => `<option value="${year}">${year}</option>`)
     .join('');
-  $('addBox__inputYear').innerHTML = `<option selected></option>${yearOptions}`;
+  $('addBox__year').innerHTML = `<option selected></option>${yearOptions}`;
   $('addBox__close').style.display = '';
   $('addBox__inputWrapper').style.display = '';
   $('addBox__h3').classList.remove('button');
@@ -229,7 +229,7 @@ const openAddBox = () => {
 
 const closeAddBox = e => {
   e.stopPropagation();
-  $('addBox__inputYear').value = '';
+  $('addBox__year').value = '';
   $('addBox__inputDate').value = '';
   $('addBox__close').style.display = 'none';
   $('addBox__inputWrapper').style.display = 'none';
