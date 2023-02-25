@@ -109,25 +109,25 @@ label {
   justify-content: space-between;
 }
 
-.quickpot {
+.quickpots__quickpot {
   display: grid;
   width: 56px;
   height: 96px;
 }
 
-.quickpot15 {
+.quickpots__quickpot15 {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.quickpot77 {
+.quickpots__quickpot77 {
   grid-template-columns: repeat(7, 1fr);
 }
 
-.quickpot84 {
+.quickpots__quickpot84 {
   grid-template-columns: repeat(7, 1fr);
 }
 
-.quickpot144 {
+.quickpots__quickpot144 {
   grid-template-columns: repeat(9, 1fr);
 }
 

@@ -274,11 +274,11 @@ const renderQuickpots = (veggie, seedAmount) => {
       <div class="button" id="floorQuickpot">-<div class="mirror" id="floorQuickpotArrow">&#x2935;</div></div>
       <div class="button" id="ceilQuickpot">+&#x2935;</div>
     </div>`;
-  const filledQuickpotHtml = `<div class="quickpot quickpot${size}">${filledSlotHtml.repeat(
+  const filledQuickpotHtml = `<div class="quickpots__quickpot quickpots__quickpot${size}">${filledSlotHtml.repeat(
     size
   )}</div>`;
   const partialQuickpot = emptySlots
-    ? `<div class="quickpot quickpot${size}">${filledSlotHtml.repeat(
+    ? `<div class="quickpots__quickpot quickpots__quickpot${size}">${filledSlotHtml.repeat(
         size - emptySlots
       )}${emptySlotHtml.repeat(emptySlots)}</div>${buttonsHtml}`
     : '';
