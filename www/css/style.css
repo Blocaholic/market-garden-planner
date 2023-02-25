@@ -109,7 +109,7 @@ label {
   margin: 6px;
 }
 
-.wrapper3columns {
+.addSowing__requirements {
   display: grid;
   grid-template-columns: repeat(3, max-content);
   column-gap: 10px;
