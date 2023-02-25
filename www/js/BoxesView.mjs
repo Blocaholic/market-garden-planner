@@ -123,9 +123,14 @@ const handleChangeSowingForm = handler => {
   );
   $('addSowing__bedLength').setAttribute('autocomplete', 'off');
   $('addSowing__bedLength').addEventListener('click', e => e.target.select());
-  $('quickpotAmount').addEventListener('change', HANDLER.changeSowingForm);
-  $('quickpotAmount').setAttribute('autocomplete', 'off');
-  $('quickpotAmount').addEventListener('click', e => e.target.select());
+  $('addSowing__quickpotAmount').addEventListener(
+    'change',
+    HANDLER.changeSowingForm
+  );
+  $('addSowing__quickpotAmount').setAttribute('autocomplete', 'off');
+  $('addSowing__quickpotAmount').addEventListener('click', e =>
+    e.target.select()
+  );
   $('floorQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
   $('ceilQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
   $$('.addSowing__amountPerBox').forEach(crop => {
