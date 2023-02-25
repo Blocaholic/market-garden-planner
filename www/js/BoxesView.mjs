@@ -50,7 +50,7 @@ const handleAddBox = (handler, boxes) => {
   const weekday = boxes[0]?.date.getDay();
   $('addBox__inputYear').addEventListener('change', e => {
     const year = Number(e.target.value);
-    $('addBox__saveButton').style.display = 'none';
+    $('addBox__save').style.display = 'none';
     $('addBox__inputDate').style.display = '';
     $('addBox__inputDateLabel').style.display = '';
     const boxTimes = boxes.map(box => box.date.getTime());
@@ -66,9 +66,9 @@ const handleAddBox = (handler, boxes) => {
   });
   $('addBox__inputDate').addEventListener(
     'change',
-    _ => ($('addBox__saveButton').style.display = '')
+    _ => ($('addBox__save').style.display = '')
   );
-  $('addBox__saveButton').addEventListener('click', _ =>
+  $('addBox__save').addEventListener('click', _ =>
     handler(boxes, new Date($('addBox__inputDate').value))
   );
 };
@@ -236,7 +236,7 @@ const closeAddBox = e => {
   $('addBox__inputDate').style.display = 'none';
   $('addBox__inputDate').innerHTML = '';
   $('addBox__inputDateLabel').style.display = 'none';
-  $('addBox__saveButton').style.display = 'none';
+  $('addBox__save').style.display = 'none';
   $('addBox__h3').classList.add('button');
   $('addBox__wrapper').style.borderColor = 'transparent';
   $('addBox__wrapper').style.padding = '0';
