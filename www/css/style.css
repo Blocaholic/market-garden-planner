@@ -102,7 +102,7 @@ label {
   flex-flow: row wrap;
 }
 
-.quickpots__buttonWrapper {
+.quickpots__actionsWrapper {
   width: 56px;
   display: flex;
   flex-direction: column;
