@@ -15,11 +15,11 @@ const $$ = query => document.querySelectorAll(query);
 const handleMultiBoxPreview = handler => {
   const myFunc = _ =>
     handler({
-      firstDay: $('firstBoxDay').value,
+      firstDay: $('addBoxes__firstDay').value,
       lastDay: $('lastBoxDay').value,
       interval: $('boxInterval').value,
     });
-  $('firstBoxDay').addEventListener('change', myFunc);
+  $('addBoxes__firstDay').addEventListener('change', myFunc);
   $('lastBoxDay').addEventListener('change', myFunc);
   $('boxInterval').addEventListener('change', myFunc);
 };
@@ -27,7 +27,7 @@ const handleMultiBoxPreview = handler => {
 const handleMultiBoxSave = handler => {
   $('addBoxes__saveButton').addEventListener('click', _ =>
     handler({
-      firstDay: $('firstBoxDay').value,
+      firstDay: $('addBoxes__firstDay').value,
       lastDay: $('lastBoxDay').value,
       interval: $('boxInterval').value,
     })
@@ -199,7 +199,7 @@ const openMultiBox = () => {
 
 const closeMultiBox = e => {
   e.stopPropagation();
-  $('firstBoxDay').value = '';
+  $('addBoxes__firstDay').value = '';
   $('lastBoxDay').value = '';
   $('boxInterval').value = 7;
   renderBoxPreview([]);
