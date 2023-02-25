@@ -132,7 +132,7 @@ const handleChangeSowingForm = handler => {
     e.target.select()
   );
   $('quickpots__floor')?.addEventListener('click', HANDLER.changeSowingForm);
-  $('ceilQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
+  $('quickpots__ceil')?.addEventListener('click', HANDLER.changeSowingForm);
   $$('.addSowing__amountPerBox').forEach(crop => {
     crop.addEventListener('change', HANDLER.changeSowingForm);
     crop.setAttribute('autocomplete', 'off');
@@ -274,7 +274,7 @@ const renderQuickpots = (veggie, seedAmount) => {
     '<div class="quickpots__slot quickpots__slot--empty"></div>';
   const buttonsHtml = `<div class="quickpots__actionsWrapper">
       <div class="button" id="quickpots__floor">-<div class="mirror" id="quickpots__floorArrow">&#x2935;</div></div>
-      <div class="button" id="ceilQuickpot">+&#x2935;</div>
+      <div class="button" id="quickpots__ceil">+&#x2935;</div>
     </div>`;
   const filledQuickpotHtml = `<div class="quickpots__quickpot quickpots__quickpot${size}">${filledSlotHtml.repeat(
     size
