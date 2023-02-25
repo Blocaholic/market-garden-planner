@@ -77,43 +77,36 @@ const handleCulture = handler =>
   $('culture')?.addEventListener('change', e => {
     handler({
       culture: e.target.value,
-      firstCropDate: stringToDate($('sowingForm__firstCropDate').innerHTML),
+      firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
     });
-    $('sowing').scrollIntoView();
+    $('addSowing').scrollIntoView();
   });
 
 const handleVariety = handler =>
   $('variety')?.addEventListener('change', e =>
     handler({
       veggieId: e.target.value,
-      firstCropDate: stringToDate($('sowingForm__firstCropDate').innerHTML),
+      firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
     })
   );
 
 const handleChangeSowingForm = handler => {
   const getCrops = () =>
-    [...$$('.sowingForm__boxAmount')].map(node => ({
+    [...$$('.addSowing__amountPerBox')].map(node => ({
       date: stringToDate(node.id.substr(-10)),
       boxAmount: commaToDot(node.value),
     }));
-  const getSyncedCrops = () => {
-    const checked = [...$$('.sowingForm__syncCropCheckbox')].map(
-      node => node.checked
-    );
-    return checked[0] ? checked.map(_ => true) : checked;
-  };
   const getSowingFormData = event => ({
     target:
       event.target.id === 'floorQuickpotArrow'
         ? 'floorQuickpot'
         : event.target.id,
     veggieId: $('variety').value,
-    sowingDate: stringToDate($('sowingForm__sowingDate').innerHTML),
-    seedAmount: commaToDot($('seedAmount').value),
-    bedLength: commaToDot($('bedLength').value),
-    quickpotAmount: commaToDot($('quickpotAmount').value),
+    sowingDate: stringToDate($('addSowing__date').innerHTML),
+    seedAmount: commaToDot($('addSowing__seedAmount').value),
+    bedLength: commaToDot($('addSowing__bedLength').value),
+    quickpotAmount: commaToDot($('addSowing__quickpotAmount').value),
     crops: getCrops(),
-    syncedCrops: getSyncedCrops(),
   });
   HANDLER.changeSowingForm = handler
     ? event => handler(getSowingFormData(event))
@@ -129,15 +122,12 @@ const handleChangeSowingForm = handler => {
   $('quickpotAmount').addEventListener('click', e => e.target.select());
   $('floorQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
   $('ceilQuickpot')?.addEventListener('click', HANDLER.changeSowingForm);
-  $$('.sowingForm__boxAmount').forEach(crop => {
+  $$('.addSowing__amountPerBox').forEach(crop => {
     crop.addEventListener('change', HANDLER.changeSowingForm);
     crop.setAttribute('autocomplete', 'off');
     crop.addEventListener('click', e => e.target.select());
   });
-  $$('.sowingForm__syncCropCheckbox').forEach(checkbox =>
-    checkbox.addEventListener('change', HANDLER.changeSowingForm)
-  );
-  $('sowing').scrollIntoView();
+  $('addSowing').scrollIntoView();
 };
 
 const hideMultiBoxForm = () => {
@@ -149,17 +139,17 @@ const hideAddBox = () => {
 };
 
 const hideSowingForm = () => {
-  $('sowing').style.display = 'none';
+  $('addSowing').style.display = 'none';
 };
 
 const showSowingForm = e => {
   resetSowingForm();
-  $('sowingForm__firstCropDate').innerHTML =
+  $('addSowing__firstCropDate').innerHTML =
     e.target.parentNode.querySelector('.box__date').innerHTML;
-  $('sowingForm__sowingDateWrapper').style.display = 'none';
-  $('sowingForm__cropsWrapper').style.display = 'none';
-  $('sowing').style.display = '';
-  $('sowing').scrollIntoView();
+  $('addSowing__dateWrapper').style.display = 'none';
+  $('addSowing__cropsWrapper').style.display = 'none';
+  $('addSowing').style.display = '';
+  $('addSowing').scrollIntoView();
 };
 
 const resetSowingForm = (e = undefined) => {
@@ -167,22 +157,22 @@ const resetSowingForm = (e = undefined) => {
     e.stopPropagation();
     e.preventDefault();
   }
-  $('sowingForm__cropsWrapper').innerHTML = '';
-  $('sowingForm__cropsWrapper').style.display = 'none';
+  $('addSowing__cropsWrapper').innerHTML = '';
+  $('addSowing__cropsWrapper').style.display = 'none';
   $('quickpotImages').innerHTML = '';
-  $('seedAmount').value = 0;
-  $('bedLength').value = 0;
-  $('quickpotAmount').value = 0;
-  $('sowingInfos').style.display = 'none';
-  $('veggieName').style.display = 'none';
-  $('variety').style.display = 'none';
-  $('culture').style.display = '';
-  $('sowingForm__sowingDate').innerHTML = '';
-  $('sowingForm__sowingDateWrapper').style.display = 'none';
-  $('sowingForm__firstCropDateWrapper').style.display = 'none';
-  $('culture').selectedIndex = 0;
-  $('variety').selectedIndex = 0;
-  $('sowing').scrollIntoView();
+  $('addSowing__seedAmount').value = 0;
+  $('addSowing__bedLength').value = 0;
+  $('addSowing__quickpotAmount').value = 0;
+  $('addSowing__requirements').style.display = 'none';
+  $('addSowing__veggieName').style.display = 'none';
+  $('addSowing__variety').style.display = 'none';
+  $('addSowing__culture').style.display = '';
+  $('addSowing__date').innerHTML = '';
+  $('addSowing__dateWrapper').style.display = 'none';
+  $('addSowing__firstCropDateWrapper').style.display = 'none';
+  $('addSowing__culture').selectedIndex = 0;
+  $('addSowing__variety').selectedIndex = 0;
+  $('addSowing').scrollIntoView();
 };
 
 const openMultiBox = () => {
@@ -300,46 +290,46 @@ const renderSowingForm = data => {
   const nothingIsSelected = () => data.cultures;
 
   const showVeggieName = veggieName => {
-    $('veggieName').innerHTML = veggieName;
-    $('veggieName').style.display = '';
+    $('addSowing__veggieName').innerHTML = veggieName;
+    $('addSowing__veggieName').style.display = '';
   };
 
   const showSowingDate = date => {
-    $('sowingForm__sowingDate').innerHTML = dateToString(date);
-    $('sowingForm__sowingDateWrapper').style.display = '';
+    $('addSowing__date').innerHTML = dateToString(date);
+    $('addSowing__dateWrapper').style.display = '';
   };
 
   const hideCultureSelect = () => {
-    $('culture').style.display = 'none';
+    $('addSowing__culture').style.display = 'none';
   };
 
   const hideVarietySelect = () => {
-    $('variety').style.display = 'none';
+    $('addSowing__variety').style.display = 'none';
   };
 
   const setVarietySelectValue = selected => {
-    $('variety').value = selected;
+    $('addSowing__variety').value = selected;
   };
 
   const showQuickpotInfos = (veggie, sowing) => {
-    $('quickpotAmount').value = sowing.quickpotAmount;
-    $('quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
-    $('quickpotAmount').style.display = '';
-    $('quickpotSize').style.display = '';
-    $('quickpotAmount').labels[0].style.display = '';
+    $('addSowing__quickpotAmount').value = sowing.quickpotAmount;
+    $('addSowing__quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
+    $('addSowing__quickpotAmount').style.display = '';
+    $('addSowing__quickpotSize').style.display = '';
+    $('addSowing__quickpotAmount').labels[0].style.display = '';
     renderQuickpots(veggie, sowing.seedAmount);
   };
 
   const hideQuickpotInfos = () => {
-    $('quickpotAmount').value = 0;
-    $('quickpotSize').innerHTML = ``;
-    $('quickpotAmount').style.display = 'none';
-    $('quickpotSize').style.display = 'none';
-    $('quickpotAmount').labels[0].style.display = 'none';
+    $('addSowing__quickpotAmount').value = 0;
+    $('addSowing__quickpotSize').innerHTML = ``;
+    $('addSowing__quickpotAmount').style.display = 'none';
+    $('addSowing__quickpotSize').style.display = 'none';
+    $('addSowing__quickpotAmount').labels[0].style.display = 'none';
   };
 
   // event listeners
-  $('sowingForm__close').addEventListener('click', _ => {
+  $('addSowing__close').addEventListener('click', _ => {
     resetSowingForm();
     hideSowingForm();
   });
@@ -347,7 +337,7 @@ const renderSowingForm = data => {
   // culture and variety are selected
   if (varietyIsSelected()) {
     // variables
-    const {sowing, numberOfBoxes, syncedCrops = [false, true]} = data;
+    const {sowing, numberOfBoxes} = data;
     const veggie = sowing.veggie;
     const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
     /* const roundedBoxAmount =
@@ -358,29 +348,23 @@ const renderSowingForm = data => {
     setVarietySelectValue(veggie.id);
     showVeggieName(veggie.fullName);
     showSowingDate(sowing.sowingDate);
-    // sowingInfos
-    $('seedAmount').value = sowing.seedAmount;
-    $('bedLength').value = sowing.bedLength;
-    styleNumber($('seedAmount'));
-    styleNumber($('bedLength'));
-    styleNumber($('quickpotAmount'));
-    $('sowingInfos').style.display = '';
+    // sowingRequirements
+    $('addSowing__seedAmount').value = sowing.seedAmount;
+    $('addSowing__bedLength').value = sowing.bedLength;
+    styleNumber($('addSowing__seedAmount'));
+    styleNumber($('addSowing__bedLength'));
+    styleNumber($('addSowing__quickpotAmount'));
+    $('addSowing__requirements').style.display = '';
     veggie.preGrow ? showQuickpotInfos(veggie, sowing) : hideQuickpotInfos();
     // crops
     const head = `<div class="head">Ernte-Termin</div>
       <div class="head">Inhalt Kiste</div>
       <div class="head">frei pro Kiste</div>
       <div class="head">Überproduktion</div>
-      <div class="head">Summe</div>
-      <input type="checkbox"
-             name="syncCrop--all"
-             id="syncCrop--all"
-             class="sowingForm__syncCropCheckbox"
-             ${syncedCrops[0] ? 'checked' : ''}>`;
+      <div class="head">Summe</div>`;
 
     const rows = sowing.possibleCropDates
       .map((date, index) => {
-        const syncedCrop = syncedCrops[index + 1];
         const boxAmount =
           Math.round(
             (sowing.crops.find(crop => crop.date.getTime() === date.getTime())
@@ -394,24 +378,19 @@ const renderSowingForm = data => {
       <div>
         <input type="text"
                name=""
-               id="sowingForm__boxAmount--${dateToString(date)}"
-               class="sowingForm__boxAmount"
+               id="addSowing__amountPerBox--${dateToString(date)}"
+               class="addSowing__amountPerBox"
                value="${dotToComma(boxAmount)}"> ${veggie.harvestUnit}
       </div>
-      <div><span class="sowingForm__unusedPerBox">${
+      <div><span class="addSowing__availablePerBox">${
         Math.floor(unusedPerBox * 100) / 100
       }</span> ${veggie.harvestUnit}</div>
-      <div><span class="sowingForm__overProduction">${overProduction}</span> ${
+      <div><span class="addSowing__overProduction">${overProduction}</span> ${
           veggie.harvestUnit
         }</div>
-      <div><span class="sowingForm__roundedCropAmount">${roundedCropAmount}</span> ${
+      <div><span class="addSowing__cropAmount--rounded">${roundedCropAmount}</span> ${
           veggie.harvestUnit
-        }</div>
-      <input type="checkbox"
-             name="syncCrop--${dateToString(date)}"
-             id="syncCrop--${dateToString(date)}"
-             class="sowingForm__syncCropCheckbox"
-             ${syncedCrop ? 'checked' : ''}>`;
+        }</div>`;
       })
       .join('');
 
@@ -422,12 +401,12 @@ const renderSowingForm = data => {
       <div>Summe Einheit</div>
       <div></div>`;
 
-    $('sowingForm__cropsWrapper').innerHTML = head + rows + finalRow;
-    $$('.sowingForm__boxAmount').forEach(el => styleNumber(el));
-    $$('.sowingForm__unusedPerBox').forEach(el => styleNumber(el));
-    $$('.sowingForm__overProduction').forEach(el => styleNumber(el));
-    $$('.sowingForm__roundedCropAmount').forEach(el => styleNumber(el));
-    $('sowingForm__cropsWrapper').style.display = '';
+    $('addSowing__cropsWrapper').innerHTML = head + rows + finalRow;
+    $$('.addSowing__amountPerBox').forEach(el => styleNumber(el));
+    $$('.addSowing__availablePerBox').forEach(el => styleNumber(el));
+    $$('.addSowing__overProduction').forEach(el => styleNumber(el));
+    $$('.addSowing__cropAmount--rounded').forEach(el => styleNumber(el));
+    $('addSowing__cropsWrapper').style.display = '';
     handleChangeSowingForm();
     return;
   }
@@ -440,8 +419,10 @@ const renderSowingForm = data => {
       .join('');
     showVeggieName(data.culture);
     hideCultureSelect();
-    $('variety').innerHTML = `<option>Sorte auswählen</option>${options}`;
-    $('variety').style.display = '';
+    $(
+      'addSowing__variety'
+    ).innerHTML = `<option>Sorte auswählen</option>${options}`;
+    $('addSowing__variety').style.display = '';
     return;
   }
   if (nothingIsSelected()) {
@@ -449,8 +430,10 @@ const renderSowingForm = data => {
     const options = [...data.cultures]
       .map(culture => `<option value="${culture}">${culture}</option>`)
       .join('');
-    $('culture').innerHTML = `<option>Kultur auswählen</option>${options}`;
-    $('resetSowingForm').addEventListener('click', resetSowingForm);
+    $(
+      'addSowing__culture'
+    ).innerHTML = `<option>Kultur auswählen</option>${options}`;
+    $('addSowing__reset').addEventListener('click', resetSowingForm);
     return;
   }
 };
@@ -496,7 +479,7 @@ const init = () => {
   $('addBox__h3').addEventListener('click', openAddBox);
   $('addBox__close').addEventListener('click', closeAddBox);
   $('addBox__close').click();
-  $('sowing').style.display = 'none';
+  $('addSowing').style.display = 'none';
 };
 
 export {

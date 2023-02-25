@@ -50,7 +50,7 @@ label {
 }
  */
 
-.closeSymbol {
+.__closeSymbol {
   position: absolute;
   top: 3px;
   right: 3px;
@@ -60,10 +60,6 @@ label {
   cursor: pointer;
   font-size: 22px;
   font-weight: bold;
-}
-
-#sowingForm__close {
-  margin: 0;
 }
 
 .head {
@@ -77,8 +73,7 @@ label {
 }
 
 .addBoxes__h3,
-.addBox__h3,
-.addSowing__h3 {
+.addBox__h3 {
   margin-top: 0;
 }
 
@@ -94,7 +89,7 @@ label {
   column-gap: 10px;
 }
 
-.sowing,
+.addSowing,
 .addBoxes__wrapper,
 .addBox__wrapper {
   position: relative;
@@ -110,7 +105,7 @@ label {
   margin-top: 2.4rem;
 }
 
-.sowing > * {
+.addSowing > * {
   margin: 6px;
 }
 
