@@ -51,8 +51,8 @@ const handleAddBox = (handler, boxes) => {
   $('addBox__year').addEventListener('change', e => {
     const year = Number(e.target.value);
     $('addBox__save').style.display = 'none';
-    $('addBox__inputDate').style.display = '';
-    $('addBox__inputDateLabel').style.display = '';
+    $('addBox__date').style.display = '';
+    $('addBox__dateLabel').style.display = '';
     const boxTimes = boxes.map(box => box.date.getTime());
     const possibleDates = getAllDatesOfWeekdayOfYear(weekday, year).filter(
       date => !boxTimes.includes(date.getTime())
@@ -60,16 +60,14 @@ const handleAddBox = (handler, boxes) => {
     const dateOptions = possibleDates.map(
       date => `<option value="${date}">${dateToString(date)}</option>`
     );
-    $(
-      'addBox__inputDate'
-    ).innerHTML = `<option selected></option>${dateOptions}`;
+    $('addBox__date').innerHTML = `<option selected></option>${dateOptions}`;
   });
-  $('addBox__inputDate').addEventListener(
+  $('addBox__date').addEventListener(
     'change',
     _ => ($('addBox__save').style.display = '')
   );
   $('addBox__save').addEventListener('click', _ =>
-    handler(boxes, new Date($('addBox__inputDate').value))
+    handler(boxes, new Date($('addBox__date').value))
   );
 };
 
@@ -230,12 +228,12 @@ const openAddBox = () => {
 const closeAddBox = e => {
   e.stopPropagation();
   $('addBox__year').value = '';
-  $('addBox__inputDate').value = '';
+  $('addBox__date').value = '';
   $('addBox__close').style.display = 'none';
   $('addBox__inputWrapper').style.display = 'none';
-  $('addBox__inputDate').style.display = 'none';
-  $('addBox__inputDate').innerHTML = '';
-  $('addBox__inputDateLabel').style.display = 'none';
+  $('addBox__date').style.display = 'none';
+  $('addBox__date').innerHTML = '';
+  $('addBox__dateLabel').style.display = 'none';
   $('addBox__save').style.display = 'none';
   $('addBox__h3').classList.add('button');
   $('addBox__wrapper').style.borderColor = 'transparent';
