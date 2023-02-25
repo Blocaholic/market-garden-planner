@@ -31,25 +31,6 @@ label {
   cursor: wait !important;
 }
 
-/* .button {
-  display: inline-block;
-  font-weight: bold;
-  font-family: monospace;
-  font-size: 18px;
-  padding: 0px 4px;
-  margin: 4px;
-  background-color: rgb(40, 40, 40);
-  border: 1px solid rgb(204, 204, 204);
-  border-radius: 3px;
-  cursor: pointer;
-} */
-
-/* .button:active {
-  background-color: rgb(250, 250, 250);
-  border-color: rgb(150, 150, 150);
-}
- */
-
 .__closeSymbol {
   position: absolute;
   top: 3px;
