@@ -74,7 +74,7 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
           interval: Number(interval),
         });
   const newBoxes = dates.map(date => new Box(date));
-  saveBoxes(newBoxesquickpot);
+  saveBoxes(newBoxes);
 };
 
 const addBox = (boxes, newBoxDate) => {
@@ -88,28 +88,21 @@ const updateSowingForm = ({
   target,
   veggieId,
   sowingDate,
-  cropAmount,
-  boxAmount,
   seedAmount,
   bedLength,
   quickpotAmount,
   crops,
 }) => {
   const veggie = veggies.find(idEquals(veggieId));
-  if (target === 'quickpotAmount')
-    seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
-  else if (target === 'bedLength')
+  if (target === 'addSowing__bedLength')
     seedAmount = veggie.toSeedAmount({bedLength});
-  else if (target === 'cropAmount')
-    seedAmount = veggie.toSeedAmount({cropAmount});
-  else if (target === 'boxAmount')
-    seedAmount = veggie.toSeedAmount({cropAmount: boxAmount * numberOfBoxes});
-  else if (target === 'floorQuickpot')
+  else if (target === 'addSowing__quickpotAmount')
+    seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
+  else if (target === 'quickpots__floor')
     seedAmount =
       (quickpotAmount - 1) * veggie.quickpotSize * veggie.seedsPerPot;
-  else if (target === 'ceilQuickpot')
+  else if (target === 'quickpots__ceil')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
-  const tempSowing = new Sowing({veggie, sowingDate, seedAmount, crops: []});
   const newCrops = crops.map(
     (crop, i) => new Crop(crop.date, veggie, crop.boxAmount * numberOfBoxes)
   );
