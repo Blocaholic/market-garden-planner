@@ -345,14 +345,15 @@ const renderSowingForm = data => {
     hideSowingForm();
   });
 
-  // culture and variety are selected
+  // culture and varquickpotAmountiety are selected
   if (varietyIsSelected()) {
     // variables
     const {sowing, numberOfBoxes} = data;
     const veggie = sowing.veggie;
-    const roundedCropAmount = Math.floor(sowing.cropAmount * 100) / 100 || 0;
+    const roundedCropAmount =
+      Math.floor(sowing.totalCropAmount * 100) / 100 || 0;
     /* const roundedBoxAmount =
-      Math.floor((sowing.cropAmount / numberOfBoxes) * 100) / 100 || 0; */
+      Math.floor((sowing.totalCropAmount / numberOfBoxes) * 100) / 100 || 0; */
     // execute
     hideCultureSelect();
     hideVarietySelect();
@@ -390,7 +391,7 @@ const renderSowingForm = data => {
             (sowing.crops.find(crop => crop.date.getTime() === date.getTime())
               ?.amount / numberOfBoxes || 0) * 100
           ) / 100;
-        const maxBoxAmount = sowing.cropAmount / numberOfBoxes;
+        const maxBoxAmount = sowing.totalCropAmount / numberOfBoxes;
         const unusedPerBox = maxBoxAmount - boxAmount;
         const overProduction =
           Math.round(unusedPerBox * numberOfBoxes * 100) / 100;
