@@ -94,9 +94,9 @@ const updateSowingForm = ({
   crops,
 }) => {
   const veggie = veggies.find(idEquals(veggieId));
-  if (target === 'addSowing__bedLength')
+  if (target === 'addSowing__bedLength--given')
     seedAmount = veggie.toSeedAmount({bedLength});
-  else if (target === 'addSowing__quickpotAmount')
+  else if (target === 'addSowing__quickpotAmount--given')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   else if (target === 'quickpots__floor')
     seedAmount =

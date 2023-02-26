@@ -91,9 +91,7 @@ label {
 }
 
 .addSowing__requirements {
-  display: grid;
-  grid-template-columns: repeat(3, max-content);
-  column-gap: 10px;
+  border-spacing: 1rem 0;
 }
 
 .quickpots {

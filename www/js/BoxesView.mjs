@@ -101,32 +101,36 @@ const handleChangeSowingForm = handler => {
         : event.target.id,
     veggieId: $('addSowing__variety').value,
     sowingDate: stringToDate($('addSowing__date').innerHTML),
-    seedAmount: commaToDot($('addSowing__seedAmount').value),
-    bedLength: commaToDot($('addSowing__bedLength').value),
-    quickpotAmount: commaToDot($('addSowing__quickpotAmount').value),
+    seedAmount: commaToDot($('addSowing__seedAmount--given').value),
+    bedLength: commaToDot($('addSowing__bedLength--given').value),
+    quickpotAmount: commaToDot($('addSowing__quickpotAmount--given').value),
     crops: getCrops(),
   });
   HANDLER.changeSowingForm = handler
     ? event => handler(getSowingFormData(event))
     : HANDLER.changeSowingForm;
-  $('addSowing__seedAmount').addEventListener(
+  $('addSowing__seedAmount--given').addEventListener(
     'change',
     HANDLER.changeSowingForm
   );
-  $('addSowing__seedAmount').setAttribute('autocomplete', 'off');
-  $('addSowing__seedAmount').addEventListener('click', e => e.target.select());
-  $('addSowing__bedLength').addEventListener(
+  $('addSowing__seedAmount--given').setAttribute('autocomplete', 'off');
+  $('addSowing__seedAmount--given').addEventListener('click', e =>
+    e.target.select()
+  );
+  $('addSowing__bedLength--given').addEventListener(
     'change',
     HANDLER.changeSowingForm
   );
-  $('addSowing__bedLength').setAttribute('autocomplete', 'off');
-  $('addSowing__bedLength').addEventListener('click', e => e.target.select());
-  $('addSowing__quickpotAmount').addEventListener(
+  $('addSowing__bedLength--given').setAttribute('autocomplete', 'off');
+  $('addSowing__bedLength--given').addEventListener('click', e =>
+    e.target.select()
+  );
+  $('addSowing__quickpotAmount--given').addEventListener(
     'change',
     HANDLER.changeSowingForm
   );
-  $('addSowing__quickpotAmount').setAttribute('autocomplete', 'off');
-  $('addSowing__quickpotAmount').addEventListener('click', e =>
+  $('addSowing__quickpotAmount--given').setAttribute('autocomplete', 'off');
+  $('addSowing__quickpotAmount--given').addEventListener('click', e =>
     e.target.select()
   );
   $('quickpots__floor')?.addEventListener('click', HANDLER.changeSowingForm);
@@ -169,9 +173,9 @@ const resetSowingForm = (e = undefined) => {
   $('addSowing__cropsWrapper').innerHTML = '';
   $('addSowing__cropsWrapper').style.display = 'none';
   $('quickpots').innerHTML = '';
-  $('addSowing__seedAmount').value = 0;
-  $('addSowing__bedLength').value = 0;
-  $('addSowing__quickpotAmount').value = 0;
+  $('addSowing__seedAmount--given').value = 0;
+  $('addSowing__bedLength--given').value = 0;
+  $('addSowing__quickpotAmount--given').value = 0;
   $('addSowing__requirements').style.display = 'none';
   $('addSowing__veggieName').style.display = 'none';
   $('addSowing__variety').style.display = 'none';
@@ -322,21 +326,17 @@ const renderSowingForm = data => {
     $('addSowing__variety').value = selected;
   };
 
-  const showQuickpotInfos = (veggie, sowing) => {
-    $('addSowing__quickpotAmount').value = sowing.quickpotAmount;
+  const showQuickpotRequirements = (veggie, sowing) => {
+    $('addSowing__quickpotAmount--given').value = sowing.quickpotAmount;
     $('addSowing__quickpotSize').innerHTML = `Größe ${veggie.quickpotSize}`;
-    $('addSowing__quickpotAmount').style.display = '';
-    $('addSowing__quickpotSize').style.display = '';
-    $('addSowing__quickpotAmount').labels[0].style.display = '';
+    $('addSowing__quickpot').style.display = '';
     renderQuickpots(veggie, sowing.seedAmount);
   };
 
-  const hideQuickpotInfos = () => {
-    $('addSowing__quickpotAmount').value = 0;
+  const hideQuickpotRequirements = () => {
+    $('addSowing__quickpotAmount--given').value = 0;
     $('addSowing__quickpotSize').innerHTML = ``;
-    $('addSowing__quickpotAmount').style.display = 'none';
-    $('addSowing__quickpotSize').style.display = 'none';
-    $('addSowing__quickpotAmount').labels[0].style.display = 'none';
+    $('addSowing__quickpot').style.display = 'none';
   };
 
   // event listeners
@@ -360,13 +360,15 @@ const renderSowingForm = data => {
     showVeggieName(veggie.fullName);
     showSowingDate(sowing.sowingDate);
     // sowingRequirements
-    $('addSowing__seedAmount').value = sowing.seedAmount;
-    $('addSowing__bedLength').value = sowing.bedLength;
-    styleNumber($('addSowing__seedAmount'));
-    styleNumber($('addSowing__bedLength'));
-    styleNumber($('addSowing__quickpotAmount'));
+    $('addSowing__seedAmount--given').value = sowing.seedAmount;
+    $('addSowing__bedLength--given').value = sowing.bedLength;
+    styleNumber($('addSowing__seedAmount--given'));
+    styleNumber($('addSowing__bedLength--given'));
+    styleNumber($('addSowing__quickpotAmount--given'));
     $('addSowing__requirements').style.display = '';
-    veggie.preGrow ? showQuickpotInfos(veggie, sowing) : hideQuickpotInfos();
+    veggie.preGrow
+      ? showQuickpotRequirements(veggie, sowing)
+      : hideQuickpotRequirements();
     // crops
     const head = `<div class="head">Ernte-Termin</div>
       <div class="head">Inhalt Kiste</div>
