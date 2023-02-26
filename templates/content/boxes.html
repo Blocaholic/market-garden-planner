@@ -138,7 +138,46 @@
   <div id="quickpots"
        class="quickpots">
   </div>
-  <!-- CROPS TABLE hier einfügen -->
+  <table class="addSowing__crops"
+         id="addSowing__crops">
+    <tr>
+      <td></td>
+      <td>Kiste</td>
+      <td>verfügbar</td>
+      <td>Markt</td>
+      <td>verfügbar</td>
+      <td>Summe</td>
+    </tr>
+    <tr id="addSowing__singleCropAvailableRow">
+      <td>verfügbar</td>
+      <td id="addSowing__availablePerBox">0</td>
+      <td></td>
+      <td id="addSowing__totalAvailable">0</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Do, 20.07.2023</td>
+      <td><input type="text"
+               id="addSowing__amountPerBox--20.07.2023"
+               value="1"></td>
+      <td id="addSowing__availablePerBox--20.07.2023">0</td>
+      <td><input type="text"
+               id="addSowing__amountForMarket--20.07.2023"
+               value="50"></td>
+      <td id="addSowing__availablePerDay--20.07.2023">0</td>
+      <td id="addSowing__requiredCropAmount--20.07.2023">100</td>
+    </tr>
+    <!-- CONTENT ROWS -->
+    <tr>
+      <td>Summe</td>
+      <td id="addSowing__totalAmountPerClient">0</td>
+      <td id="addSowing__totalAvailablePerClient">0</td>
+      <td id="addSowing__totalAmountForMarket">0</td>
+      <td id="addSowing__totalAvailableForMarket">0</td>
+      <td id="addSowing__totalRequiredCropAmount">0</td>
+    </tr>
+  </table>
   <a href="#"
      class="button"
      id="addSowing__reset">Reset</a>

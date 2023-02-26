@@ -58,10 +58,8 @@ label {
   margin-top: 0;
 }
 
-.addSowing__cropsWrapper {
-  display: grid;
-  grid-template-columns: repeat(6, max-content);
-  column-gap: 10px;
+.addSowing__crops {
+  border-spacing: 1rem 0;
 }
 
 .addBoxes__inputWrapper {
