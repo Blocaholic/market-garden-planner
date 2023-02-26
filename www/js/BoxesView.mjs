@@ -363,13 +363,16 @@ const renderSowingForm = data => {
     // sowingRequirements
     $('addSowing__seedAmount--given').value = sowing.seedAmount;
     $('addSowing__bedLength--given').value = sowing.bedLength;
-    $('addSowing__totalCropAmount--given').value = sowing.totalCropAmount;
     $('addSowing__cropAmount--given').value = sowing.cropAmount;
+    $('addSowing__totalCropAmount--given').value = sowing.totalCropAmount;
+    [...$$('.addSowing__harvestUnit')].map(
+      element => (element.innerHTML = veggie.harvestUnit)
+    );
     styleNumber($('addSowing__seedAmount--given'));
     styleNumber($('addSowing__bedLength--given'));
     styleNumber($('addSowing__quickpotAmount--given'));
-    styleNumber($('addSowing__totalCropAmount--given'));
     styleNumber($('addSowing__cropAmount--given'));
+    styleNumber($('addSowing__totalCropAmount--given'));
     $('addSowing__requirements').style.display = '';
     veggie.preGrow
       ? showQuickpotRequirements(veggie, sowing)
