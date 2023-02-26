@@ -81,26 +81,47 @@
   <div id="addSowing__firstCropDateWrapper">Erster Ernte-Termin:
     <span id="addSowing__firstCropDate"></span>
   </div>
+  <table id="addSowing__requirements"
+         class="addSowing__requirements">
+    <tr id="addSowing__requirementsHeader">
+      <td></td>
+      <td>Bedarf</td>
+      <td>Vorgabe</td>
+      <td></td>
+    </tr>
+    <tr id="addSowing__seedAmount">
+      <td>Aussaat-Menge</td>
+      <td id="addSowing__seedAmount--required">0</td>
+      <td id="addSowing__seedAmount--given">0</td>
+      <td>Samen</td>
+    </tr>
+    <tr id="addSowing__bedLength">
+      <td>Beet-Länge</td>
+      <td id="addSowing__bedLength--required">0</td>
+      <td id="addSowing__bedLength--given">0</td>
+      <td>m</td>
+    </tr>
+    <tr id="addSowing__quickpot">
+      <td>Quickpots</td>
+      <td id="addSowing__quickpotAmount--required">0</td>
+      <td id="addSowing__quickpotAmount--given">0</td>
+      <td id="addSowing__quickpotSize"></td>
+    </tr>
+    <tr id="addSowing__totalCropAmount">
+      <td>Ernte gesamt</td>
+      <td id="addSowing__totalCropAmount--required">0</td>
+      <td id="addSowing__totalCropAmount--given">0</td>
+      <td class="addSowing__harvestUnit"></td>
+    </tr>
+    <tr id="addSowing__cropAmount">
+      <td>Ernte pro Tag</td>
+      <td id="addSowing__cropAmount--required">0</td>
+      <td id="addSowing__cropAmount--given">0</td>
+      <td class="addSowing__harvestUnit"></td>
+    </tr>
+  </table>
 </div>
 <!--OLD CODE-->
-<div class="addSowing__requirements"
-     id="addSowing__requirements">
-  <label for="addSowing__seedAmount">Aussaat Menge</label>
-  <input type="text"
-         name="addSowing__seedAmount"
-         id="addSowing__seedAmount">
-  <div></div>
-  <label for="addSowing__bedLength">Beet-Länge (m)</label>
-  <input type="text"
-         name="addSowing__bedLength"
-         id="addSowing__bedLength">
-  <div></div>
-  <label for="addSowing__quickpotAmount">Quickpots</label>
-  <input type="text"
-         name="addSowing__quickpotAmount"
-         id="addSowing__quickpotAmount">
-  <div id="addSowing__quickpotSize"></div>
-</div>
 <div id="quickpots"
      class="quickpots">
 </div>
