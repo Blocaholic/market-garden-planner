@@ -362,13 +362,20 @@ const renderSowingForm = data => {
     // sowingRequirements
     $('addSowing__seedAmount--given').value = sowing.seedAmount;
     $('addSowing__bedLength--given').value = sowing.bedLength;
+    $('addSowing__totalCropAmount--given').value = sowing.totalCropAmount;
+    $('addSowing__cropAmount--given').value = sowing.cropAmount;
     styleNumber($('addSowing__seedAmount--given'));
     styleNumber($('addSowing__bedLength--given'));
     styleNumber($('addSowing__quickpotAmount--given'));
+    styleNumber($('addSowing__totalCropAmount--given'));
+    styleNumber($('addSowing__cropAmount--given'));
     $('addSowing__requirements').style.display = '';
     veggie.preGrow
       ? showQuickpotRequirements(veggie, sowing)
       : hideQuickpotRequirements();
+    veggie.isMultiCrop
+      ? ($('addSowing__cropAmount').style.display = '')
+      : ($('addSowing__cropAmount').style.display = 'none');
     // crops
     const head = `<div class="head">Ernte-Termin</div>
       <div class="head">Inhalt Kiste</div>

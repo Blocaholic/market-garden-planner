@@ -223,15 +223,26 @@ Object.defineProperties(Sowing.prototype, {
       return veggie.isMultiCrop ? multiCropResult() : singleCropResult();
     },
   },
+  totalCropAmount: {
+    get() {
+      const veggie = this.veggie;
+      return veggie.isMultiCrop
+        ? this.cropAmount * veggie.numberOfHarvests
+        : this.seedAmount *
+            veggie.germinationRate *
+            veggie.survivalRate *
+            veggie.harvestRate;
+    },
+  },
   cropAmount: {
     get() {
       const veggie = this.veggie;
-      return (
-        this.seedAmount *
-        veggie.germinationRate *
-        veggie.survivalRate *
-        veggie.harvestRate
-      );
+      return veggie.isMultiCrop
+        ? this.seedAmount *
+            veggie.germinationRate *
+            veggie.survivalRate *
+            veggie.harvestRate
+        : undefined;
     },
   },
   bedLength: {
