@@ -103,10 +103,22 @@ Veggie.prototype.toSeedAmount = function (x) {
         ? this.plantsPerMeter / this.germinationRate
         : this.plantsPerMeter) * x.bedLength
     );
-  if (x.hasOwnProperty('cropAmount'))
+  if (x.hasOwnProperty('cropAmount')) {
+    if (this.isSingleCrop)
+      throw new Error(`Keine "Ernte pro Tag" bei Einfach-Ernten!`);
     return Math.ceil(
       x.cropAmount / this.harvestRate / this.survivalRate / this.germinationRate
     );
+  }
+  if (x.hasOwnProperty('totalCropAmount')) {
+    return (
+      x.totalCropAmount /
+      (this.isMultiCrop ? this.numberOfHarvests : 1) /
+      this.harvestRate /
+      this.survivalRate /
+      this.germinationRate
+    );
+  }
   throw new Error(`Could not convert ${JSON.stringify(x)} to seedAmount!`);
 };
 
@@ -226,22 +238,29 @@ Object.defineProperties(Sowing.prototype, {
   totalCropAmount: {
     get() {
       const veggie = this.veggie;
-      return veggie.isMultiCrop
-        ? this.cropAmount * veggie.numberOfHarvests
-        : this.seedAmount *
-            veggie.germinationRate *
-            veggie.survivalRate *
-            veggie.harvestRate;
+      return (
+        Math.round(
+          (veggie.isMultiCrop
+            ? this.cropAmount * veggie.numberOfHarvests
+            : this.seedAmount *
+              veggie.germinationRate *
+              veggie.survivalRate *
+              veggie.harvestRate) * 100
+        ) / 100
+      );
     },
   },
   cropAmount: {
     get() {
       const veggie = this.veggie;
       return veggie.isMultiCrop
-        ? this.seedAmount *
-            veggie.germinationRate *
-            veggie.survivalRate *
-            veggie.harvestRate
+        ? Math.round(
+            this.seedAmount *
+              veggie.germinationRate *
+              veggie.survivalRate *
+              veggie.harvestRate *
+              100
+          ) / 100
         : undefined;
     },
   },

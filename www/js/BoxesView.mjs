@@ -104,6 +104,8 @@ const handleChangeSowingForm = handler => {
     seedAmount: commaToDot($('addSowing__seedAmount--given').value),
     bedLength: commaToDot($('addSowing__bedLength--given').value),
     quickpotAmount: commaToDot($('addSowing__quickpotAmount--given').value),
+    cropAmount: commaToDot($('addSowing__cropAmount--given').value),
+    totalCropAmount: commaToDot($('addSowing__totalCropAmount--given').value),
     crops: getCrops(),
   });
   HANDLER.changeSowingForm = handler
@@ -133,6 +135,24 @@ const handleChangeSowingForm = handler => {
   $('addSowing__quickpotAmount--given').addEventListener('click', e =>
     e.target.select()
   );
+
+  $('addSowing__cropAmount--given').addEventListener(
+    'change',
+    HANDLER.changeSowingForm
+  );
+  $('addSowing__cropAmount--given').setAttribute('autocomplete', 'off');
+  $('addSowing__cropAmount--given').addEventListener('click', e =>
+    e.target.select()
+  );
+  $('addSowing__totalCropAmount--given').addEventListener(
+    'change',
+    HANDLER.changeSowingForm
+  );
+  $('addSowing__totalCropAmount--given').setAttribute('autocomplete', 'off');
+  $('addSowing__totalCropAmount--given').addEventListener('click', e =>
+    e.target.select()
+  );
+
   $('quickpots__floor')?.addEventListener('click', HANDLER.changeSowingForm);
   $('quickpots__ceil')?.addEventListener('click', HANDLER.changeSowingForm);
   $$('.addSowing__amountPerBox').forEach(crop => {
@@ -430,7 +450,7 @@ const renderSowingForm = data => {
     $$('.addSowing__availablePerBox').forEach(el => styleNumber(el));
     $$('.addSowing__overProduction').forEach(el => styleNumber(el));
     $$('.addSowing__cropAmount--rounded').forEach(el => styleNumber(el));
-    $('addSowing__cropsWrapper').style.display = '';
+    // $('addSowing__cropsWrapper').style.display = '';
     handleChangeSowingForm();
     return;
   }
