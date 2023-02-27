@@ -180,7 +180,7 @@ const showSowingForm = e => {
   $('addSowing__firstCropDate').innerHTML =
     e.target.parentNode.querySelector('.box__date').innerHTML;
   $('addSowing__dateWrapper').style.display = 'none';
-  $('addSowing__cropsWrapper').style.display = 'none';
+  $('addSowing__crops').style.display = 'none';
   $('addSowing').style.display = '';
   $('addSowing').scrollIntoView();
 };
@@ -190,8 +190,8 @@ const resetSowingForm = (e = undefined) => {
     e.stopPropagation();
     e.preventDefault();
   }
-  $('addSowing__cropsWrapper').innerHTML = '';
-  $('addSowing__cropsWrapper').style.display = 'none';
+  $('addSowing__crops').innerHTML = '';
+  $('addSowing__crops').style.display = 'none';
   $('quickpots').innerHTML = '';
   $('addSowing__seedAmount--given').value = 0;
   $('addSowing__bedLength--given').value = 0;
@@ -401,56 +401,71 @@ const renderSowingForm = data => {
       ? ($('addSowing__cropAmount').style.display = '')
       : ($('addSowing__cropAmount').style.display = 'none');
     // crops
-    const head = `<div class="head">Ernte-Termin</div>
-      <div class="head">Inhalt Kiste</div>
-      <div class="head">frei pro Kiste</div>
-      <div class="head">Überproduktion</div>
-      <div class="head">Summe</div>`;
+    const head1 = `<tr>
+    <td></td>
+    <td>Kiste</td>
+    <td>verfügbar</td>
+    <td>Markt</td>
+    <td>verfügbar</td>
+    <td>Summe</td>
+  </tr>`;
+
+    const head2 = veggie.isSingleCrop
+      ? `<tr id="addSowing__singleCropAvailableRow">
+    <td>verfügbar</td>
+    <td id="addSowing__availablePerBox">0</td>
+    <td></td>
+    <td id="addSowing__totalAvailable">0</td>
+    <td></td>
+    <td></td>
+  </tr>`
+      : '';
 
     const rows = sowing.possibleCropDates
-      .map((date, index) => {
+      .map(date => {
         const boxAmount =
           Math.round(
             (sowing.crops.find(crop => crop.date.getTime() === date.getTime())
               ?.amount / numberOfBoxes || 0) * 100
           ) / 100;
         const maxBoxAmount = sowing.totalCropAmount / numberOfBoxes;
-        const unusedPerBox = maxBoxAmount - boxAmount;
-        const overProduction =
-          Math.round(unusedPerBox * numberOfBoxes * 100) / 100;
-        return `<div>${dateToWeekday(date)}, ${dateToString(date)}</div>
-      <div>
-        <input type="text"
-               name=""
-               id="addSowing__amountPerBox--${dateToString(date)}"
-               class="addSowing__amountPerBox"
-               value="${dotToComma(boxAmount)}"> ${veggie.harvestUnit}
-      </div>
-      <div><span class="addSowing__availablePerBox">${
-        Math.floor(unusedPerBox * 100) / 100
-      }</span> ${veggie.harvestUnit}</div>
-      <div><span class="addSowing__overProduction">${overProduction}</span> ${
+        const availablePerBox = maxBoxAmount - boxAmount;
+
+        const row = `<tr>
+          <td>${dateToWeekday(date)}, ${dateToString(date)}</td>
+          <td><input type="text"
+                   id="addSowing__amountPerBox--${dateToString(date)}"
+                   value="${dotToComma(boxAmount)}"></td>
+          <td id="addSowing__availablePerBox--${dateToString(date)}">${
+          Math.floor(availablePerBox * 100) / 100
+        } ${veggie.harvestUnit}</td>
+          <td><input type="text"
+                   id="addSowing__amountForMarket--${dateToString(date)}"
+                   value="0"></td>
+          <td id="addSowing__availablePerDay--${dateToString(date)}">0 ${
           veggie.harvestUnit
-        }</div>
-      <div><span class="addSowing__cropAmount--rounded">${roundedCropAmount}</span> ${
-          veggie.harvestUnit
-        }</div>`;
+        }</td>
+          <td id="addSowing__requiredCropAmount--${dateToString(date)}">0</td>
+        </tr>`;
+        return row;
       })
       .join('');
 
-    const finalRow = `<div>Summe</div>
-      <div>Menge Einheit</div>
-      <div>unused Einheit</div>
-      <div>über Einheit</div>
-      <div>Summe Einheit</div>
-      <div></div>`;
+    const finalRow = `<tr>
+    <td>Summe</td>
+    <td id="addSowing__totalAmountPerClient">0</td>
+    <td id="addSowing__totalAvailablePerClient">0</td>
+    <td id="addSowing__totalAmountForMarket">0</td>
+    <td id="addSowing__totalAvailableForMarket">0</td>
+    <td id="addSowing__totalRequiredCropAmount">0</td>
+  </tr>`;
 
-    $('addSowing__cropsWrapper').innerHTML = head + rows + finalRow;
+    $('addSowing__crops').innerHTML = head1 + head2 + rows + finalRow;
     $$('.addSowing__amountPerBox').forEach(el => styleNumber(el));
     $$('.addSowing__availablePerBox').forEach(el => styleNumber(el));
     $$('.addSowing__overProduction').forEach(el => styleNumber(el));
     $$('.addSowing__cropAmount--rounded').forEach(el => styleNumber(el));
-    // $('addSowing__cropsWrapper').style.display = '';
+    $('addSowing__crops').style.display = '';
     handleChangeSowingForm();
     return;
   }
