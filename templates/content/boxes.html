@@ -57,12 +57,75 @@
   </div>
   <a href="#"
      id="addBox__save"
-     class="button">1 Kiste Hinzufügen</a>
+     class="button">1 Kiste hinzufügen</a>
 </div>
 <hr>
+<!-- MARKTTAGE ANFANG -->
+<h1>Markttage</h1>
+<div id="marketDays__wrapper"
+     class="marketDays__wrapper">
+</div>
+<div class="addMarketDays__wrapper"
+     id="addMarketDays__wrapper">
+  <h3 id="addMarketDays__h3"
+      class="addMarketDays__h3">Serie planen
+    <span class="__closeSymbol"
+          id="addMarketDays__close">&#65291;</span>
+  </h3>
+  <div class="addMarketDays__inputWrapper"
+       id="addMarketDays__inputWrapper">
+    <label for="addMarketDays__firstDay">Erster Markttag</label>
+    <input type="date"
+           name="addMarketDays__firstDay"
+           id="addMarketDays__firstDay">
+    <label for="addMarketDays__lastDay">Letzter Markttag</label>
+    <input type="date"
+           name="addMarketDays__lastDay"
+           id="addMarketDays__lastDay">
+    <label for="addMarketDays__interval">Intervall</label>
+    <select name="addMarketDays__interval"
+            id="addMarketDays__interval">
+      <option value="7">wöchentlich</option>
+      <option value="14">2-wöchig</option>
+      <option value="21">3-wöchig</option>
+      <option value="28">4-wöchig</option>
+    </select>
+  </div>
+  <div class="addMarketDays__dates"
+       id="addMarketDays__dates"></div>
+  <a href="#"
+     id="addMarketDays__save"
+     class="button">0 Markttage hinzufügen</a>
+</div>
+
+<div class="addMarketDay__wrapper"
+     id="addMarketDay__wrapper">
+  <h3 id="addMarketDay__h3"
+      class="addMarketDay__h3">Markttag hinzufügen
+    <span class="__closeSymbol"
+          id="addMarketDay__close">&#65291;</span>
+  </h3>
+  <div class="addMarketDay__inputWrapper"
+       id="addMarketDay__inputWrapper">
+    <label for="addMarketDay__year"
+           id="addMarketDay__yearLabel">Jahr</label>
+    <select name="addMarketDay__year"
+            id="addMarketDay__year">
+    </select>
+    <label for="addMarketDay__date"
+           id="addMarketDay__dateLabel">Datum</label>
+    <select name="addMarketDay__date"
+            id="addMarketDay__date">
+    </select>
+  </div>
+  <a href="#"
+     id="addMarketDay__save"
+     class="button">1 Markttag hinzufügen</a>
+</div>
+<hr>
+<!-- MARKTTAGE ENDE -->
 <h1>Aussaaten</h1>
 <code id="sowings"></code>
-<!--NEW CODE-->
 <div class="addSowing"
      id="addSowing">
   <span class="__closeSymbol"
