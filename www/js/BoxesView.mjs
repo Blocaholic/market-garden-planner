@@ -24,12 +24,34 @@ const handleMultiBoxPreview = handler => {
   $('addBoxes__interval').addEventListener('change', myFunc);
 };
 
+const handleAddMarketDaysPreview = handler => {
+  const myFunc = _ =>
+    handler({
+      firstDay: $('addMarketDays__firstDay').value,
+      firstDay: $('addMarketDays__lastDay').value,
+      firstDay: $('addMarketDays__interval').value,
+    });
+  $('addMarketDays__firstDay').addEventListener('change', myFunc);
+  $('addMarketDays__lastDay').addEventListener('change', myFunc);
+  $('addMarketDays__interval').addEventListener('change', myFunc);
+};
+
 const handleMultiBoxSave = handler => {
   $('addBoxes__save').addEventListener('click', _ =>
     handler({
       firstDay: $('addBoxes__firstDay').value,
       lastDay: $('addBoxes__lastDay').value,
       interval: $('addBoxes__interval').value,
+    })
+  );
+};
+
+const handleAddMarketDaysSave = handler => {
+  $('addMarketDays__save').addEventListener('click', _ =>
+    handler({
+      firstDay: $('addMarketDays__firstDay').value,
+      lastDay: $('addMarketDays__lastDay').value,
+      interval: $('addMarketDays__interval').value,
     })
   );
 };
@@ -68,6 +90,35 @@ const handleAddBox = (handler, boxes) => {
   );
   $('addBox__save').addEventListener('click', _ =>
     handler(boxes, new Date($('addBox__date').value))
+  );
+};
+
+const handleAddMarketDay = (handler, marketDays) => {
+  const weekday = marketDays[0]?.date.getDay();
+  $('addMarketDay__year').addEventListener('change', e => {
+    const year = Number(e.target.value);
+    $('addMarketDay__save').style.display = 'none';
+    $('addMarketDay__date').style.display = '';
+    $('addMarketDay__dateLabel').style.display = '';
+    const marketDayTimes = marketDays.map(marketDay =>
+      marketDay.date.getTime()
+    );
+    const possibleDates = getAllDatesOfWeekdayOfYear(weekday, year).filter(
+      date => !marketDayTimes.includes(date.getTime())
+    );
+    const dateOptions = possibleDates.map(
+      date => `<option value="${date}">${dateToString(date)}</option>`
+    );
+    $(
+      'addMarketDay__date'
+    ).innerHTML = `<option selected></option>${dateOptions}`;
+  });
+  $('addMarketDay__date').addEventListener(
+    'change',
+    _ => ($('addMarketDay__save').style.display = '')
+  );
+  $('addMarketDay__save').addEventListener('click', _ =>
+    handler(marketDays, new Date($('addMarketDay__date').value))
   );
 };
 
@@ -167,8 +218,16 @@ const hideMultiBoxForm = () => {
   $('addBoxes__wrapper').style.display = 'none';
 };
 
+const hideAddMarketDaysForm = () => {
+  $('addMarketDays__wrapper').style.display = 'none';
+};
+
 const hideAddBox = () => {
   $('addBox__wrapper').style.display = 'none';
+};
+
+const hideAddMarketDayForm = () => {
+  $('addMarketDay__wrapper').style.display = 'none';
 };
 
 const hideSowingForm = () => {
@@ -219,6 +278,17 @@ const openMultiBox = () => {
   $('addBoxes__wrapper').style.padding = '';
 };
 
+const openAddMarketDays = () => {
+  $('addMarketDays__close').style.display = '';
+  $('addMarketDays__inputWrapper').style.display = '';
+  $('addMarketDays__dates').style.display = '';
+  $('addMarketDays__h3').classList.remove('button');
+  $('addMarketDays__save').style.display = '';
+  $('addMarketDays__wrapper').style.borderColor = '';
+  $('addMarketDays__wrapper').style.margin = '';
+  $('addMarketDays__wrapper').style.padding = '';
+};
+
 const closeMultiBox = e => {
   e.stopPropagation();
   $('addBoxes__firstDay').value = '';
@@ -235,6 +305,22 @@ const closeMultiBox = e => {
   $('addBoxes__wrapper').style.padding = '0';
 };
 
+const closeAddMarketDays = e => {
+  e.stopPropagation();
+  $('addMarketDays__firstDay').value = '';
+  $('addMarketDays__lastDay').value = '';
+  $('addMarketDays__interval').value = 7;
+  renderMarketDaysPreview([]);
+  $('addMarketDays__close').style.display = 'none';
+  $('addMarketDays__inputWrapper').style.display = 'none';
+  $('addMarketDays__dates').style.display = 'none';
+  $('addMarketDays__save').style.display = 'none';
+  $('addMarketDays__h3').classList.add('button');
+  $('addMarketDays__wrapper').style.borderColor = 'transparent';
+  $('addMarketDays__wrapper').style.margin = '0';
+  $('addMarketDays__wrapper').style.padding = '0';
+};
+
 const openAddBox = () => {
   const currentYear = new Date().getFullYear();
   const next30years = [...Array(30)].map((_, key) => key + currentYear);
@@ -247,6 +333,22 @@ const openAddBox = () => {
   $('addBox__h3').classList.remove('button');
   $('addBox__wrapper').style.borderColor = '';
   $('addBox__wrapper').style.padding = '';
+};
+
+const openAddMarketDay = () => {
+  const currentYear = new Date().getFullYear();
+  const next30years = [...Array(30)].map((_, key) => key + currentYear);
+  const yearOptions = next30years
+    .map(year => `<option value="${year}">${year}</option>`)
+    .join('');
+  $(
+    'addMarketDay__year'
+  ).innerHTML = `<option selected></option>${yearOptions}`;
+  $('addMarketDay__close').style.display = '';
+  $('addMarketDay__inputWrapper').style.display = '';
+  $('addMarketDay__h3').classList.remove('button');
+  $('addMarketDay__wrapper').style.borderColor = '';
+  $('addMarketDay__wrapper').style.padding = '';
 };
 
 const closeAddBox = e => {
@@ -262,6 +364,21 @@ const closeAddBox = e => {
   $('addBox__h3').classList.add('button');
   $('addBox__wrapper').style.borderColor = 'transparent';
   $('addBox__wrapper').style.padding = '0';
+};
+
+const closeAddMarketDay = e => {
+  e.stopPropagation();
+  $('addMarketDay__year').value = '';
+  $('addMarketDay__date').value = '';
+  $('addMarketDay__close').style.display = 'none';
+  $('addMarketDay__inputWrapper').style.display = 'none';
+  $('addMarketDay__date').style.display = 'none';
+  $('addMarketDay__date').innerHTML = '';
+  $('addMarketDay__dateLabel').style.display = 'none';
+  $('addMarketDay__save').style.display = 'none';
+  $('addMarketDay__h3').classList.add('button');
+  $('addMarketDay__wrapper').style.borderColor = 'transparent';
+  $('addMarketDay__wrapper').style.padding = '0';
 };
 
 const renderBoxPreview = dates => {
@@ -283,6 +400,27 @@ const renderBoxPreview = dates => {
     )
     .join(' ');
   $('addBoxes__dates').innerHTML = datesHtml;
+};
+
+const renderMarketDaysPreview = dates => {
+  const numberOfMarketDays = dates.length;
+  $('addMarketDays__save').style.color =
+    numberOfMarketDays === 0 ? 'rgb(170,170,170)' : 'rgb(0,0,0)';
+  const buttonText =
+    numberOfMarketDays === 1
+      ? `1 Markttag hinzufügen`
+      : `${numberOfMarketDays} Markttage hinzufügen`;
+  $('addMarketDays__save').innerHTML = buttonText;
+  const datesHtml = dates
+    .reduce(
+      (datesString, date, i, self) =>
+        date.getMonth() !== self[i - 1]?.getMonth()
+          ? [...datesString, `<br>[${dateToString(date)}]`]
+          : [...datesString, `[${dateToString(date)}]`],
+      []
+    )
+    .join(' ');
+  $('addMarketDays__dates').innerHTML = datesHtml;
 };
 
 const renderQuickpots = (veggie, seedAmount) => {
@@ -523,6 +661,32 @@ const renderBoxes = boxes => {
   );
 };
 
+const renderMarketDays = marketDays => {
+  const marketDaysHtml = marketDays
+    .map(marketDay => {
+      const ingredientsHtml = marketDay.ingredients
+        .map(
+          ingredient => `<tr>
+    <td>${ingredient.veggie.fullName}</td>
+    <td>${ingredient.amount} ${ingredient.veggie.harvestUnit}</td>
+    <td>&#128465;</td>
+  </tr>`
+        )
+        .join('');
+      const marketDayHtml = `<div class="marketDay">
+    <div class="marketDay__date">${dateToString(marketDay.date)}</div>
+    <table>${ingredientsHtml}</table>
+    <div class="button marketDay__addVeggieButton">&#65291; Gemüse</div>
+  </div>`;
+      return marketDayHtml;
+    })
+    .join('');
+  $('marketDays__wrapper').innerHTML = marketDaysHtml;
+  $$('.marketDay__addVeggieButton').forEach(button =>
+    button.addEventListener('click', showSowingForm)
+  );
+};
+
 const renderSowings = sowings => {
   $('sowings').innerHTML = sowings;
 };
@@ -535,22 +699,35 @@ const init = () => {
   $('addBoxes__h3').addEventListener('click', openMultiBox);
   $('addBoxes__close').addEventListener('click', closeMultiBox);
   $('addBoxes__close').click();
+  $('addMarketDays__h3').addEventListener('click', openAddMarketDays);
+  $('addMarketDays__close').addEventListener('click', closeAddMarketDays);
+  $('addMarketDays__close').click();
   $('addBox__h3').addEventListener('click', openAddBox);
   $('addBox__close').addEventListener('click', closeAddBox);
   $('addBox__close').click();
+  $('addMarketDay__h3').addEventListener('click', openAddMarketDay);
+  $('addMarketDay__close').addEventListener('click', closeAddMarketDay);
+  $('addMarketDay__close').click();
   $('addSowing').style.display = 'none';
 };
 
 export {
   renderSowingForm,
   renderBoxPreview,
+  renderMarketDaysPreview,
   renderBoxes,
+  renderMarketDays,
   renderSowings,
   hideMultiBoxForm,
   hideAddBox,
+  hideAddMarketDaysForm,
+  hideAddMarketDayForm,
   handleMultiBoxPreview,
   handleMultiBoxSave,
+  handleAddMarketDaysPreview,
+  handleAddMarketDaysSave,
   handleAddBox,
+  handleAddMarketDay,
   handleCulture,
   handleVariety,
   handleChangeSowingForm,
