@@ -184,6 +184,33 @@ function Box(date, ingredients = []) {
   Utils.deepFreeze(this);
 }
 
+function MarketDay(date, ingredients = []) {
+  if (date === undefined)
+    throw new Error(`MarketDay.constructor: parameter "date" is undefined`);
+  if (date.constructor !== Date)
+    throw new Error(
+      `MarketDay.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
+    );
+  if (ingredients.constructor !== Array)
+    throw new Error(
+      `MarketDay.constructor: "ingredients" must be of type "Array", but is of type "${ingredients.constructor.name}"!`
+    );
+  ingredients.map(ingredient => {
+    if (ingredient.constructor !== Crop)
+      throw new Error(
+        `MarketDay.constructor: Each "ingredient" must be of type "Crop", but is of type "${ingredient.constructor.name}"!`
+      );
+    if (ingredient.date.getTime() !== date.getTime())
+      throw new Error(
+        `MarketDay.constructor: Each crop must be of the same date as the MarketDay! MarketDay date.getTime(): ${date.getTime()}; Ingredient date.getTime(): ${ingredient.date.getTime()}`
+      );
+  });
+  this.date = new Date(date.getTime());
+  this.date.setHours(0, 0, 0, 0);
+  this.ingredients = [...ingredients];
+  Utils.deepFreeze(this);
+}
+
 function Sowing({veggie, sowingDate, seedAmount, crops}) {
   this.veggie = veggie;
   this.sowingDate = new Date(sowingDate.getTime());
@@ -297,4 +324,4 @@ Object.defineProperties(Sowing.prototype, {
   },
 });
 
-export {Veggie, Crop, Box, Sowing};
+export {Veggie, Crop, Box, MarketDay, Sowing};
