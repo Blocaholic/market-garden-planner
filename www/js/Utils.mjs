@@ -55,7 +55,6 @@ const daysBetweenDates = (firstDate, lastDate) =>
 
 const getDatesInRange = ({weekday, firstDate, lastDate, interval = 1}) => {
   if (firstDate > lastDate) return [];
-  // erstes datum ändern auf erstes datum mit passendem wochentag
   const firstDateOfWeekday = getNextDateOfWeekday(firstDate, weekday);
   const numberOfDates =
     Math.floor(daysBetweenDates(firstDateOfWeekday, lastDate) / interval) + 1;
