@@ -53,8 +53,10 @@ const addDaysToDate = (origin, days) => {
 const daysBetweenDates = (firstDate, lastDate) =>
   Math.round((lastDate - firstDate) / (1000 * 60 * 60 * 24));
 
-const getDatesInRange = ({firstDate, lastDate, interval = 1}) => {
+const getDatesInRange = ({weekday, firstDate, lastDate, interval = 1}) => {
   if (firstDate > lastDate) return [];
+  // erstes datum ändern auf erstes datum mit passendem wochentag
+  // const firstDateOfWeekday = 0;
   const numberOfDates =
     Math.floor(daysBetweenDates(firstDate, lastDate) / interval) + 1;
   const dates = Array.from(Array(numberOfDates - 1)).reduce(
