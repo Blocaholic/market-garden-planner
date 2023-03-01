@@ -237,7 +237,8 @@ const hideSowingForm = () => {
 const showSowingForm = e => {
   resetSowingForm();
   $('addSowing__firstCropDate').innerHTML =
-    e.target.parentNode.querySelector('.box__date').innerHTML;
+    e.target.parentNode.querySelector('.box__date')?.innerHTML ||
+    e.target.parentNode.querySelector('.marketDay__date')?.innerHTML;
   $('addSowing__dateWrapper').style.display = 'none';
   $('addSowing__crops').style.display = 'none';
   $('addSowing').style.display = '';
