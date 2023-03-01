@@ -28,8 +28,8 @@ const handleAddMarketDaysPreview = handler => {
   const myFunc = _ =>
     handler({
       firstDay: $('addMarketDays__firstDay').value,
-      firstDay: $('addMarketDays__lastDay').value,
-      firstDay: $('addMarketDays__interval').value,
+      lastDay: $('addMarketDays__lastDay').value,
+      interval: $('addMarketDays__interval').value,
     });
   $('addMarketDays__firstDay').addEventListener('change', myFunc);
   $('addMarketDays__lastDay').addEventListener('change', myFunc);
