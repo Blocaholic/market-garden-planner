@@ -56,12 +56,12 @@ const daysBetweenDates = (firstDate, lastDate) =>
 const getDatesInRange = ({weekday, firstDate, lastDate, interval = 1}) => {
   if (firstDate > lastDate) return [];
   // erstes datum ändern auf erstes datum mit passendem wochentag
-  // const firstDateOfWeekday = 0;
+  const firstDateOfWeekday = getNextDateOfWeekday(firstDate, weekday);
   const numberOfDates =
-    Math.floor(daysBetweenDates(firstDate, lastDate) / interval) + 1;
+    Math.floor(daysBetweenDates(firstDateOfWeekday, lastDate) / interval) + 1;
   const dates = Array.from(Array(numberOfDates - 1)).reduce(
     (dates, _) => [...dates, addDaysToDate(dates.at(-1), interval)],
-    [firstDate]
+    [firstDateOfWeekday]
   );
   return dates;
 };
