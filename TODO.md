@@ -2,7 +2,6 @@
 
 ## Prio A
 
-- Wochentag über Konfig festlegen
 - renderSowingForm() für Einfachernte
 - renderSowingForm() für Mehrfachernte
 - Abspeichern von Aussaaten
@@ -11,6 +10,7 @@
 - URL beautify (wie bei reinwiese.de)
 - target=boxes umbenennen in /planung
 - Navi: Planung / Konfiguration / Logout
+- Aktuelles Jahr vorauswählen, bei addBox & addMarketDay
 
 ## Prio B
 
