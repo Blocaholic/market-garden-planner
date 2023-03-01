@@ -66,6 +66,16 @@ const getDatesInRange = ({weekday, firstDate, lastDate, interval = 1}) => {
   return dates;
 };
 
+const getNextDateOfWeekday = (date, weekday) => {
+  const diff =
+    ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'].indexOf(weekday) - date.getDay();
+  const daysUntilWeekday = diff < 0 ? 7 + diff : diff;
+  const nextDateOfWeekday = new Date(
+    date.getTime() + daysUntilWeekday * 24 * 60 * 60 * 1000
+  );
+  return nextDateOfWeekday;
+};
+
 export {
   deepFreeze,
   commaToDot,
@@ -77,5 +87,6 @@ export {
   addDaysToDate,
   daysBetweenDates,
   getDatesInRange,
+  getNextDateOfWeekday,
 };
 export * as default from './Utils.mjs';
