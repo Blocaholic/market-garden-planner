@@ -1,4 +1,4 @@
-import {Box, Veggie, Sowing, Crop} from './Datatypes.mjs';
+import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
 import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
 
@@ -55,6 +55,18 @@ const multiBoxPreview = ({firstDay, lastDay, interval}) => {
   View.renderBoxPreview(dates);
 };
 
+const marketDaysPreview = ({firstDay, lastDay, interval}) => {
+  const dates =
+    !firstDay || !lastDay
+      ? []
+      : getDatesInRange({
+          firstDate: new Date(firstDay),
+          lastDate: new Date(lastDay),
+          interval: Number(interval),
+        });
+  View.renderMarketDaysPreview(dates);
+};
+
 const saveBoxes = boxes => {
   View.showEieruhr();
   postAsJson('https://marketgardenapi.reinwiese.de/boxes.php', boxes).then(
@@ -62,6 +74,16 @@ const saveBoxes = boxes => {
       if (res.ok) location.reload();
     }
   );
+};
+
+const saveMarketDays = marketDays => {
+  View.showEieruhr();
+  postAsJson(
+    'https://marketgardenapi.reinwiese.de/marketDays.php',
+    marketDays
+  ).then(res => {
+    if (res.ok) location.reload();
+  });
 };
 
 const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
@@ -77,10 +99,32 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
   saveBoxes(newBoxes);
 };
 
+const saveMarketDaySeries = ({firstDay, lastDay, interval}) => {
+  const dates =
+    !firstDay || !lastDay
+      ? []
+      : getDatesInRange({
+          firstDate: new Date(firstDay),
+          lastDate: new Date(lastDay),
+          interval: Number(interval),
+        });
+  const marketDays = dates.map(date => new MarketDay(date));
+  saveMarketDays(marketDays);
+};
+
 const addBox = (boxes, newBoxDate) => {
   const box = new Box(newBoxDate, []);
   saveBoxes(
     [...boxes, box].sort((a, b) => a.date.getTime() - b.date.getTime())
+  );
+};
+
+const addMarketDay = (marketDays, newMarketDayDate) => {
+  const marketDay = new MarketDay(newMarketDayDate, []);
+  saveMarketDays(
+    [...marketDays, marketDay].sort(
+      (a, b) => a.date.getTime() - b.date.getTime()
+    )
   );
 };
 
@@ -150,16 +194,39 @@ const boxes = await fetchJson(
   })
 );
 
+const marketDays = await fetchJson(
+  'https://marketgardenapi.reinwiese.de/marketDays.php'
+).then(jsonArray =>
+  jsonArray.map(item => {
+    const ingredients = item.ingredients.map(
+      ingredient =>
+        new Crop(
+          new Date(ingredient.date),
+          new Veggie(ingredient.veggie),
+          ingredient.amount
+        )
+    );
+    return new MarketDay(new Date(item.date), ingredients);
+  })
+);
+
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();
   if (boxes.length === 0) View.hideAddBox();
   View.renderBoxes(boxes);
   View.renderBoxPreview([]);
+  if (marketDays.length > 0) View.hideAddMarketDaysForm();
+  if (marketDays === 0) View.hideAddMarketDayForm();
+  View.renderMarketDays(marketDays);
+  View.renderMarketDaysPreview([]);
   View.renderSowingForm({cultures});
   View.renderSowings(sowings);
   View.handleMultiBoxPreview(multiBoxPreview);
+  View.handleAddMarketDaysPreview(marketDaysPreview);
   View.handleMultiBoxSave(saveMultiBoxSeries);
+  View.handleAddMarketDaysSave(saveMarketDaySeries);
   View.handleAddBox(addBox, boxes);
+  View.handleAddMarketDay(addMarketDay, marketDays);
   View.handleCulture(updateOnCulture);
   View.handleVariety(updateOnVariety);
   View.handleChangeSowingForm(updateSowingForm);

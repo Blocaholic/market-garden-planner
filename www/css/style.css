@@ -48,23 +48,20 @@ label {
 }
 
 .addBoxes__h3,
-.addBox__h3 {
+.addBox__h3,
+.addMarketDays__h3,
+.addMarketDay__h3 {
   display: flex;
   justify-content: space-between;
-}
-
-.addBoxes__h3,
-.addBox__h3 {
   margin-top: 0;
 }
 
-.addSowing__cropsWrapper {
-  display: grid;
-  grid-template-columns: repeat(6, max-content);
-  column-gap: 10px;
+.addSowing__crops {
+  border-spacing: 1rem 0;
 }
 
-.addBoxes__inputWrapper {
+.addBoxes__inputWrapper,
+.addMarketDays__inputWrapper {
   display: grid;
   grid-template-columns: auto auto;
   column-gap: 10px;
@@ -72,7 +69,9 @@ label {
 
 .addSowing,
 .addBoxes__wrapper,
-.addBox__wrapper {
+.addBox__wrapper,
+.addMarketDays__wrapper,
+.addMarketDay__wrapper {
   position: relative;
   display: table;
   border: 2px solid rgb(100, 100, 100);
@@ -82,7 +81,8 @@ label {
   padding-right: 25px;
 }
 
-.addBox__wrapper {
+.addBox__wrapper,
+.addMarketDay__wrapper {
   margin-top: 2.4rem;
 }
 
@@ -165,12 +165,23 @@ label {
 .addBoxes__h3:hover,
 .addBoxes__h3:active,
 .addBoxes__h3:link,
-.addBoxes__h3:visited {
+.addBoxes__h3:visited,
+.addMarketDay__h3,
+.addMarketDay__h3:hover,
+.addMarketDay__h3:active,
+.addMarketDay__h3:link,
+.addMarketDay__h3:visited,
+.addMarketDays__h3,
+.addMarketDays__h3:hover,
+.addMarketDays__h3:active,
+.addMarketDays__h3:link,
+.addMarketDays__h3:visited {
   margin-top: 0;
 }
 
 /* BOXES */
-.box {
+.box,
+.marketDay {
   border: 2px solid rgb(100, 100, 100);
   border-radius: 5px;
   display: inline-block;
@@ -178,7 +189,8 @@ label {
   padding: 5px;
 }
 
-.box__date {
+.box__date,
+.marketDay__date {
   border: 0px none transparent;
 }
 
@@ -186,7 +198,12 @@ label {
 .box__addVeggieButton:link,
 .box__addVeggieButton:visited,
 .box__addVeggieButton:hover,
-.box__addVeggieButton:active {
+.box__addVeggieButton:active,
+.marketDay__addVeggieButton,
+.marketDay__addVeggieButton:link,
+.marketDay__addVeggieButton:visited,
+.marketDay__addVeggieButton:hover,
+.marketDay__addVeggieButton:active {
   padding: 0px 4px;
   margin: 4px;
   border-radius: 0.3rem;
