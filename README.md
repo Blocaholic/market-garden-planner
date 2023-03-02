@@ -29,4 +29,4 @@ Available at [marketgardenapi.reinwiese.de](https://marketgardenapi.reinwiese.de
 
 - 1120px width (source file)
 - 560px width when content floated at FullHD
-- resize and compress on https://squoosh.app/
+- resize and compress on [squoosh](https://squoosh.app/)

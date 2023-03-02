@@ -211,6 +211,11 @@ const handleChangeSowingForm = handler => {
     crop.setAttribute('autocomplete', 'off');
     crop.addEventListener('click', e => e.target.select());
   });
+  $$('.addSowing__amountForMarket').forEach(crop => {
+    crop.addEventListener('change', HANDLER.changeSowingForm);
+    crop.setAttribute('autocomplete', 'off');
+    crop.addEventListener('click', e => e.target.select());
+  });
   $('addSowing').scrollIntoView();
 };
 
@@ -572,19 +577,23 @@ const renderSowingForm = data => {
 
         const row = `<tr>
           <td>${dateToWeekday(date)}, ${dateToString(date)}</td>
-          <td><input type="text"
-                   id="addSowing__amountPerBox--${dateToString(date)}"
-                   value="${dotToComma(boxAmount)}"></td>
-          <td id="addSowing__availablePerBox--${dateToString(date)}">${
-          Math.floor(availablePerBox * 100) / 100
-        } ${veggie.harvestUnit}</td>
-          <td><input type="text"
-                   id="addSowing__amountForMarket--${dateToString(date)}"
-                   value="0"></td>
-          <td id="addSowing__availablePerDay--${dateToString(date)}">0 ${
+          <td><input type="text" class="addSowing__amountPerBox" id="addSowing__amountPerBox--${dateToString(
+            date
+          )}" value="${dotToComma(boxAmount)}"></td>
+          <td class="addSowing__availablePerBox" id="addSowing__availablePerBox--${dateToString(
+            date
+          )}">${Math.floor(availablePerBox * 100) / 100} ${
           veggie.harvestUnit
         }</td>
-          <td id="addSowing__requiredCropAmount--${dateToString(date)}">0</td>
+          <td><input type="text" class="addSowing__amountForMarket"
+                   id="addSowing__amountForMarket--${dateToString(date)}"
+                   value="0"></td>
+          <td class="addSowing__availablePerDay" id="addSowing__availablePerDay--${dateToString(
+            date
+          )}">0 ${veggie.harvestUnit}</td>
+          <td class="addSowing__requiredCropAmount" id="addSowing__requiredCropAmount--${dateToString(
+            date
+          )}">0</td>
         </tr>`;
         return row;
       })
