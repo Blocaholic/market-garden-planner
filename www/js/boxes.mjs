@@ -162,8 +162,15 @@ const updateSowingForm = ({
   else if (target === 'quickpots__ceil')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const newCrops = crops.map(
-    (crop, i) =>
-      new Crop(crop.date, veggie, crop.amountPerBox * CONFIG.numberOfBoxes)
+    crop =>
+      new Crop(
+        crop.date,
+        veggie,
+        crop.salesChannel === 'Box'
+          ? crop.amount * CONFIG.numberOfBoxes
+          : crop.amount,
+        crop.salesChannel
+      )
   );
   const sowing = new Sowing({
     veggie,
@@ -195,7 +202,8 @@ const boxes = await fetchJson(
         new Crop(
           new Date(ingredient.date),
           new Veggie(ingredient.veggie),
-          ingredient.amount
+          ingredient.amount,
+          'Box'
         )
     );
     return new Box(new Date(item.date), ingredients);
@@ -211,7 +219,8 @@ const marketDays = await fetchJson(
         new Crop(
           new Date(ingredient.date),
           new Veggie(ingredient.veggie),
-          ingredient.amount
+          ingredient.amount,
+          'MarketDay'
         )
     );
     return new MarketDay(new Date(item.date), ingredients);
