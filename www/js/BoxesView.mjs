@@ -575,33 +575,48 @@ const renderSowingForm = data => {
 
     const rows = sowing.possibleCropDates
       .map(date => {
-        const boxAmount =
-          Math.round(
-            (sowing.crops.find(crop => crop.date.getTime() === date.getTime())
-              ?.amount / numberOfBoxes || 0) * 100
-          ) / 100;
-        const maxBoxAmount = sowing.totalCropAmount / numberOfBoxes;
-        const availablePerBox = maxBoxAmount - boxAmount;
-
+        const amountPerBox =
+          sowing.crops.find(
+            crop =>
+              crop.date.getTime() === date.getTime() &&
+              crop.salesChannel === 'Box'
+          )?.amount / numberOfBoxes || 0;
+        const amountForMarket =
+          sowing.crops.find(
+            crop =>
+              crop.date.getTime() === date.getTime() &&
+              crop.salesChannel === 'MarketDay'
+          )?.amount || 0;
+        const availablePerDay =
+          sowing.cropAmount - (amountForMarket + amountPerBox * numberOfBoxes);
+        const availablePerBox = availablePerDay / numberOfBoxes;
+        const requiredCropAmount =
+          amountForMarket + amountPerBox * numberOfBoxes;
+        const roundedAmountPerBox = Math.round(amountPerBox * 100) / 100;
+        const roundedAmountForMarket = Math.round(amountForMarket * 100) / 100;
+        const roundedAvailablePerDay = Math.round(availablePerDay * 100) / 100;
+        const roundedAvailablePerBox = Math.round(availablePerBox * 100) / 100;
+        const roundedRequiredCropAmount =
+          Math.round(requiredCropAmount * 100) / 100;
         const row = `<tr>
           <td>${dateToWeekday(date)}, ${dateToString(date)}</td>
           <td><input type="text" class="addSowing__amountPerBox" id="addSowing__amountPerBox--${dateToString(
             date
-          )}" value="${dotToComma(boxAmount)}"></td>
+          )}" value="${dotToComma(roundedAmountPerBox)}"></td>
           <td class="addSowing__availablePerBox" id="addSowing__availablePerBox--${dateToString(
             date
-          )}">${Math.floor(availablePerBox * 100) / 100} ${
+          )}">${Math.floor(roundedAvailablePerBox * 100) / 100} ${
           veggie.harvestUnit
         }</td>
           <td><input type="text" class="addSowing__amountForMarket"
                    id="addSowing__amountForMarket--${dateToString(date)}"
-                   value="0"></td>
+                   value="${roundedAmountForMarket}"></td>
           <td class="addSowing__availablePerDay" id="addSowing__availablePerDay--${dateToString(
             date
-          )}">0 ${veggie.harvestUnit}</td>
+          )}">${roundedAvailablePerDay} ${veggie.harvestUnit}</td>
           <td class="addSowing__requiredCropAmount" id="addSowing__requiredCropAmount--${dateToString(
             date
-          )}">0</td>
+          )}">${roundedRequiredCropAmount}</td>
         </tr>`;
         return row;
       })
