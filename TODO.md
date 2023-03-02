@@ -2,6 +2,7 @@
 
 ## Prio A
 
+- Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
 - renderSowingForm() für Einfachernte
 - renderSowingForm() für Mehrfachernte
 - Abspeichern von Aussaaten
