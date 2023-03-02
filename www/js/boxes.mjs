@@ -163,7 +163,7 @@ const updateSowingForm = ({
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const newCrops = crops.map(
     (crop, i) =>
-      new Crop(crop.date, veggie, crop.boxAmount * CONFIG.numberOfBoxes)
+      new Crop(crop.date, veggie, crop.amountPerBox * CONFIG.numberOfBoxes)
   );
   const sowing = new Sowing({
     veggie,

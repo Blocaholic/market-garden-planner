@@ -140,11 +140,31 @@ const handleVariety = handler =>
   );
 
 const handleChangeSowingForm = handler => {
-  const getCrops = () =>
-    [...$$('.addSowing__amountPerBox')].map(node => ({
-      date: stringToDate(node.id.substr(-10)),
-      boxAmount: commaToDot(node.value),
+  const mergeByStringDate = (arr1, arr2) => {
+    const map = new Map();
+    arr1.forEach(item => map.set(item.date, item));
+    arr2.forEach(item => map.set(item.date, {...map.get(item.date), ...item}));
+    return Array.from(map.values()).map(day => ({
+      ...day,
+      date: stringToDate(day.date),
     }));
+  };
+  const getAllAmountPerBox = () =>
+    [...$$('.addSowing__amountPerBox')].map(node => ({
+      date: node.id.substr(-10),
+      amountPerBox: commaToDot(node.value),
+    }));
+  const getAllAmountForMarket = () =>
+    [...$$('.addSowing__amountForMarket')].map(node => ({
+      date: node.id.substr(-10),
+      amountForMarket: commaToDot(node.value),
+    }));
+  const getCrops = () => {
+    console.log(
+      mergeByStringDate(getAllAmountPerBox(), getAllAmountForMarket())
+    );
+    return mergeByStringDate(getAllAmountPerBox(), getAllAmountForMarket());
+  };
   const getSowingFormData = event => ({
     target:
       event.target.id === 'quickpots__floorArrow'
