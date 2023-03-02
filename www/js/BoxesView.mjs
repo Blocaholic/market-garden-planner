@@ -573,6 +573,12 @@ const renderSowingForm = data => {
   </tr>`
       : '';
 
+    let totalAmountPerClient = 0;
+    let totalAvailablePerClient = 0;
+    let totalAmountForMarket = 0;
+    let totalAvailableForMarket = 0;
+    let totalRequiredCropAmount = 0;
+
     const rows = sowing.possibleCropDates
       .map(date => {
         const amountPerBox =
@@ -581,17 +587,22 @@ const renderSowingForm = data => {
               crop.date.getTime() === date.getTime() &&
               crop.salesChannel === 'Box'
           )?.amount / numberOfBoxes || 0;
+        totalAmountPerClient += amountPerBox;
         const amountForMarket =
           sowing.crops.find(
             crop =>
               crop.date.getTime() === date.getTime() &&
               crop.salesChannel === 'MarketDay'
           )?.amount || 0;
+        totalAmountForMarket += amountForMarket;
         const availablePerDay =
           sowing.cropAmount - (amountForMarket + amountPerBox * numberOfBoxes);
+        totalAvailableForMarket += availablePerDay;
         const availablePerBox = availablePerDay / numberOfBoxes;
+        totalAvailablePerClient += availablePerBox;
         const requiredCropAmount =
           amountForMarket + amountPerBox * numberOfBoxes;
+        totalRequiredCropAmount += requiredCropAmount;
         const roundedAmountPerBox = Math.round(amountPerBox * 100) / 100;
         const roundedAmountForMarket = Math.round(amountForMarket * 100) / 100;
         const roundedAvailablePerDay = Math.round(availablePerDay * 100) / 100;
@@ -624,11 +635,21 @@ const renderSowingForm = data => {
 
     const finalRow = `<tr>
     <td>Summe</td>
-    <td id="addSowing__totalAmountPerClient">0</td>
-    <td id="addSowing__totalAvailablePerClient">0</td>
-    <td id="addSowing__totalAmountForMarket">0</td>
-    <td id="addSowing__totalAvailableForMarket">0</td>
-    <td id="addSowing__totalRequiredCropAmount">0</td>
+    <td id="addSowing__totalAmountPerClient">${
+      Math.round(totalAmountPerClient * 100) / 100
+    }</td>
+    <td id="addSowing__totalAvailablePerClient">${
+      Math.round(totalAvailablePerClient * 100) / 100
+    } ${veggie.harvestUnit}</td>
+    <td id="addSowing__totalAmountForMarket">${
+      Math.round(totalAmountForMarket * 100) / 100
+    }</td>
+    <td id="addSowing__totalAvailableForMarket">${
+      Math.round(totalAvailableForMarket * 100) / 100
+    } ${veggie.harvestUnit}</td>
+    <td id="addSowing__totalRequiredCropAmount">${
+      Math.round(totalRequiredCropAmount * 100) / 100
+    }</td>
   </tr>`;
 
     $('addSowing__crops').innerHTML = head1 + head2 + rows + finalRow;
