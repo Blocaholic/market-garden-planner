@@ -86,7 +86,7 @@ Object.defineProperties(Veggie.prototype, {
   },
   rowsPerBed: {
     get() {
-      return Math.floor(75 / this.rowSpacing);
+      return Math.floor(CONFIG.bedWidth / this.rowSpacing);
     },
   },
   plantsPerMeter: {
@@ -306,7 +306,7 @@ Object.defineProperties(Sowing.prototype, {
             ? this.seedAmount * this.veggie.germinationRate
             : this.seedAmount) /
             ((100 / this.veggie.plantingDistance) *
-              Math.floor(75 / this.veggie.rowSpacing))) *
+              Math.floor(CONFIG.bedWidth / this.veggie.rowSpacing))) *
             100
         ) / 100
       );

@@ -6,6 +6,7 @@ import {
   stringToDate,
   addDaysToDate,
 } from './Utils.mjs';
+import * as CONFIG from './CONFIG.mjs';
 
 const HANDLER = {};
 
@@ -671,7 +672,7 @@ const renderSowingForm = data => {
           ? requiredSeedAmount * veggie.germinationRate
           : requiredSeedAmount) /
           ((100 / veggie.plantingDistance) *
-            Math.floor(75 / veggie.rowSpacing))) *
+            Math.floor(CONFIG.bedWidth / veggie.rowSpacing))) *
           100
       ) / 100;
     $('addSowing__quickpotAmount--required').innerHTML =
