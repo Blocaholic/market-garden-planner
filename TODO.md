@@ -22,5 +22,3 @@
 - Beetlänge und Beetbreite aus Betriebskonfiguration übernehmen
 
 ## Issues
-
-- Falscher Wochentag bei Ernten ausgewählt! Beispiel: Samstag statt Donnerstag! (Gemüsekiste Do, 11.05.2023 führt zu erstem Erntetag Sa, 13.05.2023)
