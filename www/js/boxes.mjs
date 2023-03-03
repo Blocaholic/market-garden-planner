@@ -2,6 +2,10 @@ import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
 import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
 
+const CONFIG = {};
+CONFIG.weekday = 'Do';
+CONFIG.numberOfBoxes = 50;
+
 const fetchJson = async url => await fetch(url).then(x => x.json());
 
 const postAsJson = (url, data) =>
@@ -40,7 +44,7 @@ const updateOnVariety = ({veggieId, firstCropDate}) => {
     seedAmount: 0,
     crops: [],
   });
-  View.renderSowingForm({sowing, numberOfBoxes});
+  View.renderSowingForm({sowing, numberOfBoxes: CONFIG.numberOfBoxes});
 };
 
 const multiBoxPreview = ({firstDay, lastDay, interval}) => {
@@ -48,6 +52,7 @@ const multiBoxPreview = ({firstDay, lastDay, interval}) => {
     !firstDay || !lastDay
       ? []
       : getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate: new Date(firstDay),
           lastDate: new Date(lastDay),
           interval: Number(interval),
@@ -60,6 +65,7 @@ const marketDaysPreview = ({firstDay, lastDay, interval}) => {
     !firstDay || !lastDay
       ? []
       : getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate: new Date(firstDay),
           lastDate: new Date(lastDay),
           interval: Number(interval),
@@ -91,6 +97,7 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
     !firstDay || !lastDay
       ? []
       : getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate: new Date(firstDay),
           lastDate: new Date(lastDay),
           interval: Number(interval),
@@ -104,6 +111,7 @@ const saveMarketDaySeries = ({firstDay, lastDay, interval}) => {
     !firstDay || !lastDay
       ? []
       : getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate: new Date(firstDay),
           lastDate: new Date(lastDay),
           interval: Number(interval),
@@ -154,7 +162,15 @@ const updateSowingForm = ({
   else if (target === 'quickpots__ceil')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const newCrops = crops.map(
-    (crop, i) => new Crop(crop.date, veggie, crop.boxAmount * numberOfBoxes)
+    crop =>
+      new Crop(
+        crop.date,
+        veggie,
+        crop.salesChannel === 'Box'
+          ? crop.amount * CONFIG.numberOfBoxes
+          : crop.amount,
+        crop.salesChannel
+      )
   );
   const sowing = new Sowing({
     veggie,
@@ -162,12 +178,11 @@ const updateSowingForm = ({
     seedAmount,
     crops: newCrops,
   });
-  View.renderSowingForm({sowing, numberOfBoxes});
+  View.renderSowingForm({sowing, numberOfBoxes: CONFIG.numberOfBoxes});
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const numberOfBoxes = 50;
 const veggies = await fetchJson(
   'https://marketgardenapi.reinwiese.de/veggies.php'
 ).then(convertToVeggieDatatype);
@@ -187,7 +202,8 @@ const boxes = await fetchJson(
         new Crop(
           new Date(ingredient.date),
           new Veggie(ingredient.veggie),
-          ingredient.amount
+          ingredient.amount,
+          'Box'
         )
     );
     return new Box(new Date(item.date), ingredients);
@@ -203,7 +219,8 @@ const marketDays = await fetchJson(
         new Crop(
           new Date(ingredient.date),
           new Veggie(ingredient.veggie),
-          ingredient.amount
+          ingredient.amount,
+          'MarketDay'
         )
     );
     return new MarketDay(new Date(item.date), ingredients);

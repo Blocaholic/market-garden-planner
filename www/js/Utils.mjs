@@ -53,15 +53,26 @@ const addDaysToDate = (origin, days) => {
 const daysBetweenDates = (firstDate, lastDate) =>
   Math.round((lastDate - firstDate) / (1000 * 60 * 60 * 24));
 
-const getDatesInRange = ({firstDate, lastDate, interval = 1}) => {
+const getDatesInRange = ({weekday, firstDate, lastDate, interval = 1}) => {
   if (firstDate > lastDate) return [];
+  const firstDateOfWeekday = getNextDateOfWeekday(firstDate, weekday);
   const numberOfDates =
-    Math.floor(daysBetweenDates(firstDate, lastDate) / interval) + 1;
+    Math.floor(daysBetweenDates(firstDateOfWeekday, lastDate) / interval) + 1;
   const dates = Array.from(Array(numberOfDates - 1)).reduce(
     (dates, _) => [...dates, addDaysToDate(dates.at(-1), interval)],
-    [firstDate]
+    [firstDateOfWeekday]
   );
   return dates;
+};
+
+const getNextDateOfWeekday = (date, weekday) => {
+  const diff =
+    ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'].indexOf(weekday) - date.getDay();
+  const daysUntilWeekday = diff < 0 ? 7 + diff : diff;
+  const nextDateOfWeekday = new Date(
+    date.getTime() + daysUntilWeekday * 24 * 60 * 60 * 1000
+  );
+  return nextDateOfWeekday;
 };
 
 export {
@@ -75,5 +86,6 @@ export {
   addDaysToDate,
   daysBetweenDates,
   getDatesInRange,
+  getNextDateOfWeekday,
 };
 export * as default from './Utils.mjs';

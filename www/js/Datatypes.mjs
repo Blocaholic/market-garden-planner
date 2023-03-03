@@ -122,7 +122,7 @@ Veggie.prototype.toSeedAmount = function (x) {
   throw new Error(`Could not convert ${JSON.stringify(x)} to seedAmount!`);
 };
 
-function Crop(date, veggie, amount) {
+function Crop(date, veggie, amount, salesChannel) {
   if (date === undefined)
     throw new Error(`Crop.constructor: parameter "date" is undefined`);
   if (veggie === undefined)
@@ -151,9 +151,14 @@ function Crop(date, veggie, amount) {
         amount
       )}"!`
     );
+  if (salesChannel !== 'Box' && salesChannel !== 'MarketDay')
+    throw new Error(
+      `Crop.constructor: "salesChannel must be either "Box" or "MarketDay", but is ${salesChannel}!`
+    );
   this.date = new Date(date.getTime());
   this.veggie = veggie;
   this.amount = Number(amount);
+  this.salesChannel = salesChannel;
   Utils.deepFreeze(this);
 }
 
