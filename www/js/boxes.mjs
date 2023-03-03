@@ -226,11 +226,9 @@ const marketDays = await fetchJson(
 
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();
-  if (boxes.length === 0) View.hideAddBox();
   View.renderBoxes(boxes);
   View.renderBoxPreview([]);
   if (marketDays.length > 0) View.hideAddMarketDaysForm();
-  if (marketDays === 0) View.hideAddMarketDayForm();
   View.renderMarketDays(marketDays);
   View.renderMarketDaysPreview([]);
   View.renderSowingForm({cultures});
