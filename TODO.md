@@ -18,7 +18,8 @@
 - Aussaat-Planung: Zurück-Button bei Mengen-Änderung
 - Bei Inhalt Markt: Restmenge gleichmäßig verteilen als Funktion
 - Bei Inhalt Box: Eingabe für alle Tage übernehmen als Funktion
+- Nach Reset von addSowing: Vorauswahl der zuletzt ausgewählten Kultur
 
 ## Issues
 
-- Falscher Wochentag bei Ernten ausgewählt! Beispiel: Samstag statt Donnerstag!
+- Falscher Wochentag bei Ernten ausgewählt! Beispiel: Samstag statt Donnerstag! (Gemüsekiste Do, 11.05.2023 führt zu erstem Erntetag Sa, 13.05.2023)
