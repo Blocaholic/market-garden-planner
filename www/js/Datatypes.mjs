@@ -1,4 +1,5 @@
 import Utils from './Utils.mjs';
+import * as CONFIG from './CONFIG.mjs';
 
 function Veggie({
   id,
@@ -258,6 +259,7 @@ Object.defineProperties(Sowing.prototype, {
           veggie.harvestTolerance
         );
         return Utils.getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate,
           lastDate,
           interval: 7,
