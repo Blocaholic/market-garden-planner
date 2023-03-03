@@ -86,6 +86,5 @@ export {
   addDaysToDate,
   daysBetweenDates,
   getDatesInRange,
-  getNextDateOfWeekday,
 };
 export * as default from './Utils.mjs';
