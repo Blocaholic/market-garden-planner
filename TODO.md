@@ -9,7 +9,7 @@
 - Anzeigen von bereits gespeicherten Aussaaten
 - URL beautify (wie bei reinwiese.de)
 - target=boxes umbenennen in /planung
-- Navi: Planung / Konfiguration / Logout
+- Navi: Planung / Auswertungen / Konfiguration / Logout
 
 ## Prio B
 
@@ -19,6 +19,7 @@
 - Bei Inhalt Markt: Restmenge gleichmäßig verteilen als Funktion
 - Bei Inhalt Box: Eingabe für alle Tage übernehmen als Funktion
 - Nach Reset von addSowing: Vorauswahl der zuletzt ausgewählten Kultur
+- Beetlänge und Beetbreite aus Betriebskonfiguration übernehmen
 
 ## Issues
 
