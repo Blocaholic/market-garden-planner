@@ -522,8 +522,8 @@ const renderSowingForm = data => {
     // variables
     const {sowing, numberOfBoxes} = data;
     const veggie = sowing.veggie;
-    const roundedCropAmount =
-      Math.floor(sowing.totalCropAmount * 100) / 100 || 0;
+    /* const roundedCropAmount =
+      Math.floor(sowing.totalCropAmount * 100) / 100 || 0; */
     /* const roundedBoxAmount =
       Math.floor((sowing.totalCropAmount / numberOfBoxes) * 100) / 100 || 0; */
     // execute
@@ -562,22 +562,12 @@ const renderSowingForm = data => {
     <td>Summe</td>
   </tr>`;
 
-    const head2 = veggie.isSingleCrop
-      ? `<tr id="addSowing__singleCropAvailableRow">
-    <td>verfügbar</td>
-    <td id="addSowing__availablePerBox">0</td>
-    <td></td>
-    <td id="addSowing__totalAvailable">0</td>
-    <td></td>
-    <td></td>
-  </tr>`
-      : '';
-
     let totalAmountPerClient = 0;
     let totalAvailablePerClient = 0;
     let totalAmountForMarket = 0;
     let totalAvailableForMarket = 0;
     let totalRequiredCropAmount = 0;
+    let maxRequiredCropAmount = 0;
 
     const rows = sowing.possibleCropDates
       .map(date => {
@@ -603,6 +593,8 @@ const renderSowingForm = data => {
         const requiredCropAmount =
           amountForMarket + amountPerBox * numberOfBoxes;
         totalRequiredCropAmount += requiredCropAmount;
+        if (requiredCropAmount > maxRequiredCropAmount)
+          maxRequiredCropAmount = requiredCropAmount;
         const roundedAmountPerBox = Math.round(amountPerBox * 100) / 100;
         const roundedAmountForMarket = Math.round(amountForMarket * 100) / 100;
         const roundedAvailablePerDay = Math.round(availablePerDay * 100) / 100;
@@ -633,6 +625,19 @@ const renderSowingForm = data => {
       })
       .join('');
 
+    const totalAvailable = sowing.totalCropAmount - totalRequiredCropAmount;
+    const availablePerBox = totalAvailable / numberOfBoxes;
+    const head2 = veggie.isSingleCrop
+      ? `<tr id="addSowing__singleCropAvailableRow">
+    <td>verfügbar</td>
+    <td id="addSowing__availablePerBox">${availablePerBox}</td>
+    <td></td>
+    <td id="addSowing__totalAvailable">${totalAvailable}</td>
+    <td></td>
+    <td></td>
+  </tr>`
+      : '';
+
     const finalRow = `<tr>
     <td>Summe</td>
     <td id="addSowing__totalAmountPerClient">${
@@ -651,6 +656,47 @@ const renderSowingForm = data => {
       Math.round(totalRequiredCropAmount * 100) / 100
     }</td>
   </tr>`;
+    const requiredSeedAmount = Math.ceil(
+      veggie.toSeedAmount({
+        totalCropAmount: veggie.isMultiCrop
+          ? maxRequiredCropAmount * veggie.numberOfHarvests
+          : totalRequiredCropAmount,
+      })
+    );
+    $('addSowing__seedAmount--required').innerHTML =
+      Math.round(requiredSeedAmount * 100) / 100;
+    $('addSowing__bedLength--required').innerHTML =
+      Math.round(
+        ((veggie.preGrow
+          ? requiredSeedAmount * veggie.germinationRate
+          : requiredSeedAmount) /
+          ((100 / veggie.plantingDistance) *
+            Math.floor(75 / veggie.rowSpacing))) *
+          100
+      ) / 100;
+    $('addSowing__quickpotAmount--required').innerHTML =
+      Math.round(
+        (veggie.preGrow
+          ? Math.ceil(
+              requiredSeedAmount / veggie.quickpotSize / veggie.seedsPerPot
+            )
+          : 0) * 100
+      ) / 100;
+    $('addSowing__cropAmount--required').innerHTML = veggie.isMultiCrop
+      ? Math.round(maxRequiredCropAmount * 100) / 100
+      : '';
+    $('addSowing__totalCropAmount--required').innerHTML =
+      Math.round(
+        (veggie.isMultiCrop
+          ? maxRequiredCropAmount * veggie.numberOfHarvests
+          : totalRequiredCropAmount) * 100
+      ) / 100;
+
+    styleNumber($('addSowing__seedAmount--required'));
+    styleNumber($('addSowing__bedLength--required'));
+    styleNumber($('addSowing__quickpotAmount--required'));
+    styleNumber($('addSowing__cropAmount--required'));
+    styleNumber($('addSowing__totalCropAmount--required'));
 
     $('addSowing__crops').innerHTML = head1 + head2 + rows + finalRow;
     $$('.addSowing__amountPerBox').forEach(el => styleNumber(el));
@@ -658,6 +704,26 @@ const renderSowingForm = data => {
     $$('.addSowing__overProduction').forEach(el => styleNumber(el));
     $$('.addSowing__cropAmount--rounded').forEach(el => styleNumber(el));
     $('addSowing__crops').style.display = '';
+
+    const hideTableColumn = (tableSelector, column) => {
+      $$(`${tableSelector} td:nth-child(${column})`).forEach(el => {
+        el.style.display = 'none';
+      });
+    };
+
+    const showTableColumn = (tableSelector, column) => {
+      $$(`${tableSelector} td:nth-child(${column})`).forEach(el => {
+        el.style.display = '';
+      });
+    };
+
+    veggie.isSingleCrop
+      ? hideTableColumn('#addSowing__crops', 3)
+      : showTableColumn('#addSowing__crops', 3);
+    veggie.isSingleCrop
+      ? hideTableColumn('#addSowing__crops', 5)
+      : showTableColumn('#addSowing__crops', 5);
+
     handleChangeSowingForm();
     return;
   }
