@@ -1,10 +1,7 @@
 import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
 import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
-
-const CONFIG = {};
-CONFIG.weekday = 'Do';
-CONFIG.numberOfBoxes = 50;
+import * as CONFIG from './CONFIG.mjs';
 
 const fetchJson = async url => await fetch(url).then(x => x.json());
 
