@@ -75,6 +75,23 @@ const getNextDateOfWeekday = (date, weekday) => {
   return nextDateOfWeekday;
 };
 
+const getMostFrequent = inputArray => {
+  const counter = {};
+  for (const element of inputArray) {
+    if (counter[element]) counter[element]++;
+    else counter[element] = 1;
+  }
+  let maxValue = -Infinity;
+  let maxKey = undefined;
+  for (const key in counter) {
+    if (counter[key] > maxValue) {
+      maxValue = counter[key];
+      maxKey = key;
+    }
+  }
+  return maxKey;
+};
+
 export {
   deepFreeze,
   commaToDot,
@@ -86,5 +103,6 @@ export {
   addDaysToDate,
   daysBetweenDates,
   getDatesInRange,
+  getMostFrequent,
 };
 export * as default from './Utils.mjs';
