@@ -2,7 +2,6 @@
 
 ## Prio A
 
-- Aktuelles Jahr vorauswählen, bei addBox & addMarketDay
 - Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
 - Abspeichern von Aussaaten
 - Anzeigen von Ernten in der Gemüsekiste
