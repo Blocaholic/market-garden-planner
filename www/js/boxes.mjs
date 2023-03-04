@@ -89,6 +89,16 @@ const saveMarketDays = marketDays => {
   });
 };
 
+const saveSowings = sowings => {
+  View.showEieruhr();
+  console.log(sowings);
+  postAsJson('https://marketgardenapi.reinwiese.de/sowings.php', sowings).then(
+    res => {
+      if (res.ok) location.reload();
+    }
+  );
+};
+
 const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
   const dates =
     !firstDay || !lastDay
@@ -134,7 +144,20 @@ const addMarketDay = (marketDays, newMarketDayDate) => {
 };
 
 const addSowing = sowingData => {
-  console.log(sowingData);
+  const veggie = veggies.find(idEquals(sowingData.veggieId));
+  const sowing = new Sowing({
+    veggie,
+    sowingDate: sowingData.sowingDate,
+    seedAmount: sowingData.seedAmount,
+    crops: sowingData.crops.map(
+      crop => new Crop(crop.date, veggie, crop.amount, crop.salesChannel)
+    ),
+  });
+  saveSowings(
+    [...sowings, sowing].sort(
+      (a, b) => a.sowingDate.getTime() - b.sowingDate.getTime()
+    )
+  );
 };
 
 const updateSowingForm = ({

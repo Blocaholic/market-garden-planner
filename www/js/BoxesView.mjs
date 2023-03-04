@@ -131,13 +131,13 @@ const handleAddSowing = handler => {
     sowingData.sowingDate = stringToDate($('addSowing__date').innerHTML);
     sowingData.seedAmount = $('addSowing__seedAmount--given').value;
     const boxCrops = [...$$('.addSowing__amountPerBox')].map(element => ({
-      date: element.id.slice(-10),
+      date: stringToDate(element.id.slice(-10)),
       amount: element.value,
       salesChannel: 'Box',
     }));
     const marketDayCrops = [...$$('.addSowing__amountForMarket')].map(
       element => ({
-        date: element.id.slice(-10),
+        date: stringToDate(element.id.slice(-10)),
         amount: element.value,
         salesChannel: 'MarketDay',
       })
