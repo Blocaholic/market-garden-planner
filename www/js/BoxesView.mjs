@@ -5,7 +5,9 @@ import {
   dateToWeekday,
   stringToDate,
   addDaysToDate,
+  getMostFrequent,
 } from './Utils.mjs';
+import * as CONFIG from './CONFIG.mjs';
 
 const HANDLER = {};
 
@@ -65,20 +67,20 @@ const getAllDatesOfWeekdayOfYear = (weekday, year) => {
     allDaysInYear.push(tempDate);
     tempDate = addDaysToDate(tempDate, 1);
   }
-  return allDaysInYear.filter(date => date.getDay() === weekday);
+  return allDaysInYear.filter(date => dateToWeekday(date) === weekday);
 };
 
 const handleAddBox = (handler, boxes) => {
-  const weekday = boxes[0]?.date.getDay();
   $('addBox__year').addEventListener('change', e => {
     const year = Number(e.target.value);
     $('addBox__save').style.display = 'none';
     $('addBox__date').style.display = '';
     $('addBox__dateLabel').style.display = '';
     const boxTimes = boxes.map(box => box.date.getTime());
-    const possibleDates = getAllDatesOfWeekdayOfYear(weekday, year).filter(
-      date => !boxTimes.includes(date.getTime())
-    );
+    const possibleDates = getAllDatesOfWeekdayOfYear(
+      CONFIG.weekday,
+      year
+    ).filter(date => !boxTimes.includes(date.getTime()));
     const dateOptions = possibleDates.map(
       date => `<option value="${date}">${dateToString(date)}</option>`
     );
@@ -94,7 +96,6 @@ const handleAddBox = (handler, boxes) => {
 };
 
 const handleAddMarketDay = (handler, marketDays) => {
-  const weekday = marketDays[0]?.date.getDay();
   $('addMarketDay__year').addEventListener('change', e => {
     const year = Number(e.target.value);
     $('addMarketDay__save').style.display = 'none';
@@ -103,9 +104,10 @@ const handleAddMarketDay = (handler, marketDays) => {
     const marketDayTimes = marketDays.map(marketDay =>
       marketDay.date.getTime()
     );
-    const possibleDates = getAllDatesOfWeekdayOfYear(weekday, year).filter(
-      date => !marketDayTimes.includes(date.getTime())
-    );
+    const possibleDates = getAllDatesOfWeekdayOfYear(
+      CONFIG.weekday,
+      year
+    ).filter(date => !marketDayTimes.includes(date.getTime()));
     const dateOptions = possibleDates.map(
       date => `<option value="${date}">${dateToString(date)}</option>`
     );
@@ -315,7 +317,6 @@ const closeMultiBox = e => {
   $('addBoxes__save').style.display = 'none';
   $('addBoxes__h3').classList.add('button');
   $('addBoxes__wrapper').style.borderColor = 'transparent';
-  $('addBoxes__wrapper').style.margin = '0';
   $('addBoxes__wrapper').style.padding = '0';
 };
 
@@ -331,26 +332,37 @@ const closeAddMarketDays = e => {
   $('addMarketDays__save').style.display = 'none';
   $('addMarketDays__h3').classList.add('button');
   $('addMarketDays__wrapper').style.borderColor = 'transparent';
-  $('addMarketDays__wrapper').style.margin = '0';
   $('addMarketDays__wrapper').style.padding = '0';
 };
 
 const openAddBox = () => {
   const currentYear = new Date().getFullYear();
+  const preferredYear =
+    getMostFrequent(
+      [...$$('.box__date')].map(boxDateDiv => boxDateDiv.innerHTML.slice(-4))
+    ) || currentYear;
   const next30years = [...Array(30)].map((_, key) => key + currentYear);
   const yearOptions = next30years
     .map(year => `<option value="${year}">${year}</option>`)
     .join('');
   $('addBox__year').innerHTML = `<option selected></option>${yearOptions}`;
+  $('addBox__year').value = preferredYear;
   $('addBox__close').style.display = '';
   $('addBox__inputWrapper').style.display = '';
   $('addBox__h3').classList.remove('button');
   $('addBox__wrapper').style.borderColor = '';
   $('addBox__wrapper').style.padding = '';
+  $('addBox__year').dispatchEvent(new Event('change'));
 };
 
 const openAddMarketDay = () => {
   const currentYear = new Date().getFullYear();
+  const preferredYear =
+    getMostFrequent(
+      [...$$('.marketDay__date')].map(boxDateDiv =>
+        boxDateDiv.innerHTML.slice(-4)
+      )
+    ) || currentYear;
   const next30years = [...Array(30)].map((_, key) => key + currentYear);
   const yearOptions = next30years
     .map(year => `<option value="${year}">${year}</option>`)
@@ -358,11 +370,13 @@ const openAddMarketDay = () => {
   $(
     'addMarketDay__year'
   ).innerHTML = `<option selected></option>${yearOptions}`;
+  $('addMarketDay__year').value = preferredYear;
   $('addMarketDay__close').style.display = '';
   $('addMarketDay__inputWrapper').style.display = '';
   $('addMarketDay__h3').classList.remove('button');
   $('addMarketDay__wrapper').style.borderColor = '';
   $('addMarketDay__wrapper').style.padding = '';
+  $('addMarketDay__year').dispatchEvent(new Event('change'));
 };
 
 const closeAddBox = e => {
@@ -671,7 +685,7 @@ const renderSowingForm = data => {
           ? requiredSeedAmount * veggie.germinationRate
           : requiredSeedAmount) /
           ((100 / veggie.plantingDistance) *
-            Math.floor(75 / veggie.rowSpacing))) *
+            Math.floor(CONFIG.bedWidth / veggie.rowSpacing))) *
           100
       ) / 100;
     $('addSowing__quickpotAmount--required').innerHTML =

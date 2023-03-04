@@ -75,11 +75,10 @@ label {
   position: relative;
   display: table;
   border: 2px solid rgb(100, 100, 100);
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
-  margin-bottom: 3.2rem;
-  padding-right: 25px;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0 3.2rem 0;
+  padding-right: 2.5rem;
 }
 
 .addBox__wrapper,

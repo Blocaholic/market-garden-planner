@@ -1,4 +1,5 @@
 import Utils from './Utils.mjs';
+import * as CONFIG from './CONFIG.mjs';
 
 function Veggie({
   id,
@@ -85,7 +86,7 @@ Object.defineProperties(Veggie.prototype, {
   },
   rowsPerBed: {
     get() {
-      return Math.floor(75 / this.rowSpacing);
+      return Math.floor(CONFIG.bedWidth / this.rowSpacing);
     },
   },
   plantsPerMeter: {
@@ -258,6 +259,7 @@ Object.defineProperties(Sowing.prototype, {
           veggie.harvestTolerance
         );
         return Utils.getDatesInRange({
+          weekday: CONFIG.weekday,
           firstDate,
           lastDate,
           interval: 7,
@@ -304,7 +306,7 @@ Object.defineProperties(Sowing.prototype, {
             ? this.seedAmount * this.veggie.germinationRate
             : this.seedAmount) /
             ((100 / this.veggie.plantingDistance) *
-              Math.floor(75 / this.veggie.rowSpacing))) *
+              Math.floor(CONFIG.bedWidth / this.veggie.rowSpacing))) *
             100
         ) / 100
       );

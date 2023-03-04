@@ -1,10 +1,7 @@
 import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './BoxesView.mjs';
 import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
-
-const CONFIG = {};
-CONFIG.weekday = 'Do';
-CONFIG.numberOfBoxes = 50;
+import * as CONFIG from './CONFIG.mjs';
 
 const fetchJson = async url => await fetch(url).then(x => x.json());
 
@@ -229,11 +226,9 @@ const marketDays = await fetchJson(
 
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();
-  if (boxes.length === 0) View.hideAddBox();
   View.renderBoxes(boxes);
   View.renderBoxPreview([]);
   if (marketDays.length > 0) View.hideAddMarketDaysForm();
-  if (marketDays === 0) View.hideAddMarketDayForm();
   View.renderMarketDays(marketDays);
   View.renderMarketDaysPreview([]);
   View.renderSowingForm({cultures});
