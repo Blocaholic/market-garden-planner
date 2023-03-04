@@ -133,6 +133,10 @@ const addMarketDay = (marketDays, newMarketDayDate) => {
   );
 };
 
+const addSowing = sowingData => {
+  console.log(sowingData);
+};
+
 const updateSowingForm = ({
   target,
   veggieId,
@@ -239,6 +243,7 @@ const marketDays = await fetchJson(
   View.handleAddMarketDaysSave(saveMarketDaySeries);
   View.handleAddBox(addBox, boxes);
   View.handleAddMarketDay(addMarketDay, marketDays);
+  View.handleAddSowing(addSowing);
   View.handleCulture(updateOnCulture);
   View.handleVariety(updateOnVariety);
   View.handleChangeSowingForm(updateSowingForm);

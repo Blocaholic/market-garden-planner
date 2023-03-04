@@ -124,6 +124,29 @@ const handleAddMarketDay = (handler, marketDays) => {
   );
 };
 
+const handleAddSowing = handler => {
+  $('addSowing__save').addEventListener('click', _ => {
+    const sowingData = {};
+    sowingData.veggieId = $('addSowing__variety').value;
+    sowingData.sowingDate = stringToDate($('addSowing__date').innerHTML);
+    sowingData.seedAmount = $('addSowing__seedAmount--given').value;
+    const boxCrops = [...$$('.addSowing__amountPerBox')].map(element => ({
+      date: element.id.slice(-10),
+      amount: element.value,
+      salesChannel: 'Box',
+    }));
+    const marketDayCrops = [...$$('.addSowing__amountForMarket')].map(
+      element => ({
+        date: element.id.slice(-10),
+        amount: element.value,
+        salesChannel: 'MarketDay',
+      })
+    );
+    sowingData.crops = [...boxCrops, ...marketDayCrops];
+    handler(sowingData);
+  });
+};
+
 const handleCulture = handler =>
   $('addSowing__culture')?.addEventListener('change', e => {
     handler({
@@ -862,6 +885,7 @@ export {
   handleAddMarketDaysSave,
   handleAddBox,
   handleAddMarketDay,
+  handleAddSowing,
   handleCulture,
   handleVariety,
   handleChangeSowingForm,
