@@ -215,7 +215,25 @@ const cultures = new Set(veggies.map(v => v.culture).sort());
 
 const sowings = await fetchJson(
   'https://marketgardenapi.reinwiese.de/sowings.php'
-).then(data => data.map(sowing => new Sowing(sowing)));
+).then(data =>
+  data.map(
+    sowing =>
+      new Sowing({
+        veggie: sowing.veggie,
+        sowingDate: new Date(sowing.sowingDate),
+        seedAmount: sowing.seedAmount,
+        crops: sowing.crops.map(
+          crop =>
+            new Crop(
+              new Date(crop.date),
+              new Veggie(crop.veggie),
+              crop.amount,
+              crop.salesChannel
+            )
+        ),
+      })
+  )
+);
 
 const boxes = await fetchJson(
   'https://marketgardenapi.reinwiese.de/boxes.php'
