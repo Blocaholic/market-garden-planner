@@ -4,7 +4,8 @@
 
 - Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
 - Anzeigen von Ernten in der Gemüsekiste
-- Crop Datatype: Remove veggie (get veggie from parent Datatype 'Sowing')
+- Datentypen "Box" und "MarketDay": nur "date", keine "ingredients"
+- Aussaaten: Ernten in Tooltip nach Datum sortieren
 
 ## Prio B
 
