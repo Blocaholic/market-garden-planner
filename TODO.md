@@ -4,8 +4,6 @@
 
 - Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
 - Anzeigen von Ernten in der Gemüsekiste
-- target=boxes umbenennen in /planung
-- Navi: Planung / Auswertungen / Konfiguration / Logout
 
 ## Prio B
 
