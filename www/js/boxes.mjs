@@ -219,7 +219,7 @@ const sowings = await fetchJson(
   data.map(
     sowing =>
       new Sowing({
-        veggie: sowing.veggie,
+        veggie: new Veggie(sowing.veggie),
         sowingDate: new Date(sowing.sowingDate),
         seedAmount: sowing.seedAmount,
         crops: sowing.crops.map(

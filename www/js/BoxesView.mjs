@@ -845,7 +845,23 @@ const renderMarketDays = marketDays => {
 };
 
 const renderSowings = sowings => {
-  $('sowings').innerHTML = sowings;
+  const htmlSowings = sowings
+    .map(
+      sowing =>
+        `<li title="Ernten:${sowing.crops
+          .map(crop =>
+            crop.amount > 0
+              ? `&#10;${dateToString(crop.date)}: ${crop.amount} ${
+                  sowing.veggie.harvestUnit
+                } für ${crop.salesChannel}`
+              : ''
+          )
+          .join('')}">${dateToString(sowing.sowingDate)}: ${
+          sowing.seedAmount
+        } ${sowing.veggie.fullName}</li>`
+    )
+    .join('');
+  $('sowings').innerHTML = `<ul class="--listStyleNone">${htmlSowings}</ul>`;
 };
 
 const showEieruhr = () => {
