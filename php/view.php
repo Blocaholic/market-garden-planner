@@ -1,49 +1,47 @@
 <?php
 
 function renderContent($target, $error) {
-  if(!$_SESSION['isValidUser']) {
-    return $error.'<h1>Login-Formular</h1>';
+  if (!$_SESSION['isValidUser']) {
+    return $error . '<h1>Login-Formular</h1>';
   }
-  if(file_exists('../templates/content/'.$target.'.html')) {
-    return file_get_contents("../templates/content/".$target.".html");
+  if (file_exists('../templates/content/' . $target . '.html')) {
+    return file_get_contents('../templates/content/' . $target . '.html');
   }
   return 'Page not found!';
 }
 
 function renderNav($target, $user) {
-  $nav = ($user["isValid"]) ?
-  '<li class="header__navLi">
-    <a href="?target=boxes">Kisten</a>
+  $nav = $user['isValid']
+    ? '<li class="header__navLi">
+    <a href="/boxes">Kisten</a>
   </li>
   <li class="header__navLi">
-    <a href="?target=logout">Logout</a>
-  </li>':
-  '<li class="header__navLi">
-    <a href="?target=login">Login</a>
+    <a href="/logout">Logout</a>
+  </li>'
+    : '<li class="header__navLi">
+    <a href="/login">Login</a>
   </li>';
   return $nav;
 }
 
 function renderScript($target, $user) {
-  if ($target == 'boxes' && $user["isValid"]) {
+  if ($target == 'boxes' && $user['isValid']) {
     return '<script src="js/boxes.mjs" type="module"></script>';
-  }
-  else {
+  } else {
     return '';
   }
 }
 
 function renderPage($target, $error, $user) {
-  
-  $page = file_get_contents("../templates/page.html");
+  $page = file_get_contents('../templates/page.html');
   $nav = renderNav($target, $user);
   $content = renderContent($target, $error);
   $script = renderScript($target, $user);
 
-  $page = preg_replace("/\[\%nav\%\]/", $nav, $page);
-  $page = preg_replace("/\[\%content\%\]/", $content, $page);
-  $page = preg_replace("/\[\%script\%\]/", $script, $page);
-  
+  $page = preg_replace('/\[\%nav\%\]/', $nav, $page);
+  $page = preg_replace('/\[\%content\%\]/', $content, $page);
+  $page = preg_replace('/\[\%script\%\]/', $script, $page);
+
   return $page;
 }
 

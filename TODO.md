@@ -4,7 +4,6 @@
 
 - Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
 - Anzeigen von Ernten in der Gemüsekiste
-- URL beautify (wie bei reinwiese.de)
 - target=boxes umbenennen in /planung
 - Navi: Planung / Auswertungen / Konfiguration / Logout
 
@@ -18,5 +17,6 @@
 - Nach Reset von addSowing: Vorauswahl der zuletzt ausgewählten Kultur
 - Beetlänge und Beetbreite aus Betriebskonfiguration übernehmen
 - Funktion: Markttage an jedem "Gemüsekisten-Tag" einplanen
+- Footer mit Navbar für Copyright, Impressum, Datenschutzerklärung
 
 ## Issues

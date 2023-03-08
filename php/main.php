@@ -1,34 +1,34 @@
 <?php
-include_once("view.php");
+include_once 'view.php';
 
 function isValidUser() {
   return true;
 }
 
 function main() {
-  
   session_start();
   $error = '';
-  $target = $_GET['target'] ?? 'home';
+  $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+  $request = trim($url, '/') ?: 'home';
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
-  if($target == 'login') {
+  if ($request == 'login') {
     $_SESSION['isValidUser'] = isValidUser();
-    if(!$_SESSION['isValidUser']) {
+    if (!$_SESSION['isValidUser']) {
       $error .= 'Fehler: Benutzername oder Passwort falsch!<br>';
     } else {
-      $target = 'home';
+      $request = 'home';
     }
   }
-  
-  if($target == 'logout') {
+
+  if ($request == 'logout') {
     $_SESSION['isValidUser'] = false;
   }
 
   $user = [
-    "isValid" => $_SESSION['isValidUser'],
+    'isValid' => $_SESSION['isValidUser'],
   ];
 
-  echo renderPage($target, $error, $user);
+  echo renderPage($request, $error, $user);
 }
 ?>
