@@ -1,5 +1,5 @@
 import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
-import * as View from './BoxesView.mjs';
+import * as View from './PlanningView.mjs';
 import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
 import * as CONFIG from './CONFIG.mjs';
 

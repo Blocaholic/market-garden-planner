@@ -1,16 +1,16 @@
 <?php
 
-function renderContent($target, $error) {
+function renderContent($request, $error) {
   if (!$_SESSION['isValidUser']) {
     return $error . '<h1>Login-Formular</h1>';
   }
-  if (file_exists('../templates/content/' . $target . '.html')) {
-    return file_get_contents('../templates/content/' . $target . '.html');
+  if (file_exists('../templates/content/' . $request . '.html')) {
+    return file_get_contents('../templates/content/' . $request . '.html');
   }
   return 'Page not found!';
 }
 
-function renderNav($target, $user) {
+function renderNav($request, $user) {
   $nav = $user['isValid']
     ? '<li class="header__navLi">
     <a href="/planning">Planung</a>
@@ -30,19 +30,19 @@ function renderNav($target, $user) {
   return $nav;
 }
 
-function renderScript($target, $user) {
-  if ($target == 'boxes' && $user['isValid']) {
-    return '<script src="js/boxes.mjs" type="module"></script>';
+function renderScript($request, $user) {
+  if ($request == 'planning' && $user['isValid']) {
+    return '<script src="js/planning.mjs" type="module"></script>';
   } else {
     return '';
   }
 }
 
-function renderPage($target, $error, $user) {
+function renderPage($request, $error, $user) {
   $page = file_get_contents('../templates/page.html');
-  $nav = renderNav($target, $user);
-  $content = renderContent($target, $error);
-  $script = renderScript($target, $user);
+  $nav = renderNav($request, $user);
+  $content = renderContent($request, $error);
+  $script = renderScript($request, $user);
 
   $page = preg_replace('/\[\%nav\%\]/', $nav, $page);
   $page = preg_replace('/\[\%content\%\]/', $content, $page);
