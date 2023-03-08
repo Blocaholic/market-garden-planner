@@ -13,7 +13,13 @@ function renderContent($target, $error) {
 function renderNav($target, $user) {
   $nav = $user['isValid']
     ? '<li class="header__navLi">
-    <a href="/boxes">Kisten</a>
+    <a href="/planning">Planung</a>
+  </li>
+  <li class="header__navLi">
+    <a href="/reports">Auswertungen</a>
+  </li>
+  <li class="header__navLi">
+    <a href="/config">Konfiguration</a>
   </li>
   <li class="header__navLi">
     <a href="/logout">Logout</a>
