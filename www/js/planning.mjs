@@ -128,14 +128,14 @@ const saveMarketDaySeries = ({firstDay, lastDay, interval}) => {
 };
 
 const addBox = (boxes, newBoxDate) => {
-  const box = new Box(newBoxDate, []);
+  const box = new Box(newBoxDate);
   saveBoxes(
     [...boxes, box].sort((a, b) => a.date.getTime() - b.date.getTime())
   );
 };
 
 const addMarketDay = (marketDays, newMarketDayDate) => {
-  const marketDay = new MarketDay(newMarketDayDate, []);
+  const marketDay = new MarketDay(newMarketDayDate);
   saveMarketDays(
     [...marketDays, marketDay].sort(
       (a, b) => a.date.getTime() - b.date.getTime()
@@ -230,27 +230,11 @@ const sowings = await fetchJson(
 
 const boxes = await fetchJson(
   'https://marketgardenapi.reinwiese.de/boxes.php'
-).then(jsonArray =>
-  jsonArray.map(item => {
-    const ingredients = item.ingredients.map(
-      ingredient =>
-        new Crop(new Date(ingredient.date), ingredient.amount, 'Box')
-    );
-    return new Box(new Date(item.date), ingredients);
-  })
-);
+).then(jsonArray => jsonArray.map(item => new Box(new Date(item.date))));
 
 const marketDays = await fetchJson(
   'https://marketgardenapi.reinwiese.de/marketDays.php'
-).then(jsonArray =>
-  jsonArray.map(item => {
-    const ingredients = item.ingredients.map(
-      ingredient =>
-        new Crop(new Date(ingredient.date), ingredient.amount, 'MarketDay')
-    );
-    return new MarketDay(new Date(item.date), ingredients);
-  })
-);
+).then(jsonArray => jsonArray.map(item => new MarketDay(new Date(item.date))));
 
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();

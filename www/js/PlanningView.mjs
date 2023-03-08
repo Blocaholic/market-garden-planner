@@ -795,7 +795,7 @@ const renderSowingForm = data => {
 const renderBoxes = boxes => {
   const boxesHtml = boxes
     .map(box => {
-      const ingredientsHtml = box.ingredients
+      /* const ingredientsHtml = box.ingredients
         .map(
           ingredient => `<tr>
     <td>${ingredient.veggie.fullName}</td>
@@ -803,7 +803,8 @@ const renderBoxes = boxes => {
     <td>&#128465;</td>
   </tr>`
         )
-        .join('');
+        .join(''); */
+      const ingredientsHtml = '';
       const boxHtml = `<div class="box">
     <div class="box__date">${dateToString(box.date)}</div>
     <table>${ingredientsHtml}</table>
@@ -821,7 +822,7 @@ const renderBoxes = boxes => {
 const renderMarketDays = marketDays => {
   const marketDaysHtml = marketDays
     .map(marketDay => {
-      const ingredientsHtml = marketDay.ingredients
+      /* const ingredientsHtml = marketDay.ingredients
         .map(
           ingredient => `<tr>
     <td>${ingredient.veggie.fullName}</td>
@@ -829,7 +830,8 @@ const renderMarketDays = marketDays => {
     <td>&#128465;</td>
   </tr>`
         )
-        .join('');
+        .join(''); */
+      const ingredientsHtml = '';
       const marketDayHtml = `<div class="marketDay">
     <div class="marketDay__date">${dateToString(marketDay.date)}</div>
     <table>${ingredientsHtml}</table>
