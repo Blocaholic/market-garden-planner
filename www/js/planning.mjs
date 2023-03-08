@@ -150,7 +150,7 @@ const addSowing = sowingData => {
     sowingDate: sowingData.sowingDate,
     seedAmount: sowingData.seedAmount,
     crops: sowingData.crops.map(
-      crop => new Crop(crop.date, veggie, crop.amount, crop.salesChannel)
+      crop => new Crop(crop.date, crop.amount, crop.salesChannel)
     ),
   });
   saveSowings(
@@ -189,7 +189,6 @@ const updateSowingForm = ({
     crop =>
       new Crop(
         crop.date,
-        veggie,
         crop.salesChannel === 'Box'
           ? crop.amount * CONFIG.numberOfBoxes
           : crop.amount,
@@ -223,13 +222,7 @@ const sowings = await fetchJson(
         sowingDate: new Date(sowing.sowingDate),
         seedAmount: sowing.seedAmount,
         crops: sowing.crops.map(
-          crop =>
-            new Crop(
-              new Date(crop.date),
-              new Veggie(crop.veggie),
-              crop.amount,
-              crop.salesChannel
-            )
+          crop => new Crop(new Date(crop.date), crop.amount, crop.salesChannel)
         ),
       })
   )
@@ -241,12 +234,7 @@ const boxes = await fetchJson(
   jsonArray.map(item => {
     const ingredients = item.ingredients.map(
       ingredient =>
-        new Crop(
-          new Date(ingredient.date),
-          new Veggie(ingredient.veggie),
-          ingredient.amount,
-          'Box'
-        )
+        new Crop(new Date(ingredient.date), ingredient.amount, 'Box')
     );
     return new Box(new Date(item.date), ingredients);
   })
@@ -258,12 +246,7 @@ const marketDays = await fetchJson(
   jsonArray.map(item => {
     const ingredients = item.ingredients.map(
       ingredient =>
-        new Crop(
-          new Date(ingredient.date),
-          new Veggie(ingredient.veggie),
-          ingredient.amount,
-          'MarketDay'
-        )
+        new Crop(new Date(ingredient.date), ingredient.amount, 'MarketDay')
     );
     return new MarketDay(new Date(item.date), ingredients);
   })
