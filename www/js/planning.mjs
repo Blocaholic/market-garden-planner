@@ -1,6 +1,11 @@
 import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './PlanningView.mjs';
-import {idEquals, addDaysToDate, getDatesInRange} from './Utils.mjs';
+import {
+  idEquals,
+  addDaysToDate,
+  getDatesInRange,
+  commaToDot,
+} from './Utils.mjs';
 import * as CONFIG from './CONFIG.mjs';
 
 const fetchJson = async url => await fetch(url).then(x => x.json());
@@ -154,7 +159,7 @@ const addSowing = sowingData => {
     sowingDate: sowingData.sowingDate,
     seedAmount: sowingData.seedAmount,
     crops: sowingData.crops.map(
-      crop => new Crop(crop.date, crop.amount, crop.salesChannel)
+      crop => new Crop(crop.date, commaToDot(crop.amount), crop.salesChannel)
     ),
   });
   saveSowings(
