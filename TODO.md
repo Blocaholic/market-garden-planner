@@ -2,8 +2,6 @@
 
 ## Prio A
 
-- Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
-
 ## Prio B
 
 - Bei Kisten-Serien-Planung: Anzahl Wochen als mögliches Eingabe-Feld + Live-Anzeige

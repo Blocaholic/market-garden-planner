@@ -18,6 +18,11 @@ input[type='text'] {
   width: 50px;
 }
 
+input[readonly] {
+  background-color: #ccc;
+  color: #777;
+}
+
 label {
   text-align: right;
 }

@@ -41,7 +41,12 @@ const updateOnVariety = ({veggieId, firstCropDate}) => {
     seedAmount: 0,
     crops: [],
   });
-  View.renderSowingForm({sowing, numberOfBoxes: CONFIG.numberOfBoxes});
+  View.renderSowingForm({
+    sowing,
+    numberOfBoxes: CONFIG.numberOfBoxes,
+    boxes,
+    marketDays,
+  });
 };
 
 const multiBoxPreview = ({firstDay, lastDay, interval}) => {
@@ -201,7 +206,12 @@ const updateSowingForm = ({
     seedAmount,
     crops: newCrops,
   });
-  View.renderSowingForm({sowing, numberOfBoxes: CONFIG.numberOfBoxes});
+  View.renderSowingForm({
+    sowing,
+    numberOfBoxes: CONFIG.numberOfBoxes,
+    boxes,
+    marketDays,
+  });
 };
 
 ////////////////////////////////////////////////////////////////////////////////

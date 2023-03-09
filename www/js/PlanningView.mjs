@@ -548,6 +548,12 @@ const renderSowingForm = data => {
     $('addSowing__quickpot').style.display = 'none';
   };
 
+  const boxExists = (date, boxes) =>
+    boxes.some(box => box.date.getTime() === date.getTime());
+
+  const marketDayExists = (date, marketDays) =>
+    marketDays.some(marketDay => marketDay.date.getTime() === date.getTime());
+
   // event listeners
   $('addSowing__close').addEventListener('click', _ => {
     resetSowingForm();
@@ -557,7 +563,7 @@ const renderSowingForm = data => {
   // culture and variety are selected
   if (varietyIsSelected()) {
     // variables
-    const {sowing, numberOfBoxes} = data;
+    const {sowing, numberOfBoxes, boxes, marketDays} = data;
     const veggie = sowing.veggie;
     /* const roundedCropAmount =
       Math.floor(sowing.totalCropAmount * 100) / 100 || 0; */
@@ -642,7 +648,9 @@ const renderSowingForm = data => {
           <td>${dateToWeekday(date)}, ${dateToString(date)}</td>
           <td><input type="text" class="addSowing__amountPerBox" id="addSowing__amountPerBox--${dateToString(
             date
-          )}" value="${dotToComma(roundedAmountPerBox)}"></td>
+          )}" value="${dotToComma(roundedAmountPerBox)}" ${
+          boxExists(date, boxes) ? '' : 'readonly'
+        }></td>
           <td class="addSowing__availablePerBox" id="addSowing__availablePerBox--${dateToString(
             date
           )}">${Math.floor(roundedAvailablePerBox * 100) / 100} ${
@@ -650,7 +658,9 @@ const renderSowingForm = data => {
         }</td>
           <td><input type="text" class="addSowing__amountForMarket"
                    id="addSowing__amountForMarket--${dateToString(date)}"
-                   value="${roundedAmountForMarket}"></td>
+                   value="${roundedAmountForMarket}" ${
+          marketDayExists(date, marketDays) ? '' : 'readonly'
+        }></td>
           <td class="addSowing__availablePerDay" id="addSowing__availablePerDay--${dateToString(
             date
           )}">${roundedAvailablePerDay} ${veggie.harvestUnit}</td>
