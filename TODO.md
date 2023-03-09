@@ -2,9 +2,9 @@
 
 ## Prio A
 
+- Aussaaten (inkl. Kisteninhalte) änderbar / löschbar machen
 - Auswertung benötigte Beetmeter / Anzahl Beete an Termin
 - Auswertung benötigte Quickpots an Termin
-- Aussaaten (inkl. Kisteninhalte) änderbar / löschbar machen
 
 ## Prio B
 

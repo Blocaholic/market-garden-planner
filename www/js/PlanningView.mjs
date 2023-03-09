@@ -830,7 +830,7 @@ const renderBoxes = (boxes, sowings) => {
       const boxHtml = `<div class="box">
     <div class="box__date">${dateToString(box.date)}</div>
     <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
-        boxPrice
+        Math.round(boxPrice * 100) / 100
       )} €</td><td></td></tr></table>
     <div class="button box__addVeggieButton">&#65291; Gemüse</div>
   </div>`;
@@ -875,7 +875,7 @@ const renderMarketDays = (marketDays, sowings) => {
       const marketDayHtml = `<div class="marketDay">
     <div class="marketDay__date">${dateToString(marketDay.date)}</div>
     <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
-        marketDayPrice
+        Math.round(marketDayPrice * 100) / 100
       )} €</td><td></td></tr></table>
     <div class="button marketDay__addVeggieButton">&#65291; Gemüse</div>
   </div>`;
