@@ -160,6 +160,11 @@ const addMarketDay = (marketDays, newMarketDayDate) => {
 
 const addSowing = sowingData => {
   const veggie = veggies.find(idEquals(sowingData.veggieId));
+  const otherSowings = sowings.filter(
+    sowing =>
+      sowing.veggie.id !== veggie.id ||
+      sowing.sowingDate.getTime() !== sowingData.sowingDate.getTime()
+  );
   const sowing = new Sowing({
     veggie,
     sowingDate: sowingData.sowingDate,
@@ -168,11 +173,13 @@ const addSowing = sowingData => {
       crop => new Crop(crop.date, commaToDot(crop.amount), crop.salesChannel)
     ),
   });
-  saveSowings(
-    [...sowings, sowing].sort(
-      (a, b) => a.sowingDate.getTime() - b.sowingDate.getTime()
-    )
-  );
+  const newSowings =
+    sowing.seedAmount >= 1
+      ? [...otherSowings, sowing].sort(
+          (a, b) => a.sowingDate.getTime() - b.sowingDate.getTime()
+        )
+      : [...otherSowings];
+  saveSowings(newSowings);
 };
 
 const updateSowingForm = ({

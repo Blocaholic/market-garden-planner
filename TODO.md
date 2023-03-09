@@ -2,6 +2,7 @@
 
 ## Prio A
 
+- Beim Speichern einer Aussaat mit Aussaat-Menge 0: Aussaat löschen / nicht speichern
 - Aussaaten (inkl. Kisteninhalte) änderbar / löschbar machen
 - Auswertung benötigte Beetmeter / Anzahl Beete an Termin
 - Auswertung benötigte Quickpots an Termin
