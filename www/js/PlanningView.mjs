@@ -554,7 +554,7 @@ const renderSowingForm = data => {
     hideSowingForm();
   });
 
-  // culture and varquickpotAmountiety are selected
+  // culture and variety are selected
   if (varietyIsSelected()) {
     // variables
     const {sowing, numberOfBoxes} = data;
