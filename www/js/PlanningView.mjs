@@ -801,6 +801,7 @@ const renderSowingForm = data => {
 const renderBoxes = (boxes, sowings) => {
   const boxesHtml = boxes
     .map(box => {
+      let boxPrice = 0;
       const ingredientsHtml = sowings
         .map(sowing =>
           sowing.crops
@@ -810,19 +811,27 @@ const renderBoxes = (boxes, sowings) => {
                 crop.salesChannel === 'Box' &&
                 crop.amount > 0
             )
-            .map(
-              crop => `<tr>
+            .map(crop => {
+              const cropPrice =
+                Math.round(
+                  crop.amount * sowing.veggie.sellingPricePerUnit * 100
+                ) / 100;
+              boxPrice += cropPrice;
+              return `<tr>
             <td>${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
+            <td>${cropPrice} €</td>
             <td>&#128465;</td>
-            </tr>`
-            )
+            </tr>`;
+            })
             .join('')
         )
         .join('');
       const boxHtml = `<div class="box">
     <div class="box__date">${dateToString(box.date)}</div>
-    <table>${ingredientsHtml}</table>
+    <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
+        boxPrice
+      )} €</td><td></td></tr></table>
     <div class="button box__addVeggieButton">&#65291; Gemüse</div>
   </div>`;
       return boxHtml;
@@ -837,6 +846,7 @@ const renderBoxes = (boxes, sowings) => {
 const renderMarketDays = (marketDays, sowings) => {
   const marketDaysHtml = marketDays
     .map(marketDay => {
+      let marketDayPrice = 0;
       const ingredientsHtml = sowings
         .map(sowing =>
           sowing.crops
@@ -846,19 +856,27 @@ const renderMarketDays = (marketDays, sowings) => {
                 crop.salesChannel === 'MarketDay' &&
                 crop.amount > 0
             )
-            .map(
-              crop => `<tr>
+            .map(crop => {
+              const cropPrice =
+                Math.round(
+                  crop.amount * sowing.veggie.sellingPricePerUnit * 100
+                ) / 100;
+              marketDayPrice += cropPrice;
+              return `<tr>
             <td>${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
+            <td>${cropPrice} €</td>
             <td>&#128465;</td>
-            </tr>`
-            )
+            </tr>`;
+            })
             .join('')
         )
         .join('');
       const marketDayHtml = `<div class="marketDay">
     <div class="marketDay__date">${dateToString(marketDay.date)}</div>
-    <table>${ingredientsHtml}</table>
+    <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
+        marketDayPrice
+      )} €</td><td></td></tr></table>
     <div class="button marketDay__addVeggieButton">&#65291; Gemüse</div>
   </div>`;
       return marketDayHtml;
