@@ -565,10 +565,6 @@ const renderSowingForm = data => {
     // variables
     const {sowing, numberOfBoxes, boxes, marketDays} = data;
     const veggie = sowing.veggie;
-    /* const roundedCropAmount =
-      Math.floor(sowing.totalCropAmount * 100) / 100 || 0; */
-    /* const roundedBoxAmount =
-      Math.floor((sowing.totalCropAmount / numberOfBoxes) * 100) / 100 || 0; */
     // execute
     hideCultureSelect();
     hideVarietySelect();

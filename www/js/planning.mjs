@@ -96,7 +96,6 @@ const saveMarketDays = marketDays => {
 
 const saveSowings = sowings => {
   View.showEieruhr();
-  console.log(sowings);
   postAsJson('https://marketgardenapi.reinwiese.de/sowings.php', sowings).then(
     res => {
       if (res.ok) location.reload();
