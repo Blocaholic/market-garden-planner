@@ -792,19 +792,28 @@ const renderSowingForm = data => {
   }
 };
 
-const renderBoxes = boxes => {
+const renderBoxes = (boxes, sowings) => {
   const boxesHtml = boxes
     .map(box => {
-      /* const ingredientsHtml = box.ingredients
-        .map(
-          ingredient => `<tr>
-    <td>${ingredient.veggie.fullName}</td>
-    <td>${ingredient.amount} ${ingredient.veggie.harvestUnit}</td>
-    <td>&#128465;</td>
-  </tr>`
+      const ingredientsHtml = sowings
+        .map(sowing =>
+          sowing.crops
+            .filter(
+              crop =>
+                crop.date.getTime() === box.date.getTime() &&
+                crop.salesChannel === 'Box' &&
+                crop.amount > 0
+            )
+            .map(
+              crop => `<tr>
+            <td>${sowing.veggie.fullName}</td>
+            <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
+            <td>&#128465;</td>
+            </tr>`
+            )
+            .join('')
         )
-        .join(''); */
-      const ingredientsHtml = '';
+        .join('');
       const boxHtml = `<div class="box">
     <div class="box__date">${dateToString(box.date)}</div>
     <table>${ingredientsHtml}</table>
@@ -819,19 +828,28 @@ const renderBoxes = boxes => {
   );
 };
 
-const renderMarketDays = marketDays => {
+const renderMarketDays = (marketDays, sowings) => {
   const marketDaysHtml = marketDays
     .map(marketDay => {
-      /* const ingredientsHtml = marketDay.ingredients
-        .map(
-          ingredient => `<tr>
-    <td>${ingredient.veggie.fullName}</td>
-    <td>${ingredient.amount} ${ingredient.veggie.harvestUnit}</td>
-    <td>&#128465;</td>
-  </tr>`
+      const ingredientsHtml = sowings
+        .map(sowing =>
+          sowing.crops
+            .filter(
+              crop =>
+                crop.date.getTime() === marketDay.date.getTime() &&
+                crop.salesChannel === 'MarketDay' &&
+                crop.amount > 0
+            )
+            .map(
+              crop => `<tr>
+            <td>${sowing.veggie.fullName}</td>
+            <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
+            <td>&#128465;</td>
+            </tr>`
+            )
+            .join('')
         )
-        .join(''); */
-      const ingredientsHtml = '';
+        .join('');
       const marketDayHtml = `<div class="marketDay">
     <div class="marketDay__date">${dateToString(marketDay.date)}</div>
     <table>${ingredientsHtml}</table>
