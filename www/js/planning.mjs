@@ -40,12 +40,18 @@ const updateOnVariety = ({veggieId, firstCropDate}) => {
     firstCropDate,
     -(veggie.quickpotDuration + veggie.bedDuration)
   );
-  const sowing = new Sowing({
-    veggie,
-    sowingDate,
-    seedAmount: 0,
-    crops: [],
-  });
+  const sowing =
+    sowings.find(
+      sowing =>
+        sowing.sowingDate.getTime() === sowingDate.getTime() &&
+        sowing.veggie.id === veggie.id
+    ) ||
+    new Sowing({
+      veggie,
+      sowingDate,
+      seedAmount: 0,
+      crops: [],
+    });
   View.renderSowingForm({
     sowing,
     numberOfBoxes: CONFIG.numberOfBoxes,
