@@ -3,7 +3,6 @@
 ## Prio A
 
 - Input-Felder ausgrauen/unzugänglich machen, wenn nur Box oder nur Markt an einem Datum geplant ist
-- Aussaaten: Ernten in Tooltip nach Datum sortieren
 
 ## Prio B
 

@@ -868,7 +868,8 @@ const renderSowings = sowings => {
   const htmlSowings = sowings
     .map(
       sowing =>
-        `<li title="Ernten:${sowing.crops
+        `<li title="Ernten:${[...sowing.crops]
+          .sort((a, b) => a.date.getTime() - b.date.getTime())
           .map(crop =>
             crop.amount > 0
               ? `&#10;${dateToString(crop.date)}: ${crop.amount} ${
