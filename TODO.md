@@ -2,6 +2,10 @@
 
 ## Prio A
 
+- Auswertung benötigte Beetmeter / Anzahl Beete an Termin
+- Auswertung benötigte Quickpots an Termin
+- Aussaaten (inkl. Kisteninhalte) änderbar / löschbar machen
+
 ## Prio B
 
 - Bei Kisten-Serien-Planung: Anzahl Wochen als mögliches Eingabe-Feld + Live-Anzeige
