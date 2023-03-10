@@ -194,6 +194,10 @@ label {
   padding: 5px;
 }
 
+.box--lastClicked {
+  border-color: var(--primary);
+}
+
 .box__date,
 .marketDay__date {
   border: 0px none transparent;
