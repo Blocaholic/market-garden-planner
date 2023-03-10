@@ -272,15 +272,21 @@ const hideSowingForm = () => {
   $('addSowing').style.display = 'none';
 };
 
-const showSowingForm = e => {
+const showSowingForm = data => {
+  const {cropDate, veggieId = undefined} = data;
   resetSowingForm();
-  $('addSowing__firstCropDate').innerHTML =
-    e.target.parentNode.querySelector('.box__date')?.innerHTML ||
-    e.target.parentNode.querySelector('.marketDay__date')?.innerHTML;
+  $('addSowing__firstCropDate').innerHTML = cropDate;
   $('addSowing__dateWrapper').style.display = 'none';
   $('addSowing__crops').style.display = 'none';
   $('addSowing').style.display = '';
   $('addSowing').scrollIntoView();
+  if (veggieId) {
+    $(
+      'addSowing__variety'
+    ).innerHTML = `<option value="${veggieId}" selected></option>`;
+    //$('addSowing__variety').value = veggieId;
+    $('addSowing__variety').dispatchEvent(new Event('change'));
+  }
 };
 
 const resetSowingForm = (e = undefined) => {
@@ -817,7 +823,8 @@ const renderBoxes = (boxes, sowings) => {
                   crop.amount * sowing.veggie.sellingPricePerUnit * 100
                 ) / 100;
               boxPrice += cropPrice;
-              return `<tr>
+              return `<tr class="box__ingredient">
+            <td style="display:none;" class="box__veggieId">${sowing.veggie.id}</td>
             <td>${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
             <td>${cropPrice} €</td>
@@ -839,8 +846,11 @@ const renderBoxes = (boxes, sowings) => {
     .join('');
   $('boxes__wrapper').innerHTML = boxesHtml;
   $$('.box__addVeggieButton').forEach(button =>
-    button.addEventListener('click', showSowingForm)
+    button.addEventListener('click', e =>
+      showSowingForm(e.target.parentNode.querySelector('.box__date')?.innerHTML)
+    )
   );
+  // lastClickedBox
   $$('.box').forEach(box =>
     box.addEventListener('click', event => {
       const lastClicked = event.target
@@ -860,6 +870,18 @@ const renderBoxes = (boxes, sowings) => {
     )
     ?.closest('.box')
     .classList.add('box--lastClicked');
+  // Ingredient doubleclickable
+  [...$$('.box__ingredient')].forEach(tr =>
+    tr.addEventListener('dblclick', event => {
+      const veggieId = event.target
+        .closest('.box__ingredient')
+        .querySelector('.box__veggieId').innerHTML;
+      const cropDate = event.target
+        .closest('.box')
+        .querySelector('.box__date').innerHTML;
+      showSowingForm({cropDate, veggieId});
+    })
+  );
 };
 
 const renderMarketDays = (marketDays, sowings) => {
@@ -881,7 +903,8 @@ const renderMarketDays = (marketDays, sowings) => {
                   crop.amount * sowing.veggie.sellingPricePerUnit * 100
                 ) / 100;
               marketDayPrice += cropPrice;
-              return `<tr>
+              return `<tr class="marketDay__ingredient">
+            <td style="display:none;" class="marketDay__veggieId">${sowing.veggie.id}</td>
             <td>${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
             <td>${cropPrice} €</td>
@@ -903,8 +926,13 @@ const renderMarketDays = (marketDays, sowings) => {
     .join('');
   $('marketDays__wrapper').innerHTML = marketDaysHtml;
   $$('.marketDay__addVeggieButton').forEach(button =>
-    button.addEventListener('click', showSowingForm)
+    button.addEventListener('click', e =>
+      showSowingForm(
+        e.target.parentNode.querySelector('.marketDay__date')?.innerHTML
+      )
+    )
   );
+  // lastClickedBox
   $$('.marketDay').forEach(marketDay =>
     marketDay.addEventListener('click', event => {
       const lastClicked = event.target
@@ -925,6 +953,18 @@ const renderMarketDays = (marketDays, sowings) => {
     )
     ?.closest('.marketDay')
     .classList.add('marketDay--lastClicked');
+  // Ingredient doubleclickable
+  [...$$('.marketDay__ingredient')].forEach(tr =>
+    tr.addEventListener('dblclick', event => {
+      const veggieId = event.target
+        .closest('.marketDay__ingredient')
+        .querySelector('.marketDay__veggieId').innerHTML;
+      const cropDate = event.target
+        .closest('.marketDay')
+        .querySelector('.marketDay__date').innerHTML;
+      showSowingForm({cropDate, veggieId});
+    })
+  );
 };
 
 const renderSowings = sowings => {
