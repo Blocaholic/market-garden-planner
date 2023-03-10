@@ -846,7 +846,7 @@ const renderBoxes = (boxes, sowings) => {
       const lastClicked = event.target
         .closest('.box')
         .querySelector('.box__date').innerHTML;
-      sessionStorage.setItem('lastClicked', lastClicked);
+      sessionStorage.setItem('lastClickedBox', lastClicked);
       renderBoxes(boxes, sowings);
     })
   );
@@ -855,7 +855,8 @@ const renderBoxes = (boxes, sowings) => {
   );
   [...$$('.box__date')]
     .find(
-      boxDate => boxDate.textContent === sessionStorage.getItem('lastClicked')
+      boxDate =>
+        boxDate.textContent === sessionStorage.getItem('lastClickedBox')
     )
     ?.closest('.box')
     .classList.add('box--lastClicked');
@@ -904,6 +905,26 @@ const renderMarketDays = (marketDays, sowings) => {
   $$('.marketDay__addVeggieButton').forEach(button =>
     button.addEventListener('click', showSowingForm)
   );
+  $$('.marketDay').forEach(marketDay =>
+    marketDay.addEventListener('click', event => {
+      const lastClicked = event.target
+        .closest('.marketDay')
+        .querySelector('.marketDay__date').innerHTML;
+      sessionStorage.setItem('lastClickedMarketDay', lastClicked);
+      renderMarketDays(marketDays, sowings);
+    })
+  );
+  [...$$('.marketDay__date')].forEach(marketDayDate =>
+    marketDayDate.classList.remove('marketDay--lastClicked')
+  );
+  [...$$('.marketDay__date')]
+    .find(
+      marketDayDate =>
+        marketDayDate.textContent ===
+        sessionStorage.getItem('lastClickedMarketDay')
+    )
+    ?.closest('.marketDay')
+    .classList.add('marketDay--lastClicked');
 };
 
 const renderSowings = sowings => {

@@ -194,7 +194,8 @@ label {
   padding: 5px;
 }
 
-.box--lastClicked {
+.box--lastClicked,
+.marketDay--lastClicked {
   border-color: var(--primary);
 }
 
