@@ -615,7 +615,7 @@ const renderSowingForm = data => {
             crop =>
               crop.date.getTime() === date.getTime() &&
               crop.salesChannel === 'Box'
-          )?.amount / numberOfBoxes || 0;
+          )?.amount || 0;
         totalAmountPerClient += amountPerBox;
         const amountForMarket =
           sowing.crops.find(

@@ -208,14 +208,7 @@ const updateSowingForm = ({
   else if (target === 'quickpots__ceil')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const newCrops = crops.map(
-    crop =>
-      new Crop(
-        crop.date,
-        crop.salesChannel === 'Box'
-          ? crop.amount * CONFIG.numberOfBoxes
-          : crop.amount,
-        crop.salesChannel
-      )
+    crop => new Crop(crop.date, crop.amount, crop.salesChannel)
   );
   const sowing = new Sowing({
     veggie,
