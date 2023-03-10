@@ -841,6 +841,24 @@ const renderBoxes = (boxes, sowings) => {
   $$('.box__addVeggieButton').forEach(button =>
     button.addEventListener('click', showSowingForm)
   );
+  $$('.box').forEach(box =>
+    box.addEventListener('click', event => {
+      const lastClicked = event.target
+        .closest('.box')
+        .querySelector('.box__date').innerHTML;
+      sessionStorage.setItem('lastClicked', lastClicked);
+      renderBoxes(boxes, sowings);
+    })
+  );
+  [...$$('.box__date')].forEach(boxDate =>
+    boxDate.classList.remove('box--lastClicked')
+  );
+  [...$$('.box__date')]
+    .find(
+      boxDate => boxDate.textContent === sessionStorage.getItem('lastClicked')
+    )
+    ?.closest('.box')
+    .classList.add('box--lastClicked');
 };
 
 const renderMarketDays = (marketDays, sowings) => {
