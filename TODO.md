@@ -24,5 +24,3 @@
 - Footer mit Navbar für Copyright, Impressum, Datenschutzerklärung
 
 ## Issues
-
-- Bei Ernten wird nur ein 50tel des angegebenen Wertes angezeigt
