@@ -153,7 +153,7 @@ const handleCulture = handler =>
       culture: e.target.value,
       firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
     });
-    $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
+    //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
   });
 
 const handleVariety = handler =>
@@ -249,7 +249,7 @@ const handleChangeSowingForm = handler => {
     crop.setAttribute('autocomplete', 'off');
     crop.addEventListener('click', e => e.target.select());
   });
-  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
+  //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
 const hideMultiBoxForm = () => {
@@ -274,26 +274,21 @@ const hideSowingForm = () => {
 
 const showSowingForm = data => {
   const {firstCropDate, veggieId = undefined} = data;
-  resetSowingForm();
+  clearSowingForm();
   $('addSowing__firstCropDate').innerHTML = firstCropDate;
   $('addSowing__dateWrapper').style.display = 'none';
   $('addSowing__crops').style.display = 'none';
   $('addSowing').style.display = '';
-  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
   if (veggieId) {
     $(
       'addSowing__variety'
     ).innerHTML = `<option value="${veggieId}" selected></option>`;
-    //$('addSowing__variety').value = veggieId;
     $('addSowing__variety').dispatchEvent(new Event('change'));
   }
+  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
-const resetSowingForm = (e = undefined) => {
-  if (e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
+const clearSowingForm = () => {
   $('addSowing__crops').innerHTML = '';
   $('addSowing__crops').style.display = 'none';
   $('quickpots').innerHTML = '';
@@ -309,6 +304,12 @@ const resetSowingForm = (e = undefined) => {
   $('addSowing__firstCropDateWrapper').style.display = 'none';
   $('addSowing__culture').selectedIndex = 0;
   $('addSowing__variety').selectedIndex = 0;
+};
+
+const resetSowingForm = event => {
+  event.stopPropagation();
+  event.preventDefault();
+  clearSowingForm();
   $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
@@ -562,7 +563,7 @@ const renderSowingForm = data => {
 
   // event listeners
   $('addSowing__close').addEventListener('click', _ => {
-    resetSowingForm();
+    clearSowingForm();
     hideSowingForm();
   });
 
@@ -792,7 +793,7 @@ const renderSowingForm = data => {
     return;
   }
   if (nothingIsSelected()) {
-    resetSowingForm();
+    clearSowingForm();
     const options = [...data.cultures]
       .map(culture => `<option value="${culture}">${culture}</option>`)
       .join('');
