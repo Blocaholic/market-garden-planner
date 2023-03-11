@@ -25,7 +25,6 @@
 - Funktion: Markttage an jedem "Gemüsekisten-Tag" einplanen
 - Footer mit Navbar für Copyright, Impressum, Datenschutzerklärung
 - Bei Klick auf Gemüse in Box/MarketDay: Alle gleichen Gemüse in allen Box/MarketDay hervorheben
-- Gemüse in Box/MarketDay nach Namen alphabetisch sortieren
 
 ## Issues
 

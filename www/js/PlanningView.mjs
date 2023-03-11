@@ -808,7 +808,14 @@ const renderBoxes = (boxes, sowings) => {
   const boxesHtml = boxes
     .map(box => {
       let boxPrice = 0;
-      const ingredientsHtml = sowings
+      const ingredientsHtml = [...sowings]
+        .sort((a, b) => {
+          const veggieNameA = a.veggie.fullName.toUpperCase();
+          const veggieNameB = b.veggie.fullName.toUpperCase();
+          if (veggieNameA < veggieNameB) return -1;
+          if (veggieNameA > veggieNameB) return 1;
+          return 0;
+        })
         .map(sowing =>
           sowing.crops
             .filter(
@@ -897,7 +904,14 @@ const renderMarketDays = (marketDays, sowings) => {
   const marketDaysHtml = marketDays
     .map(marketDay => {
       let marketDayPrice = 0;
-      const ingredientsHtml = sowings
+      const ingredientsHtml = [...sowings]
+        .sort((a, b) => {
+          const veggieNameA = a.veggie.fullName.toUpperCase();
+          const veggieNameB = b.veggie.fullName.toUpperCase();
+          if (veggieNameA < veggieNameB) return -1;
+          if (veggieNameA > veggieNameB) return 1;
+          return 0;
+        })
         .map(sowing =>
           sowing.crops
             .filter(
