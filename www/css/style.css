@@ -197,6 +197,7 @@ label {
 .box--lastClicked,
 .marketDay--lastClicked {
   border-color: var(--primary);
+  background-color: hsl(102deg 54% 80% / 20%);
 }
 
 .box__date,
