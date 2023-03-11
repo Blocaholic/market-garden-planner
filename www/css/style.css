@@ -209,6 +209,11 @@ label {
   border: 0px none transparent;
 }
 
+.box__veggieName--highlighted,
+.marketDay__veggieName--highlighted {
+  color: var(--primary--dark);
+}
+
 .box__addVeggieButton,
 .box__addVeggieButton:link,
 .box__addVeggieButton:visited,

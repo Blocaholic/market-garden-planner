@@ -833,7 +833,7 @@ const renderBoxes = (boxes, sowings) => {
               boxPrice += cropPrice;
               return `<tr class="box__ingredient">
             <td style="display:none;" class="box__veggieId">${sowing.veggie.id}</td>
-            <td>${sowing.veggie.fullName}</td>
+            <td class="box__veggieName">${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
             <td>${cropPrice} €</td>
             <td>&#128465;</td>
@@ -899,6 +899,27 @@ const renderBoxes = (boxes, sowings) => {
       showSowingForm({firstCropDate, veggieId});
     })
   );
+  // Ingredient clickable
+  [...$$('.box__veggieName')].forEach(td =>
+    td.addEventListener('click', event => {
+      const veggieId = event.target
+        .closest('tr')
+        .querySelector('.box__veggieId').innerHTML;
+      sessionStorage.setItem('highlightedVeggieId', veggieId);
+    })
+  );
+  [...$$('.box__veggieName')].forEach(td =>
+    td.classList.remove('box__veggieName--highlighted')
+  );
+  [...$$('.box__veggieId')]
+    .filter(
+      td => td.innerHTML === sessionStorage.getItem('highlightedVeggieId')
+    )
+    .forEach(td =>
+      td.parentElement
+        .querySelector('.box__veggieName')
+        .classList.add('box__veggieName--highlighted')
+    );
 };
 
 const renderMarketDays = (marketDays, sowings) => {
@@ -997,6 +1018,27 @@ const renderMarketDays = (marketDays, sowings) => {
       showSowingForm({firstCropDate, veggieId});
     })
   );
+  // Ingredient clickable
+  [...$$('.marketDay__veggieName')].forEach(td =>
+    td.addEventListener('click', event => {
+      const veggieId = event.target
+        .closest('tr')
+        .querySelector('.marketDay__veggieId').innerHTML;
+      sessionStorage.setItem('highlightedVeggieId', veggieId);
+    })
+  );
+  [...$$('.marketDay__veggieName')].forEach(td =>
+    td.classList.remove('marketDay__veggieName--highlighted')
+  );
+  [...$$('.marketDay__veggieId')]
+    .filter(
+      td => td.innerHTML === sessionStorage.getItem('highlightedVeggieId')
+    )
+    .forEach(td =>
+      td.parentElement
+        .querySelector('.marketDay__veggieName')
+        .classList.add('marketDay__veggieName--highlighted')
+    );
 };
 
 const renderSowings = sowings => {
