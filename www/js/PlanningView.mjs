@@ -153,7 +153,7 @@ const handleCulture = handler =>
       culture: e.target.value,
       firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
     });
-    $('addSowing').scrollIntoView();
+    $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
   });
 
 const handleVariety = handler =>

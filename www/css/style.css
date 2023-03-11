@@ -72,6 +72,10 @@ label {
   column-gap: 10px;
 }
 
+.addSowing {
+  scroll-margin-top: 20rem;
+}
+
 .addSowing,
 .addBoxes__wrapper,
 .addBox__wrapper,
