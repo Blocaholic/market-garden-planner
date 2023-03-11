@@ -15,6 +15,7 @@
 
 ## Prio B
 
+- Bei Klick auf 'close sowingForm' und 'save sowingForm' scroll zu lastClickedBox
 - Bei Kisten-Serien-Planung: Anzahl Wochen als mögliches Eingabe-Feld + Live-Anzeige
 - Gemüsekisten löschbar machen
 - Aussaat-Planung: Zurück-Button bei Mengen-Änderung
@@ -29,4 +30,3 @@
 ## Issues
 
 - dblclick auf Gemüse in Box/MarketDay funktioniert nicht in Firefox
-- Scroll-Position nach rendern von /planung irgendwo mitten in den Aussaaten
