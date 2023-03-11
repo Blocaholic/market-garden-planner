@@ -249,7 +249,7 @@ const handleChangeSowingForm = handler => {
     crop.setAttribute('autocomplete', 'off');
     crop.addEventListener('click', e => e.target.select());
   });
-  $('addSowing').scrollIntoView();
+  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
 const hideMultiBoxForm = () => {
@@ -279,7 +279,7 @@ const showSowingForm = data => {
   $('addSowing__dateWrapper').style.display = 'none';
   $('addSowing__crops').style.display = 'none';
   $('addSowing').style.display = '';
-  $('addSowing').scrollIntoView();
+  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
   if (veggieId) {
     $(
       'addSowing__variety'
@@ -309,7 +309,7 @@ const resetSowingForm = (e = undefined) => {
   $('addSowing__firstCropDateWrapper').style.display = 'none';
   $('addSowing__culture').selectedIndex = 0;
   $('addSowing__variety').selectedIndex = 0;
-  $('addSowing').scrollIntoView();
+  $('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
 const openMultiBox = () => {
