@@ -29,3 +29,4 @@
 ## Issues
 
 - dblclick auf Gemüse in Box/MarketDay funktioniert nicht in Firefox
+- Scroll-Position nach rendern von /planung irgendwo mitten in den Aussaaten
