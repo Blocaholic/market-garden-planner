@@ -25,8 +25,8 @@
 - Beetlänge und Beetbreite aus Betriebskonfiguration übernehmen
 - Funktion: Markttage an jedem "Gemüsekisten-Tag" einplanen
 - Footer mit Navbar für Copyright, Impressum, Datenschutzerklärung
-- Bei Klick auf Gemüse in Box/MarketDay: Alle gleichen Gemüse in allen Box/MarketDay hervorheben
 
 ## Issues
 
 - dblclick auf Gemüse in Box/MarketDay funktioniert nicht in Firefox
+- Highlight ingredient in Box wirkt nicht auf Markttag und umgekehrt
