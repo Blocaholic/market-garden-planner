@@ -950,7 +950,7 @@ const renderMarketDays = (marketDays, sowings) => {
               marketDayPrice += cropPrice;
               return `<tr class="marketDay__ingredient">
             <td style="display:none;" class="marketDay__veggieId">${sowing.veggie.id}</td>
-            <td>${sowing.veggie.fullName}</td>
+            <td class="marketDay__veggieName">${sowing.veggie.fullName}</td>
             <td>${crop.amount} ${sowing.veggie.harvestUnit}</td>
             <td>${cropPrice} €</td>
             <td>&#128465;</td>
