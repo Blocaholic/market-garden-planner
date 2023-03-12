@@ -5,17 +5,10 @@ import {
   addDaysToDate,
   getDatesInRange,
   commaToDot,
+  fetchJson,
+  postAsJson,
 } from './Utils.mjs';
 import * as CONFIG from './CONFIG.mjs';
-
-const fetchJson = async url => await fetch(url).then(x => x.json());
-
-const postAsJson = (url, data) =>
-  fetch(url, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data),
-  });
 
 const convertToVeggieDatatype = jsonArray =>
   jsonArray.map(item => new Veggie(item));

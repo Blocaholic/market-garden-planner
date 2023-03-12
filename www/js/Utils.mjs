@@ -92,6 +92,15 @@ const getMostFrequent = inputArray => {
   return maxKey;
 };
 
+const fetchJson = async url => await fetch(url).then(x => x.json());
+
+const postAsJson = (url, data) =>
+  fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data),
+  });
+
 export {
   deepFreeze,
   commaToDot,
@@ -104,5 +113,7 @@ export {
   daysBetweenDates,
   getDatesInRange,
   getMostFrequent,
+  fetchJson,
+  postAsJson,
 };
 export * as default from './Utils.mjs';
