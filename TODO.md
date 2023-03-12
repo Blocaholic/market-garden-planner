@@ -2,16 +2,22 @@
 
 ## Prio A
 
+- Auswertung benötigte Beetmeter / Anzahl Beete an Termin
+- Auswertung benötigte Quickpots an Termin
+- TODO chronologisch: Quickpots einsäen / Beete einsäen / Anzuchten auspflanzen / Erntetage (mit Mengen) / Letzte Erntetage (Beete wieder frei)
+- Auswertung Überproduktion
+
+- Umstellung von .json auf Datenbank
+- Pflanzensteckbriefe änderbar/hinzufügbar machen
+
 - Aussaaten ID hinzufügen
 - Ändern von Box/MarketDay ingredients per sowing.id (statt datum und veggieId)
+- Aussaaten per Doppelklick änderbar machen
 - Beim Hinzufügen eines Gemüses checken ob irgendeine Aussaat einen passenden Erntetermin hat. Falls ja:
   - Wenn 1. Erntetermin passend: bestehenden Satz öffnen
   - Wenn anderer Erntetermin passen: fragen, ob Satz nutzen oder neuen Satz anlegen
   - Wenn mehrere Erntetermine passen: Auswahl welcher genutzt werden soll, oder ob neuer angelegt werden soll
-- Aussaaten per Doppelklick änderbar machen
-- Auswertung benötigte Beetmeter / Anzahl Beete an Termin
-- Auswertung benötigte Quickpots an Termin
-- Auswertung Überproduktion
+- Login / Registrierung
 
 ## Prio B
 
