@@ -17,4 +17,23 @@ const sowings = await fetchJson(
   )
 );
 
-console.log(sowings);
+const sowInQuickpot = sowings
+  .filter(sowing => sowing.veggie.preGrow)
+  .map(sowing => {
+    const quickpots = {};
+    quickpots[sowing.veggie.quickpotSize] = Math.ceil(
+      sowing.seedAmount / sowing.veggie.quickpotSize
+    );
+    return {
+      date: sowing.sowingDate,
+      veggie: sowing.veggie,
+      amount: sowing.seedAmount,
+      quickpots,
+      bedLength: 0,
+    };
+  });
+const sowInBed = [];
+const plantInBed = [];
+const clearBed = [];
+
+console.log(sowInQuickpot);
