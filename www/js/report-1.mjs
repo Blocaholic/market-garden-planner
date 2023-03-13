@@ -51,4 +51,11 @@ const plantInBed = sowings
 
 const clearBed = [];
 
-console.log([...sowInQuickpot, ...plantInBed]);
+const allWorkSteps = [
+  ...sowInQuickpot,
+  ...plantInBed,
+  ...sowInBed,
+  ...clearBed,
+].sort((a, b) => a.date.getTime() - b.date.getTime());
+
+console.log(allWorkSteps);
