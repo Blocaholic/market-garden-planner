@@ -61,7 +61,14 @@ const plantInBed = sowings
     };
   });
 
-const clearBed = [];
+const clearBed = sowings.map(sowing => ({
+  date: sowing.lastCropDate,
+  veggie: sowing.veggie,
+  amount: 0,
+  quickpots: [],
+  bedLength: -sowing.bedLength,
+  workStep: 'clearBed',
+}));
 
 const allWorkSteps = [
   ...sowInQuickpot,
@@ -69,5 +76,12 @@ const allWorkSteps = [
   ...sowInBed,
   ...clearBed,
 ].sort((a, b) => a.date.getTime() - b.date.getTime());
+
+sowings.forEach(sowing =>
+  console.log({
+    possibleCropDates: sowing.possibleCropDates,
+    crops: sowing.crops,
+  })
+);
 
 View.renderWorkSteps(allWorkSteps);
