@@ -1,5 +1,5 @@
 import {Sowing, Veggie, Crop} from './Datatypes.mjs';
-import {fetchJson} from './Utils.mjs';
+import {fetchJson, addDaysToDate} from './Utils.mjs';
 
 const sowings = await fetchJson(
   'https://marketgardenapi.reinwiese.de/sowings.php'
@@ -21,19 +21,34 @@ const sowInQuickpot = sowings
   .filter(sowing => sowing.veggie.preGrow)
   .map(sowing => {
     const quickpots = {};
-    quickpots[sowing.veggie.quickpotSize] = Math.ceil(
-      sowing.seedAmount / sowing.veggie.quickpotSize
-    );
+    quickpots[sowing.veggie.quickpotSize] = sowing.quickpotAmount;
     return {
       date: sowing.sowingDate,
       veggie: sowing.veggie,
       amount: sowing.seedAmount,
       quickpots,
       bedLength: 0,
+      workStep: 'sowInQuickpot',
     };
   });
+
 const sowInBed = [];
-const plantInBed = [];
+
+const plantInBed = sowings
+  .filter(sowing => sowing.veggie.preGrow)
+  .map(sowing => {
+    const quickpots = {};
+    quickpots[sowing.veggie.quickpotSize] = sowing.quickpotAmount;
+    return {
+      date: addDaysToDate(sowing.sowingDate, sowing.veggie.quickpotDuration),
+      veggie: sowing.veggie,
+      amount: sowing.seedAmount * sowing.veggie.germinationRate,
+      quickpots: -quickpots,
+      bedLength: 0,
+      workStep: 'plantInBed',
+    };
+  });
+
 const clearBed = [];
 
-console.log(sowInQuickpot);
+console.log([...sowInQuickpot, ...plantInBed]);
