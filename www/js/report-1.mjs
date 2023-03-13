@@ -1,5 +1,6 @@
 import {Sowing, Veggie, Crop} from './Datatypes.mjs';
 import {fetchJson, addDaysToDate} from './Utils.mjs';
+import * as View from './Report-1View.mjs';
 
 const sowings = await fetchJson(
   'https://marketgardenapi.reinwiese.de/sowings.php'
@@ -58,4 +59,4 @@ const allWorkSteps = [
   ...clearBed,
 ].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-console.log(allWorkSteps);
+View.renderWorksteps(allWorkSteps);
