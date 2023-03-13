@@ -59,4 +59,4 @@ const allWorkSteps = [
   ...clearBed,
 ].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-View.renderWorksteps(allWorkSteps);
+View.renderWorkSteps(allWorkSteps);
