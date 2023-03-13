@@ -77,11 +77,4 @@ const allWorkSteps = [
   ...clearBed,
 ].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-sowings.forEach(sowing =>
-  console.log({
-    possibleCropDates: sowing.possibleCropDates,
-    crops: sowing.crops,
-  })
-);
-
 View.renderWorkSteps(allWorkSteps);
