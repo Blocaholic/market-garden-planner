@@ -33,7 +33,18 @@ const sowInQuickpot = sowings
     };
   });
 
-const sowInBed = [];
+const sowInBed = sowings
+  .filter(sowing => !sowing.veggie.preGrow)
+  .map(sowing => {
+    return {
+      date: sowing.sowingDate,
+      veggie: sowing.veggie,
+      amount: sowing.seedAmount,
+      quickpots: [],
+      bedLength: sowing.bedLength,
+      workStep: 'sowInBed',
+    };
+  });
 
 const plantInBed = sowings
   .filter(sowing => sowing.veggie.preGrow)
