@@ -292,6 +292,17 @@ Object.defineProperties(Sowing.prototype, {
         : 0;
     },
   },
+  lastCropDate: {
+    get() {
+      return this.crops
+        .filter(crop => crop.amount > 0)
+        .reduce(
+          (max, crop) =>
+            max.getTime() > crop.date.getTime() ? max : crop.date,
+          new Date(0)
+        );
+    },
+  },
 });
 
 export {Veggie, Crop, Box, MarketDay, Sowing};
