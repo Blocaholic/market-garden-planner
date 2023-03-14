@@ -88,7 +88,8 @@ const renderWorkSteps = workSteps => {
     return rows + row;
   }, '');
 
-  const tableFoot = `<tfoot><tr>
+  const tableFoot = document.createElement('tfoot');
+  tableFoot.innerHTML = `<tfoot><tr>
   <th></th>
   <th></th>
   <th></th>
@@ -106,8 +107,8 @@ const renderWorkSteps = workSteps => {
   <th>${max.bedLength}</th>
   </tr></tfoot>`;
 
-  $('report-1__table').querySelector('tbody:first-of-type').innerHTML =
-    rows + tableFoot;
+  $('report-1__table').querySelector('tbody:first-of-type').innerHTML = rows;
+  $('report-1__table').appendChild(tableFoot);
 };
 
 export {renderWorkSteps};
