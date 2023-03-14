@@ -230,3 +230,24 @@ label {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* Report-1 */
+
+.report-1__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.report-1__table th {
+  border: none 0 transparent;
+  padding: 0 0.5rem;
+}
+
+.report-1__table th:not(:empty) {
+  border: 1px solid black;
+}
+
+.report-1__table td {
+  border: solid 1px black;
+  padding: 0 0.5rem;
+}
