@@ -56,7 +56,7 @@ const plantInBed = sowings
       veggie: sowing.veggie,
       amount: sowing.seedAmount * sowing.veggie.germinationRate,
       quickpots: -quickpots,
-      bedLength: 0,
+      bedLength: sowing.bedLength,
       workStep: 'plantInBed',
     };
   });
