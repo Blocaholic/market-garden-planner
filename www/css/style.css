@@ -236,6 +236,7 @@ label {
 .report-1__table {
   border-collapse: collapse;
   border-spacing: 0;
+  margin-bottom: 3.2rem;
 }
 
 .report-1__table th {
