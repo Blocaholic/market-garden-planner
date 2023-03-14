@@ -22,6 +22,17 @@ const renderWorkSteps = workSteps => {
     bedLength: 0,
   };
 
+  const max = {
+    quickpots: {
+      15: 0,
+      77: 0,
+      84: 0,
+      144: 0,
+      all: 0,
+    },
+    bedLength: 0,
+  };
+
   const rows = workSteps.reduce((rows, workStep) => {
     sum.quickpots[15] += workStep.quickpots[15] || 0;
     sum.quickpots[77] += workStep.quickpots[77] || 0;
@@ -33,6 +44,30 @@ const renderWorkSteps = workSteps => {
     sum.quickpots.all += workStep.quickpots[144] || 0;
     sum.bedLength += workStep.bedLength;
     sum.bedLength = Math.round(sum.bedLength * 100) / 100;
+
+    max.quickpots[15] =
+      max.quickpots[15] > sum.quickpots[15]
+        ? max.quickpots[15]
+        : sum.quickpots[15];
+    max.quickpots[77] =
+      max.quickpots[77] > sum.quickpots[77]
+        ? max.quickpots[77]
+        : sum.quickpots[77];
+    max.quickpots[84] =
+      max.quickpots[84] > sum.quickpots[84]
+        ? max.quickpots[84]
+        : sum.quickpots[84];
+    max.quickpots[144] =
+      max.quickpots[144] > sum.quickpots[144]
+        ? max.quickpots[144]
+        : sum.quickpots[144];
+    max.quickpots.all =
+      max.quickpots.all > sum.quickpots.all
+        ? max.quickpots.all
+        : sum.quickpots.all;
+    max.bedLength =
+      max.bedLength > sum.bedLength ? max.bedLength : sum.bedLength;
+
     const row = `<tr>
       <td>${dateToString(workStep.date)}</td>
       <td>${translateWorkStep(workStep)}</td>
@@ -53,7 +88,26 @@ const renderWorkSteps = workSteps => {
     return rows + row;
   }, '');
 
-  $('report-1__table').querySelector('tbody:first-of-type').innerHTML = rows;
+  const tableFoot = `<tfoot><tr>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th>max.</th>
+  <th>${max.quickpots[15]}</th>
+  <th>${max.quickpots[77]}</th>
+  <th>${max.quickpots[84]}</th>
+  <th>${max.quickpots[144]}</th>
+  <th>${max.quickpots.all}</th>
+  <th>${max.bedLength}</th>
+  </tr></tfoot>`;
+
+  $('report-1__table').querySelector('tbody:first-of-type').innerHTML =
+    rows + tableFoot;
 };
 
 export {renderWorkSteps};
