@@ -2,15 +2,13 @@
 
 ## Prio A
 
-- Auswertung benötigte Beetmeter / Anzahl Beete an Termin
-- Auswertung benötigte Quickpots an Termin
-- TODO chronologisch: Quickpots einsäen / Beete einsäen / Anzuchten auspflanzen / Erntetage (mit Mengen) / Letzte Erntetage (Beete wieder frei)
+- Auswertung Erntetage (mit Mengen)
 - Auswertung Überproduktion
 
 - Umstellung von .json auf Datenbank
 - Pflanzensteckbriefe änderbar/hinzufügbar machen
 
-- Aussaaten ID hinzufügen
+- Aussaaten ID (sowing.id) hinzufügen
 - Ändern von Box/MarketDay ingredients per sowing.id (statt datum und veggieId)
 - Aussaaten per Doppelklick änderbar machen
 - Beim Hinzufügen eines Gemüses checken ob irgendeine Aussaat einen passenden Erntetermin hat. Falls ja:
@@ -36,3 +34,4 @@
 
 - dblclick auf Gemüse in Box/MarketDay funktioniert nicht in Firefox
 - Highlight ingredient in Box wirkt nicht auf Markttag und umgekehrt
+- Report-1: border-design fehlerhaft, da border-collapse:separate, weil thead position: sticky
