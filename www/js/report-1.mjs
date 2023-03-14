@@ -50,12 +50,12 @@ const plantInBed = sowings
   .filter(sowing => sowing.veggie.preGrow)
   .map(sowing => {
     const quickpots = {};
-    quickpots[sowing.veggie.quickpotSize] = sowing.quickpotAmount;
+    quickpots[sowing.veggie.quickpotSize] = -sowing.quickpotAmount;
     return {
       date: addDaysToDate(sowing.sowingDate, sowing.veggie.quickpotDuration),
       veggie: sowing.veggie,
       amount: sowing.seedAmount * sowing.veggie.germinationRate,
-      quickpots: -quickpots,
+      quickpots,
       bedLength: sowing.bedLength,
       workStep: 'plantInBed',
     };
