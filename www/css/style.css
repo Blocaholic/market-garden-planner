@@ -234,9 +234,15 @@ label {
 /* Report-1 */
 
 .report-1__table {
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 3.2rem;
+}
+
+.report-1__table thead {
+  position: sticky;
+  top: 19.3rem;
+  background-color: white;
 }
 
 .report-1__table th {
