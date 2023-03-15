@@ -8,7 +8,6 @@
 - Umstellung von .json auf Datenbank
 - Pflanzensteckbriefe änderbar/hinzufügbar machen
 
-- Aussaaten ID (sowing.id) hinzufügen
 - Ändern von Box/MarketDay ingredients per sowing.id (statt datum und veggieId)
 - Aussaaten per Doppelklick änderbar machen
 - Beim Hinzufügen eines Gemüses checken ob irgendeine Aussaat einen passenden Erntetermin hat. Falls ja:
