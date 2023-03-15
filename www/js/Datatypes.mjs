@@ -185,6 +185,13 @@ function Sowing({veggie, sowingDate, seedAmount, crops}) {
   this.sowingDate = new Date(sowingDate.getTime());
   this.seedAmount = seedAmount;
   this.crops = [...crops];
+  this.id =
+    '' +
+    Utils.randomHash(
+      '' + this.veggie.fullName + this.sowingDate,
+      this.seedAmount
+    ) +
+    Date.now();
   crops.map(crop => {
     if (
       Utils.dateToWeekday(crop.date) !==
