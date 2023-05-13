@@ -2,7 +2,9 @@
 
 function renderContent($request, $error) {
   if (!$_SESSION['isValidUser']) {
-    return $error . '<h1>Login-Formular</h1>';
+    if (!in_array($request, ['signup', 'signin'])) {
+      return $error . file_get_contents('../templates/content/signin.html');
+    }
   }
   if (file_exists('../templates/content/' . $request . '.html')) {
     return file_get_contents('../templates/content/' . $request . '.html');
@@ -26,6 +28,9 @@ function renderNav($request, $user) {
   </li>'
     : '<li class="header__navLi">
     <a href="/login">Login</a>
+  </li>
+  <li class="header__navLi">
+    <a href="/signup">Registrieren</a>
   </li>';
   return $nav;
 }
