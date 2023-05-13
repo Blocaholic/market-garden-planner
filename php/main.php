@@ -13,8 +13,11 @@ function main() {
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
   if ($request == 'checkSignup') {
-    if (empty($_POST['email'])) {
-      die('E-Mail muss angegeben werden!');
+    if (empty($_POST['name'])) {
+      die('Es muss ein Benutzername angegeben werden!');
+    }
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      die('Es muss eine gültige E-Mail-Adresse angegeben werden!');
     }
     print_r($_POST);
   }
