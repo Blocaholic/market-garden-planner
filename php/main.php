@@ -17,7 +17,7 @@ function main() {
       die('Es muss ein Benutzername angegeben werden!');
     }
     if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-      die('Es muss eine gültige E-Mail-Adresse angegeben werden!');
+      die('Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden!');
     }
     print_r($_POST);
   }
