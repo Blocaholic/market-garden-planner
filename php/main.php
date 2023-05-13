@@ -12,7 +12,7 @@ function main() {
   $request = trim($url, '/') ?: 'home';
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
-  if ($request == 'signup') {
+  if ($request == 'checkSignup') {
     print_r($_POST);
   }
 
