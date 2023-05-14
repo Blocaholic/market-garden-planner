@@ -10,7 +10,12 @@ function main() {
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
   if ($request == 'checkSignup') {
-    $request = User\checkSignup();
+    if (!User\checkSignup()) {
+      $error = 'Fehler: Benutzer konnte nicht registriert werden!<br>';
+      $request = 'signup';
+    }
+    $_SESSION['isValidUser'] = true;
+    $request = 'home';
   }
 
   if ($request == 'login') {

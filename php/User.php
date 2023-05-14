@@ -30,5 +30,5 @@ function checkSignup() {
     die('Die Passw&ouml;rter stimmen nicht überein!');
   }
 
-  return 'home';
+  return true;
 }
