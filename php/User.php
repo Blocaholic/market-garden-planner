@@ -1,6 +1,8 @@
 <?php
 namespace User;
 
+require_once 'DB.php';
+
 function isValidUser() {
   return true;
 }
@@ -29,6 +31,10 @@ function checkSignup() {
   if ($_POST['password'] !== $_POST['password2']) {
     die('Die Passw&ouml;rter stimmen nicht überein!');
   }
+
+  $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+  $pdo = DB\connect();
 
   return true;
 }
