@@ -10,11 +10,11 @@ function main() {
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
   if ($request == 'checkSignup') {
-    $request = \User\checkSignup();
+    $request = User\checkSignup();
   }
 
   if ($request == 'login') {
-    $_SESSION['isValidUser'] = \User\isValidUser();
+    $_SESSION['isValidUser'] = User\isValidUser();
     if (!$_SESSION['isValidUser']) {
       $error .= 'Fehler: Benutzername oder Passwort falsch!<br>';
     } else {
