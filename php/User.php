@@ -2,6 +2,7 @@
 namespace User;
 
 require_once 'DB.php';
+use DB;
 
 function isValidUser() {
   return true;
