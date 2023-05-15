@@ -1,8 +1,5 @@
 <?php
-namespace User;
-
-require_once 'DB.php';
-use DB;
+include_once 'db.php';
 
 function isValidUser() {
   return true;
@@ -38,7 +35,7 @@ function checkSignup() {
   $data['email'] = $_POST['email'];
   $data['passwordHash'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-  $pdo = \DB\connect();
+  $pdo = DB::connect();
   $query =
     'INSERT INTO user (name, email, password_hash) VALUES (:name, :email, :passwordHash)';
   $statement = $pdo->prepare($query);
@@ -46,3 +43,5 @@ function checkSignup() {
 
   return true;
 }
+
+?>
