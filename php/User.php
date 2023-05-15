@@ -32,9 +32,16 @@ function checkSignup() {
     die('Die Passw&ouml;rter stimmen nicht überein!');
   }
 
-  $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $data = [];
+  $data['name'] = $_POST['name'];
+  $data['email'] = $_POST['email'];
+  $data['passwordHash'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
   $pdo = DB\connect();
+  $query =
+    'INSERT INTO user (name, email, password_hash) VALUES (:name, :email, :passwordHash)';
+  $statement = $pdo->prepare($query);
+  $statement->execute($data);
 
   return true;
 }
