@@ -39,7 +39,9 @@ function checkSignup() {
   $query =
     'INSERT INTO user (name, email, password_hash) VALUES (:name, :email, :passwordHash)';
   $statement = $pdo->prepare($query);
-  $statement->execute($data);
+  if (!$statement->execute($data)) {
+    die('Fehler beim Eintrag in die Datenbank!');
+  }
 
   return true;
 }
