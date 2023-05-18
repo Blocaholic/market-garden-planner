@@ -15,7 +15,7 @@ function main() {
       $request = 'signup';
     }
     $_SESSION['isValidUser'] = true;
-    $request = 'home';
+    $request = 'signup-success';
   }
 
   if ($request == 'login') {
