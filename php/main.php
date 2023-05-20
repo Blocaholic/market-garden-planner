@@ -19,7 +19,13 @@ function main() {
   }
 
   if ($request == 'checkSignin') {
-    // checkSignin();
+    if (!checkSignin()) {
+      $error = 'Login fehlgeschlagen!';
+      $request = 'signin';
+    } else {
+      $_SESSION['isValidUser'] = true;
+      $request = 'home';
+    }
   }
 
   if ($request == 'login') {

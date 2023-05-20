@@ -5,6 +5,16 @@ function isValidUser() {
   return true;
 }
 
+function checkSignin() {
+  $pdo = DB::connect();
+  $query = 'SELECT * FROM user WHERE email = ? LIMIT 1;';
+  $statement = $pdo->prepare($query);
+  $statement->execute([$_POST['email']]);
+  $row = $statement->fetch(PDO::FETCH_ASSOC);
+  var_dump($row);
+  return true;
+}
+
 function checkSignup() {
   if (empty($_POST['name'])) {
     die('Es muss ein Benutzername angegeben werden!');
