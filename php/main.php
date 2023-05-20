@@ -18,6 +18,10 @@ function main() {
     $request = 'signup-success';
   }
 
+  if ($request == 'checkSignin') {
+    // checkSignin();
+  }
+
   if ($request == 'login') {
     $_SESSION['isValidUser'] = isValidUser();
     if (!$_SESSION['isValidUser']) {
