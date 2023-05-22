@@ -10,9 +10,13 @@ function checkSignin() {
   $query = 'SELECT * FROM user WHERE email = ? LIMIT 1;';
   $statement = $pdo->prepare($query);
   $statement->execute([$_POST['email']]);
-  $row = $statement->fetch(PDO::FETCH_ASSOC);
-  var_dump($row);
-  return true;
+  $user = $statement->fetch(PDO::FETCH_ASSOC);
+  if ($user) {
+    if (password_verify($_POST['password'], $user['password_hash'])) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function checkSignup() {

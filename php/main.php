@@ -20,6 +20,7 @@ function main() {
 
   if ($request == 'checkSignin') {
     if (!checkSignin()) {
+      $_SESSION['isValidUser'] = false;
       $error = 'Login fehlgeschlagen!';
       $request = 'signin';
     } else {

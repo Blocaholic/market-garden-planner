@@ -7,7 +7,8 @@ function renderContent($request, $error) {
     }
   }
   if (file_exists('../templates/content/' . $request . '.html')) {
-    return file_get_contents('../templates/content/' . $request . '.html');
+    return $error .
+      file_get_contents('../templates/content/' . $request . '.html');
   }
   return 'Page not found!';
 }
