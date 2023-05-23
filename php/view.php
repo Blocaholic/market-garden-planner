@@ -7,8 +7,15 @@ function renderContent($request, $error) {
     }
   }
   if (file_exists('../templates/content/' . $request . '.html')) {
+    $script =
+      $request == 'signin'
+        ? '<script>document.getElementById("email").value = "' .
+          $_POST['email'] .
+          '"</script>'
+        : '';
     return $error .
-      file_get_contents('../templates/content/' . $request . '.html');
+      file_get_contents('../templates/content/' . $request . '.html') .
+      $script;
   }
   return 'Page not found!';
 }
