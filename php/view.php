@@ -11,7 +11,7 @@ function renderContent($request, $error) {
       $request == 'signin'
         ? '<script>document.getElementById("email").value = "' .
           $_POST['email'] .
-          '"</script>'
+          '"; document.getElementById("email").focus();</script>'
         : '';
     return $error .
       file_get_contents('../templates/content/' . $request . '.html') .
