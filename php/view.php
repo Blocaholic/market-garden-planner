@@ -10,7 +10,7 @@ function renderContent($request, $error) {
     $script =
       $request == 'signin'
         ? '<script>document.getElementById("email").value = "' .
-          $_POST['email'] .
+          htmlspecialchars($_POST['email'] ?? '') .
           '"; document.getElementById("email").focus();</script>'
         : '';
     return $error .
