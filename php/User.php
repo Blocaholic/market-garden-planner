@@ -6,6 +6,7 @@ function isValidUser() {
 }
 
 function checkSignin() {
+  $_SESSION['isValidUser'] = false;
   $pdo = DB::connect();
   $query = 'SELECT * FROM user WHERE email = ? LIMIT 1;';
   $statement = $pdo->prepare($query);
@@ -13,6 +14,10 @@ function checkSignin() {
   $user = $statement->fetch(PDO::FETCH_ASSOC);
   if ($user) {
     if (password_verify($_POST['password'], $user['password_hash'])) {
+      $_SESSION['isValidUser'] = true;
+      $_SESSION['id'] = $user['id'];
+      $_SESSION['name'] = $user['name'];
+      $_SESSION['email'] = $user['email'];
       return true;
     }
   }
