@@ -37,7 +37,7 @@ function main() {
   }
 
   if ($request == 'logout') {
-    $_SESSION['isValidUser'] = false;
+    session_destroy();
   }
 
   $user = [
