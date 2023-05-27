@@ -38,6 +38,7 @@ function main() {
 
   if ($request == 'logout') {
     session_destroy();
+    $request = 'signin';
   }
 
   $user = [
