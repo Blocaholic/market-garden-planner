@@ -3,11 +3,11 @@
 function renderContent($request, $error) {
   if (!$_SESSION['isValidUser']) {
     if (!in_array($request, ['signup', 'signin'])) {
-      return $error . file_get_contents('../templates/content/signin.html');
+      return $error . file_get_contents('../templates/content/signin.php');
     }
   }
 
-  if (file_exists('../templates/content/' . $request . '.html')) {
+  if (file_exists('../templates/content/' . $request . '.php')) {
     $script = '';
     if ($request == 'signin') {
       $script =
@@ -18,7 +18,7 @@ function renderContent($request, $error) {
 
     $content =
       $error .
-      file_get_contents('../templates/content/' . $request . '.html') .
+      file_get_contents('../templates/content/' . $request . '.php') .
       $script;
 
     return $content;
@@ -61,7 +61,7 @@ function renderScript($request, $user) {
 }
 
 function renderPage($request, $error, $user) {
-  $page = file_get_contents('../templates/page.html');
+  $page = file_get_contents('../templates/page.php');
   $nav = renderNav($request, $user);
   $content = renderContent($request, $error);
   $script = renderScript($request, $user);
