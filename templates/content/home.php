@@ -1,1 +1,3 @@
-<h1>Willkommen beim Gemüseanbau-Planer</h1>
+<h1>Willkommen beim Gemüseanbau-Planer, <?= htmlspecialchars(
+  $_SESSION['name']
+) ?></h1>
