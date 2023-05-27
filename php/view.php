@@ -6,18 +6,25 @@ function renderContent($request, $error) {
       return $error . file_get_contents('../templates/content/signin.html');
     }
   }
+
   if (file_exists('../templates/content/' . $request . '.html')) {
-    $script =
-      $request == 'signin'
-        ? '<script>document.getElementById("email").value = "' .
-          htmlspecialchars($_POST['email'] ?? '') .
-          '"; document.getElementById("email").focus();</script>'
-        : '';
-    return $error .
+    $script = '';
+    if ($request == 'signin') {
+      $script =
+        '<script>document.getElementById("email").value = "' .
+        htmlspecialchars($_POST['email'] ?? '') .
+        '"; document.getElementById("email").focus();</script>';
+    }
+
+    $content =
+      $error .
       file_get_contents('../templates/content/' . $request . '.html') .
       $script;
+
+    return $content;
   }
-  return 'Page not found!';
+
+  return '<h1>Page not found!</h1>';
 }
 
 function renderNav($request, $user) {
