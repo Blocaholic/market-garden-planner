@@ -81,7 +81,7 @@ const marketDaysPreview = ({firstDay, lastDay, interval}) => {
 
 const saveBoxes = boxes => {
   View.showEieruhr();
-  postAsJson('https://marketgardenapi.reinwiese.de/boxes.php', boxes).then(
+  postAsJson('https://anbau24api.reinwiese.de/boxes.php', boxes).then(
     res => {
       if (res.ok) location.reload();
     }
@@ -91,7 +91,7 @@ const saveBoxes = boxes => {
 const saveMarketDays = marketDays => {
   View.showEieruhr();
   postAsJson(
-    'https://marketgardenapi.reinwiese.de/marketDays.php',
+    'https://anbau24api.reinwiese.de/marketDays.php',
     marketDays
   ).then(res => {
     if (res.ok) location.reload();
@@ -100,7 +100,7 @@ const saveMarketDays = marketDays => {
 
 const saveSowings = sowings => {
   View.showEieruhr();
-  postAsJson('https://marketgardenapi.reinwiese.de/sowings.php', sowings).then(
+  postAsJson('https://anbau24api.reinwiese.de/sowings.php', sowings).then(
     res => {
       if (res.ok) location.reload();
     }
@@ -220,13 +220,13 @@ const updateSowingForm = ({
 ////////////////////////////////////////////////////////////////////////////////
 
 const veggies = await fetchJson(
-  'https://marketgardenapi.reinwiese.de/veggies.php'
+  'https://anbau24api.reinwiese.de/veggies.php'
 ).then(convertToVeggieDatatype);
 
 const cultures = new Set(veggies.map(v => v.culture).sort());
 
 const sowings = await fetchJson(
-  'https://marketgardenapi.reinwiese.de/sowings.php'
+  'https://anbau24api.reinwiese.de/sowings.php'
 ).then(data =>
   data.map(
     sowing =>
@@ -242,11 +242,11 @@ const sowings = await fetchJson(
 );
 
 const boxes = await fetchJson(
-  'https://marketgardenapi.reinwiese.de/boxes.php'
+  'https://anbau24api.reinwiese.de/boxes.php'
 ).then(jsonArray => jsonArray.map(item => new Box(new Date(item.date))));
 
 const marketDays = await fetchJson(
-  'https://marketgardenapi.reinwiese.de/marketDays.php'
+  'https://anbau24api.reinwiese.de/marketDays.php'
 ).then(jsonArray => jsonArray.map(item => new MarketDay(new Date(item.date))));
 
 (function init() {

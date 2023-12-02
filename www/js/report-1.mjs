@@ -3,7 +3,7 @@ import {fetchJson, addDaysToDate} from './Utils.mjs';
 import * as View from './Report-1View.mjs';
 
 const sowings = await fetchJson(
-  'https://marketgardenapi.reinwiese.de/sowings.php'
+  'https://anbau24api.reinwiese.de/sowings.php'
 ).then(data =>
   data.map(
     sowing =>

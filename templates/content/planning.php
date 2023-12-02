@@ -1,5 +1,5 @@
 <h1>Gemüsekisten</h1>
-<p>50 Abonnenten</p>
+<p>100 Abonnenten</p>
 <div id="boxes__wrapper"
      class="boxes__wrapper">
 </div>
