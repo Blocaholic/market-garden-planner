@@ -7,6 +7,7 @@ function main() {
   $error = '';
   $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
   $request = trim($url, '/') ?: 'home';
+
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
   if ($request == 'checkSignup') {
@@ -37,6 +38,7 @@ function main() {
   }
 
   if ($request == 'logout') {
+    $_SESSION['isValidUser'] = false;
     session_destroy();
     $request = 'signin';
   }
@@ -47,4 +49,3 @@ function main() {
 
   echo renderPage($request, $error, $user);
 }
-?>

@@ -11,14 +11,14 @@ function renderContent($request, $error) {
     $script = '';
     if ($request == 'signin') {
       $script =
-        '<script>document.getElementById("email").value = "' .
-        htmlspecialchars($_POST['email'] ?? '') .
+      '<script>document.getElementById("email").value = "' .
+      htmlspecialchars($_POST['email'] ?? '') .
         '"; document.getElementById("email").focus();</script>';
     }
 
     $content =
-      $error .
-      file_get_contents('../templates/content/' . $request . '.php') .
+    $error .
+    file_get_contents('../templates/content/' . $request . '.php') .
       $script;
 
     return $content;
@@ -29,23 +29,17 @@ function renderContent($request, $error) {
 
 function renderNav($request, $user) {
   $nav = $user['isValid']
-    ? '<li class="header__navLi">
+  ? '<li class="header__navLi">
     <a href="/planning">Planung</a>
   </li>
   <li class="header__navLi">
-    <a href="/reports">Auswertungen</a>
-  </li>
-  <li class="header__navLi">
-    <a href="/config">Konfiguration</a>
+    <a href="/report-1">Auswertung</a>
   </li>
   <li class="header__navLi">
     <a href="/logout">Logout</a>
   </li>'
-    : '<li class="header__navLi">
+  : '<li class="header__navLi">
     <a href="/login">Login</a>
-  </li>
-  <li class="header__navLi">
-    <a href="/signup">Registrieren</a>
   </li>';
   return $nav;
 }
@@ -72,5 +66,3 @@ function renderPage($request, $error, $user) {
 
   return $page;
 }
-
-?>
