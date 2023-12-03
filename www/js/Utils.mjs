@@ -36,7 +36,6 @@ const stringToDate = string => {
   const mm = string.substr(3, 2);
   const yyyy = string.substr(6, 4);
   const date = new Date(`${yyyy}-${mm}-${dd}`);
-  date.setHours(0, 0, 0, 0);
   return date;
 };
 

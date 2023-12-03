@@ -164,7 +164,6 @@ function Box(date) {
       `Box.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
     );
   this.date = new Date(date.getTime());
-  this.date.setHours(0, 0, 0, 0);
   Utils.deepFreeze(this);
 }
 
@@ -176,7 +175,6 @@ function MarketDay(date) {
       `MarketDay.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
     );
   this.date = new Date(date.getTime());
-  this.date.setHours(0, 0, 0, 0);
   Utils.deepFreeze(this);
 }
 

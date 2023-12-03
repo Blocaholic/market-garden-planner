@@ -62,7 +62,6 @@ const handleAddMarketDaysSave = handler => {
 const getAllDatesOfWeekdayOfYear = (weekday, year) => {
   let allDaysInYear = [];
   let tempDate = new Date(`${year}-01-01`);
-  tempDate.setHours(0, 0, 0, 0);
   while (tempDate.getFullYear() === year) {
     allDaysInYear.push(tempDate);
     tempDate = addDaysToDate(tempDate, 1);
