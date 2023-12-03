@@ -2,9 +2,7 @@ import {Sowing, Veggie, Crop} from './Datatypes.mjs';
 import {fetchJson, addDaysToDate} from './Utils.mjs';
 import * as View from './Report-1View.mjs';
 
-const sowings = await fetchJson(
-  'https://anbau24api.reinwiese.de/sowings.php'
-).then(data =>
+const sowings = await fetchJson('./api/sowings.php').then(data =>
   data.map(
     sowing =>
       new Sowing({

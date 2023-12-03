@@ -81,30 +81,23 @@ const marketDaysPreview = ({firstDay, lastDay, interval}) => {
 
 const saveBoxes = boxes => {
   View.showEieruhr();
-  postAsJson('https://anbau24api.reinwiese.de/boxes.php', boxes).then(
-    res => {
-      if (res.ok) location.reload();
-    }
-  );
+  postAsJson('./api/boxes.php', boxes).then(res => {
+    if (res.ok) location.reload();
+  });
 };
 
 const saveMarketDays = marketDays => {
   View.showEieruhr();
-  postAsJson(
-    'https://anbau24api.reinwiese.de/marketDays.php',
-    marketDays
-  ).then(res => {
+  postAsJson('./api/marketDays.php', marketDays).then(res => {
     if (res.ok) location.reload();
   });
 };
 
 const saveSowings = sowings => {
   View.showEieruhr();
-  postAsJson('https://anbau24api.reinwiese.de/sowings.php', sowings).then(
-    res => {
-      if (res.ok) location.reload();
-    }
-  );
+  postAsJson('./api/sowings.php', sowings).then(res => {
+    if (res.ok) location.reload();
+  });
 };
 
 const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
@@ -219,15 +212,13 @@ const updateSowingForm = ({
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const veggies = await fetchJson(
-  'https://anbau24api.reinwiese.de/veggies.php'
-).then(convertToVeggieDatatype);
+const veggies = await fetchJson('./api/veggies.php').then(
+  convertToVeggieDatatype
+);
 
 const cultures = new Set(veggies.map(v => v.culture).sort());
 
-const sowings = await fetchJson(
-  'https://anbau24api.reinwiese.de/sowings.php'
-).then(data =>
+const sowings = await fetchJson('./api/sowings.php').then(data =>
   data.map(
     sowing =>
       new Sowing({
@@ -241,13 +232,13 @@ const sowings = await fetchJson(
   )
 );
 
-const boxes = await fetchJson(
-  'https://anbau24api.reinwiese.de/boxes.php'
-).then(jsonArray => jsonArray.map(item => new Box(new Date(item.date))));
+const boxes = await fetchJson('./api/boxes.php').then(jsonArray =>
+  jsonArray.map(item => new Box(new Date(item.date)))
+);
 
-const marketDays = await fetchJson(
-  'https://anbau24api.reinwiese.de/marketDays.php'
-).then(jsonArray => jsonArray.map(item => new MarketDay(new Date(item.date))));
+const marketDays = await fetchJson('./api/marketDays.php').then(jsonArray =>
+  jsonArray.map(item => new MarketDay(new Date(item.date)))
+);
 
 (function init() {
   if (boxes.length > 0) View.hideMultiBoxForm();
