@@ -27,7 +27,7 @@ function renderContent($request, $error) {
   return '<h1>Page not found!</h1>';
 }
 
-function renderNav($request, $user) {
+function renderNav($user) {
   $nav = $user['isValid']
   ? '<li class="header__navLi">
     <a href="/planning">Planung</a>
@@ -56,7 +56,7 @@ function renderScript($request, $user) {
 
 function renderPage($request, $error, $user) {
   $page = file_get_contents('../templates/page.php');
-  $nav = renderNav($request, $user);
+  $nav = renderNav($user);
   $content = renderContent($request, $error);
   $script = renderScript($request, $user);
 

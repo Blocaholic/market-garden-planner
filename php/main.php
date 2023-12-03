@@ -1,6 +1,5 @@
 <?php
 require_once 'view.php';
-require_once 'User.php';
 
 function main() {
   session_start();
@@ -10,31 +9,9 @@ function main() {
 
   $_SESSION['isValidUser'] = $_SESSION['isValidUser'] ?? false;
 
-  if ($request == 'checkSignup') {
-    if (!checkSignup()) {
-      $error = 'Fehler: Benutzer konnte nicht registriert werden!<br>';
-      $request = 'signup';
-    }
-    $_SESSION['isValidUser'] = true;
-    $request = 'signup-success';
-  }
-
-  if ($request == 'checkSignin') {
-    if (!checkSignin()) {
-      $error = 'Login fehlgeschlagen!';
-      $request = 'signin';
-    } else {
-      $request = 'home';
-    }
-  }
-
   if ($request == 'login') {
-    $_SESSION['isValidUser'] = isValidUser();
-    if (!$_SESSION['isValidUser']) {
-      $error .= 'Fehler: Benutzername oder Passwort falsch!<br>';
-    } else {
-      $request = 'home';
-    }
+    $_SESSION['isValidUser'] = true;
+    $request = 'home';
   }
 
   if ($request == 'logout') {
