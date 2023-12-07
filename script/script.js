@@ -459,10 +459,10 @@ const View = new (function () {
 
   this.saveVeggiesAsJson = async veggies => {
     const json = JSON.stringify(veggies[1]);
-    await Utils.clearDirectory('../api/veggies');
+    await Utils.clearDirectory('../www/api/veggies');
     veggies.forEach(veggie =>
       Utils.writeFile(
-        `../api/veggies/${veggie.id}.json`,
+        `../www/api/veggies/${veggie.id}.json`,
         JSON.stringify(veggie)
       )
     );
