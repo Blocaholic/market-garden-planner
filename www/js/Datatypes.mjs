@@ -310,4 +310,49 @@ Object.defineProperties(Sowing.prototype, {
   },
 });
 
-export {Veggie, Crop, Box, MarketDay, Sowing};
+function Dayte(date) {
+  // date: DD.MM.YYYY (DE) oder YYYY-MM-DD (ISO)
+  const dateExists = dayte => {
+    const date = new Date(`${dayte.year}/${dayte.month}/${dayte.day}`);
+    if (Number(dayte.day) !== date.getDate()) return false;
+    if (Number(dayte.month) !== date.getMonth() + 1) return false;
+    if (Number(dayte.year) !== date.getFullYear()) return false;
+    return true;
+  };
+
+  if (typeof date !== 'string')
+    throw new Exception('date must be of type string');
+  if (date.length !== 10) throw new Exception('date must have 10 characters');
+
+  let format;
+  if (date[2] === '.' && date[5] === '.') {
+    format = 'DE';
+  } else if (date[4] === '-' && date[7] === '-') {
+    format = 'ISO';
+  } else {
+    throw new Exception('invalid date format');
+  }
+
+  if (format === 'DE') {
+    this.day = date.slice(0, 2);
+    this.month = date.slice(3, 5);
+    this.year = date.slice(6, 10);
+  } else if (format === 'ISO') {
+    this.day = date.slice(8, 10);
+    this.month = date.slice(5, 7);
+    this.year = date.slice(0, 4);
+  }
+
+  if (Number(this.day) < 1 || Number(this.day) > 31)
+    throw new Exception('day must be between 01 and 31');
+  if (Number(this.month) < 1 || Number(this.month) > 12)
+    throw new Exception('month must be between 01 and 12');
+  if (Number(this.year) < 0 || Number(this.year) > 9999)
+    throw new Exception('year must be between 0000 and 9999');
+  if (!dateExists(this)) throw new Exception('date does not exist');
+  this.de = `${this.day}.${this.month}.${this.year}`;
+  this.iso = `${this.year}-${this.month}-${this.day}`;
+  Utils.deepFreeze(this);
+}
+
+export {Veggie, Crop, Box, MarketDay, Sowing, Dayte};
