@@ -248,7 +248,6 @@ const handleChangeSowingForm = handler => {
       '.box > table > tbody > tr:last-child > td:nth-child(3)'
     ),
   ];
-  const meanBoxPriceElement = document.createElement('p');
   const meanBoxPrice = dotToComma(
     Math.round(
       (allBoxElements
@@ -258,8 +257,9 @@ const handleChangeSowingForm = handler => {
         100
     ) / 100
   );
-  meanBoxPriceElement.innerText = `Durchschnittlicher Kistenpreis: ${meanBoxPrice} €`;
-  $('boxes__wrapper').before(meanBoxPriceElement);
+  $(
+    'boxes__meanBoxPrice'
+  ).innerText = `Durchschnittlicher Kistenpreis: ${meanBoxPrice} €`;
   //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
