@@ -1,13 +1,6 @@
-import {
-  commaToDot,
-  dotToComma,
-  dateToString,
-  dateToWeekday,
-  stringToDate,
-  addDaysToDate,
-  getMostFrequent,
-} from './Utils.mjs';
+import {commaToDot, dotToComma, getMostFrequent} from './Utils.mjs';
 import * as CONFIG from './CONFIG.mjs';
+import {Dayte} from './Datatypes.mjs';
 
 const HANDLER = {};
 
@@ -59,14 +52,15 @@ const handleAddMarketDaysSave = handler => {
 };
 
 // GEHÖRT HIER NICHT HIN!!!
-const getAllDatesOfWeekdayOfYear = (weekday, year) => {
+const getAllDaytesOfWeekdayOfYear = (weekday, year) => {
+  year = String(year);
   let allDaysInYear = [];
-  let tempDate = new Date(`${year}-01-01`);
-  while (tempDate.getFullYear() === year) {
-    allDaysInYear.push(tempDate);
-    tempDate = addDaysToDate(tempDate, 1);
+  let tempDayte = new Dayte(`${year}-01-01`);
+  while (tempDayte.year === year) {
+    allDaysInYear.push(tempDayte);
+    tempDayte = tempDayte.addDays(1);
   }
-  return allDaysInYear.filter(date => dateToWeekday(date) === weekday);
+  return allDaysInYear.filter(dayte => dayte.weekday === weekday);
 };
 
 const handleAddBox = (handler, boxes) => {
@@ -75,13 +69,13 @@ const handleAddBox = (handler, boxes) => {
     $('addBox__save').style.display = 'none';
     $('addBox__date').style.display = '';
     $('addBox__dateLabel').style.display = '';
-    const boxTimes = boxes.map(box => box.date.getTime());
-    const possibleDates = getAllDatesOfWeekdayOfYear(
-      CONFIG.weekday,
-      year
-    ).filter(date => !boxTimes.includes(date.getTime()));
-    const dateOptions = possibleDates.map(
-      date => `<option value="${date}">${dateToString(date)}</option>`
+    const boxTimes = boxes.map(box => box.dayte.getTime());
+    const allDaytesOfYear = getAllDaytesOfWeekdayOfYear(CONFIG.weekday, year);
+    const possibleDaytes = allDaytesOfYear.filter(
+      dayte => !boxTimes.includes(dayte.getTime())
+    );
+    const dateOptions = possibleDaytes.map(
+      dayte => `<option value="${dayte.iso}">${dayte.de}</option>`
     );
     $('addBox__date').innerHTML = `<option selected></option>${dateOptions}`;
   });
@@ -90,7 +84,7 @@ const handleAddBox = (handler, boxes) => {
     _ => ($('addBox__save').style.display = '')
   );
   $('addBox__save').addEventListener('click', _ =>
-    handler(boxes, new Date($('addBox__date').value))
+    handler(boxes, new Dayte($('addBox__date').value))
   );
 };
 
@@ -101,14 +95,14 @@ const handleAddMarketDay = (handler, marketDays) => {
     $('addMarketDay__date').style.display = '';
     $('addMarketDay__dateLabel').style.display = '';
     const marketDayTimes = marketDays.map(marketDay =>
-      marketDay.date.getTime()
+      marketDay.dayte.getTime()
     );
-    const possibleDates = getAllDatesOfWeekdayOfYear(
+    const possibleDaytes = getAllDaytesOfWeekdayOfYear(
       CONFIG.weekday,
       year
-    ).filter(date => !marketDayTimes.includes(date.getTime()));
-    const dateOptions = possibleDates.map(
-      date => `<option value="${date}">${dateToString(date)}</option>`
+    ).filter(dayte => !marketDayTimes.includes(dayte.getTime()));
+    const dateOptions = possibleDaytes.map(
+      dayte => `<option value="${dayte.iso}">${dayte.de}</option>`
     );
     $(
       'addMarketDay__date'
@@ -119,7 +113,7 @@ const handleAddMarketDay = (handler, marketDays) => {
     _ => ($('addMarketDay__save').style.display = '')
   );
   $('addMarketDay__save').addEventListener('click', _ =>
-    handler(marketDays, new Date($('addMarketDay__date').value))
+    handler(marketDays, new Dayte($('addMarketDay__date').value))
   );
 };
 
@@ -127,16 +121,16 @@ const handleAddSowing = handler => {
   $('addSowing__save').addEventListener('click', _ => {
     const sowingData = {};
     sowingData.veggieId = $('addSowing__variety').value;
-    sowingData.sowingDate = stringToDate($('addSowing__date').innerHTML);
+    sowingData.sowingDayte = new Dayte($('addSowing__date').innerHTML);
     sowingData.seedAmount = $('addSowing__seedAmount--given').value;
     const boxCrops = [...$$('.addSowing__amountPerBox')].map(element => ({
-      date: stringToDate(element.id.slice(-10)),
+      dayte: new Dayte(element.id.slice(-10)),
       amount: element.value,
       salesChannel: 'Box',
     }));
     const marketDayCrops = [...$$('.addSowing__amountForMarket')].map(
       element => ({
-        date: stringToDate(element.id.slice(-10)),
+        dayte: new Dayte(element.id.slice(-10)),
         amount: element.value,
         salesChannel: 'MarketDay',
       })
@@ -150,7 +144,7 @@ const handleCulture = handler =>
   $('addSowing__culture')?.addEventListener('change', e => {
     handler({
       culture: e.target.value,
-      firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
+      firstCropDayte: new Dayte($('addSowing__firstCropDate').innerHTML),
     });
     //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
   });
@@ -159,20 +153,20 @@ const handleVariety = handler =>
   $('addSowing__variety')?.addEventListener('change', e =>
     handler({
       veggieId: e.target.value,
-      firstCropDate: stringToDate($('addSowing__firstCropDate').innerHTML),
+      firstCropDayte: new Dayte($('addSowing__firstCropDate').innerHTML),
     })
   );
 
 const handleChangeSowingForm = handler => {
   const getAllAmountPerBox = () =>
     [...$$('.addSowing__amountPerBox')].map(node => ({
-      date: stringToDate(node.id.substr(-10)),
+      dayte: new Dayte(node.id.substr(-10)),
       amount: commaToDot(node.value),
       salesChannel: 'Box',
     }));
   const getAllAmountForMarket = () =>
     [...$$('.addSowing__amountForMarket')].map(node => ({
-      date: stringToDate(node.id.substr(-10)),
+      dayte: new Dayte(node.id.substr(-10)),
       amount: commaToDot(node.value),
       salesChannel: 'MarketDay',
     }));
@@ -183,7 +177,7 @@ const handleChangeSowingForm = handler => {
         ? 'quickpots__floor'
         : event.target.id,
     veggieId: $('addSowing__variety').value,
-    sowingDate: stringToDate($('addSowing__date').innerHTML),
+    sowingDayte: new Dayte($('addSowing__date').innerHTML),
     seedAmount: commaToDot($('addSowing__seedAmount--given').value),
     bedLength: commaToDot($('addSowing__bedLength--given').value),
     quickpotAmount: commaToDot($('addSowing__quickpotAmount--given').value),
@@ -438,8 +432,8 @@ const closeAddMarketDay = e => {
   $('addMarketDay__wrapper').style.padding = '0';
 };
 
-const renderBoxPreview = dates => {
-  const numberOfBoxes = dates.length;
+const renderBoxPreview = daytes => {
+  const numberOfBoxes = daytes.length;
   $('addBoxes__save').style.color =
     numberOfBoxes === 0 ? 'rgb(170,170,170)' : 'rgb(0,0,0)';
   const buttonText =
@@ -447,20 +441,20 @@ const renderBoxPreview = dates => {
       ? `1 Kiste hinzufügen`
       : `${numberOfBoxes} Kisten hinzufügen`;
   $('addBoxes__save').innerHTML = buttonText;
-  const datesHtml = dates
+  const datesHtml = daytes
     .reduce(
-      (datesString, date, i, self) =>
-        date.getMonth() !== self[i - 1]?.getMonth()
-          ? [...datesString, `<br>[${dateToString(date)}]`]
-          : [...datesString, `[${dateToString(date)}]`],
+      (datesString, dayte, i, self) =>
+        dayte.month !== self[i - 1]?.month
+          ? [...datesString, `<br>[${dayte.de}]`]
+          : [...datesString, `[${dayte.de}]`],
       []
     )
     .join(' ');
   $('addBoxes__dates').innerHTML = datesHtml;
 };
 
-const renderMarketDaysPreview = dates => {
-  const numberOfMarketDays = dates.length;
+const renderMarketDaysPreview = daytes => {
+  const numberOfMarketDays = daytes.length;
   $('addMarketDays__save').style.color =
     numberOfMarketDays === 0 ? 'rgb(170,170,170)' : 'rgb(0,0,0)';
   const buttonText =
@@ -468,12 +462,12 @@ const renderMarketDaysPreview = dates => {
       ? `1 Markttag hinzufügen`
       : `${numberOfMarketDays} Markttage hinzufügen`;
   $('addMarketDays__save').innerHTML = buttonText;
-  const datesHtml = dates
+  const datesHtml = daytes
     .reduce(
-      (datesString, date, i, self) =>
-        date.getMonth() !== self[i - 1]?.getMonth()
-          ? [...datesString, `<br>[${dateToString(date)}]`]
-          : [...datesString, `[${dateToString(date)}]`],
+      (datesString, dayte, i, self) =>
+        dayte.month !== self[i - 1]?.month
+          ? [...datesString, `<br>[${dayte.de}]`]
+          : [...datesString, `[${dayte.de}]`],
       []
     )
     .join(' ');
@@ -524,8 +518,8 @@ const renderSowingForm = data => {
     $('addSowing__veggieName').style.display = '';
   };
 
-  const showSowingDate = date => {
-    $('addSowing__date').innerHTML = dateToString(date);
+  const showSowingDate = dayte => {
+    $('addSowing__date').innerHTML = dayte.de;
     $('addSowing__dateWrapper').style.display = '';
   };
 
@@ -554,11 +548,11 @@ const renderSowingForm = data => {
     $('addSowing__quickpot').style.display = 'none';
   };
 
-  const boxExists = (date, boxes) =>
-    boxes.some(box => box.date.getTime() === date.getTime());
+  const boxExists = (dayte, boxes) =>
+    boxes.some(box => box.dayte.getTime() === dayte.getTime());
 
-  const marketDayExists = (date, marketDays) =>
-    marketDays.some(marketDay => marketDay.date.getTime() === date.getTime());
+  const marketDayExists = (dayte, marketDays) =>
+    marketDays.some(marketDay => marketDay.dayte.getTime() === dayte.getTime());
 
   // event listeners
   $('addSowing__close').addEventListener('click', _ => {
@@ -576,7 +570,7 @@ const renderSowingForm = data => {
     hideVarietySelect();
     setVarietySelectValue(veggie.id);
     showVeggieName(veggie.fullName);
-    showSowingDate(sowing.sowingDate);
+    showSowingDate(sowing.sowingDayte);
     // sowingRequirements
     $('addSowing__seedAmount--given').value = sowing.seedAmount;
     $('addSowing__bedLength--given').value = sowing.bedLength;
@@ -614,19 +608,19 @@ const renderSowingForm = data => {
     let totalRequiredCropAmount = 0;
     let maxRequiredCropAmount = 0;
 
-    const rows = sowing.possibleCropDates
-      .map(date => {
+    const rows = sowing.possibleCropDaytes
+      .map(dayte => {
         const amountPerBox =
           sowing.crops.find(
             crop =>
-              crop.date.getTime() === date.getTime() &&
+              crop.dayte.getTime() === dayte.getTime() &&
               crop.salesChannel === 'Box'
           )?.amount || 0;
         totalAmountPerClient += amountPerBox;
         const amountForMarket =
           sowing.crops.find(
             crop =>
-              crop.date.getTime() === date.getTime() &&
+              crop.dayte.getTime() === dayte.getTime() &&
               crop.salesChannel === 'MarketDay'
           )?.amount || 0;
         totalAmountForMarket += amountForMarket;
@@ -647,28 +641,28 @@ const renderSowingForm = data => {
         const roundedRequiredCropAmount =
           Math.round(requiredCropAmount * 100) / 100;
         const row = `<tr>
-          <td>${dateToWeekday(date)}, ${dateToString(date)}</td>
-          <td><input type="text" class="addSowing__amountPerBox" id="addSowing__amountPerBox--${dateToString(
-            date
-          )}" value="${dotToComma(roundedAmountPerBox)}" ${
-          boxExists(date, boxes) ? '' : 'readonly'
+          <td>${dayte.weekday}, ${dayte.de}</td>
+          <td><input type="text" class="addSowing__amountPerBox" id="addSowing__amountPerBox--${
+            dayte.de
+          }" value="${dotToComma(roundedAmountPerBox)}" ${
+          boxExists(dayte, boxes) ? '' : 'readonly'
         }></td>
-          <td class="addSowing__availablePerBox" id="addSowing__availablePerBox--${dateToString(
-            date
-          )}">${Math.floor(roundedAvailablePerBox * 100) / 100} ${
+          <td class="addSowing__availablePerBox" id="addSowing__availablePerBox--${
+            dayte.de
+          }">${Math.floor(roundedAvailablePerBox * 100) / 100} ${
           veggie.harvestUnit
         }</td>
           <td><input type="text" class="addSowing__amountForMarket"
-                   id="addSowing__amountForMarket--${dateToString(date)}"
+                   id="addSowing__amountForMarket--${dayte.de}"
                    value="${roundedAmountForMarket}" ${
-          marketDayExists(date, marketDays) ? '' : 'readonly'
+          marketDayExists(dayte, marketDays) ? '' : 'readonly'
         }></td>
-          <td class="addSowing__availablePerDay" id="addSowing__availablePerDay--${dateToString(
-            date
-          )}">${roundedAvailablePerDay} ${veggie.harvestUnit}</td>
-          <td class="addSowing__requiredCropAmount" id="addSowing__requiredCropAmount--${dateToString(
-            date
-          )}">${roundedRequiredCropAmount}</td>
+          <td class="addSowing__availablePerDay" id="addSowing__availablePerDay--${
+            dayte.de
+          }">${roundedAvailablePerDay} ${veggie.harvestUnit}</td>
+          <td class="addSowing__requiredCropAmount" id="addSowing__requiredCropAmount--${
+            dayte.de
+          }">${roundedRequiredCropAmount}</td>
         </tr>`;
         return row;
       })
@@ -820,7 +814,7 @@ const renderBoxes = (boxes, sowings) => {
           sowing.crops
             .filter(
               crop =>
-                crop.date.getTime() === box.date.getTime() &&
+                crop.dayte.getTime() === box.dayte.getTime() &&
                 crop.salesChannel === 'Box' &&
                 crop.amount > 0
             )
@@ -842,7 +836,7 @@ const renderBoxes = (boxes, sowings) => {
         )
         .join('');
       const boxHtml = `<div class="box">
-    <div class="box__date">${dateToString(box.date)}</div>
+    <div class="box__date">${box.dayte.de}</div>
     <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
         Math.round(boxPrice * 100) / 100
       )} €</td><td></td></tr></table>
@@ -886,7 +880,7 @@ const renderBoxes = (boxes, sowings) => {
       const veggieId = event.target
         .closest('.box__ingredient')
         .querySelector('.box__veggieId').innerHTML;
-      const cropDate = stringToDate(
+      const cropDayte = new Dayte(
         event.target.closest('.box').querySelector('.box__date').innerHTML
       );
       const sowing = sowings
@@ -937,7 +931,7 @@ const renderMarketDays = (marketDays, sowings) => {
           sowing.crops
             .filter(
               crop =>
-                crop.date.getTime() === marketDay.date.getTime() &&
+                crop.dayte.getTime() === marketDay.dayte.getTime() &&
                 crop.salesChannel === 'MarketDay' &&
                 crop.amount > 0
             )
@@ -959,7 +953,7 @@ const renderMarketDays = (marketDays, sowings) => {
         )
         .join('');
       const marketDayHtml = `<div class="marketDay">
-    <div class="marketDay__date">${dateToString(marketDay.date)}</div>
+    <div class="marketDay__date">${marketDay.dayte.de}</div>
     <table>${ingredientsHtml}<tr><td></td><td></td><td>${dotToComma(
         Math.round(marketDayPrice * 100) / 100
       )} €</td><td></td></tr></table>
@@ -1004,9 +998,10 @@ const renderMarketDays = (marketDays, sowings) => {
       const veggieId = event.target
         .closest('.marketDay__ingredient')
         .querySelector('.marketDay__veggieId').innerHTML;
-      const cropDate = stringToDate(
-        event.target.closest('.marketDay').querySelector('.marketDay__date')
-          .innerHTML
+      const cropDayte = new Dayte(
+        event.target
+          .closest('.marketDay')
+          .querySelector('.marketDay__date').innerHTML
       );
       const sowing = sowings
         .filter(sowing => sowing.veggie.id === Number(veggieId))
@@ -1045,17 +1040,15 @@ const renderSowings = sowings => {
     .map(
       sowing =>
         `<li title="Ernten:${[...sowing.crops]
-          .sort((a, b) => a.date.getTime() - b.date.getTime())
+          .sort((a, b) => a.dayte.getTime() - b.dayte.getTime())
           .map(crop =>
             crop.amount > 0
-              ? `&#10;${dateToString(crop.date)}: ${crop.amount} ${
-                  sowing.veggie.harvestUnit
-                } für ${crop.salesChannel}`
+              ? `&#10;${crop.dayte.de}: ${crop.amount} ${sowing.veggie.harvestUnit} für ${crop.salesChannel}`
               : ''
           )
-          .join('')}">${dateToString(sowing.sowingDate)}: ${
-          sowing.seedAmount
-        } ${sowing.veggie.fullName}</li>`
+          .join('')}">${sowing.sowingDayte.de}: ${sowing.seedAmount} ${
+          sowing.veggie.fullName
+        }</li>`
     )
     .join('');
   $('sowings').innerHTML = `<ul class="--listStyleNone">${htmlSowings}</ul>`;

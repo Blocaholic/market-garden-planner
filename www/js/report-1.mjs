@@ -1,5 +1,5 @@
-import {Sowing, Veggie, Crop} from './Datatypes.mjs';
-import {fetchJson, addDaysToDate} from './Utils.mjs';
+import {Dayte, Sowing, Veggie, Crop} from './Datatypes.mjs';
+import {fetchJson} from './Utils.mjs';
 import * as View from './Report-1View.mjs';
 
 const sowings = await fetchJson('./api/sowings.php').then(data =>
@@ -7,10 +7,19 @@ const sowings = await fetchJson('./api/sowings.php').then(data =>
     sowing =>
       new Sowing({
         veggie: new Veggie(sowing.veggie),
-        sowingDate: new Date(sowing.sowingDate),
+        sowingDayte: new Dayte(
+          `${sowing.sowingDayte.year}-${sowing.sowingDayte.month}-${sowing.sowingDayte.day}`
+        ),
         seedAmount: sowing.seedAmount,
         crops: sowing.crops.map(
-          crop => new Crop(new Date(crop.date), crop.amount, crop.salesChannel)
+          crop =>
+            new Crop(
+              new Dayte(
+                `${crop.dayte.year}-${crop.dayte.month}-${crop.dayte.day}`
+              ),
+              crop.amount,
+              crop.salesChannel
+            )
         ),
       })
   )
@@ -22,7 +31,7 @@ const sowInQuickpot = sowings
     const quickpots = {};
     quickpots[sowing.veggie.quickpotSize] = sowing.quickpotAmount;
     return {
-      date: sowing.sowingDate,
+      dayte: sowing.sowingDayte,
       veggie: sowing.veggie,
       amount: sowing.seedAmount,
       quickpots,
@@ -35,7 +44,7 @@ const sowInBed = sowings
   .filter(sowing => !sowing.veggie.preGrow)
   .map(sowing => {
     return {
-      date: sowing.sowingDate,
+      dayte: sowing.sowingDayte,
       veggie: sowing.veggie,
       amount: sowing.seedAmount,
       quickpots: [],
@@ -50,7 +59,7 @@ const plantInBed = sowings
     const quickpots = {};
     quickpots[sowing.veggie.quickpotSize] = -sowing.quickpotAmount;
     return {
-      date: addDaysToDate(sowing.sowingDate, sowing.veggie.quickpotDuration),
+      dayte: sowing.sowingDayte.addDays(sowing.veggie.quickpotDuration),
       veggie: sowing.veggie,
       amount: sowing.seedAmount * sowing.veggie.germinationRate,
       quickpots,
@@ -60,7 +69,7 @@ const plantInBed = sowings
   });
 
 const clearBed = sowings.map(sowing => ({
-  date: sowing.lastCropDate,
+  dayte: sowing.lastCropDayte,
   veggie: sowing.veggie,
   amount: 0,
   quickpots: [],
@@ -73,6 +82,6 @@ const allWorkSteps = [
   ...plantInBed,
   ...sowInBed,
   ...clearBed,
-].sort((a, b) => a.date.getTime() - b.date.getTime());
+].sort((a, b) => a.dayte.getTime() - b.dayte.getTime());
 
 View.renderWorkSteps(allWorkSteps);

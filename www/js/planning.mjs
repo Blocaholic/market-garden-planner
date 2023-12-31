@@ -1,9 +1,8 @@
-import {Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
+import {Dayte, Box, MarketDay, Veggie, Sowing, Crop} from './Datatypes.mjs';
 import * as View from './PlanningView.mjs';
 import {
   idEquals,
-  addDaysToDate,
-  getDatesInRange,
+  getDaytesInRange,
   commaToDot,
   fetchJson,
   postAsJson,
@@ -13,7 +12,7 @@ import * as CONFIG from './CONFIG.mjs';
 const convertToVeggieDatatype = jsonArray =>
   jsonArray.map(item => new Veggie(item));
 
-const updateOnCulture = ({culture, firstCropDate}) => {
+const updateOnCulture = ({culture, firstCropDayte}) => {
   const varieties = new Set(
     veggies
       .filter(v => v.culture === culture)
@@ -24,24 +23,23 @@ const updateOnCulture = ({culture, firstCropDate}) => {
   );
   View.renderSowingForm({culture, varieties});
   if (varieties.size === 1)
-    updateOnVariety({veggieId: [...varieties][0].id, firstCropDate});
+    updateOnVariety({veggieId: [...varieties][0].id, firstCropDayte});
 };
 
-const updateOnVariety = ({veggieId, firstCropDate}) => {
+const updateOnVariety = ({veggieId, firstCropDayte}) => {
   const veggie = veggies.find(idEquals(veggieId));
-  const sowingDate = addDaysToDate(
-    firstCropDate,
+  const sowingDayte = firstCropDayte.addDays(
     -(veggie.quickpotDuration + veggie.bedDuration)
   );
   const sowing =
     sowings.find(
       sowing =>
-        sowing.sowingDate.getTime() === sowingDate.getTime() &&
+        sowing.sowingDayte.iso === sowingDayte.iso &&
         sowing.veggie.id === veggie.id
     ) ||
     new Sowing({
       veggie,
-      sowingDate,
+      sowingDayte,
       seedAmount: 0,
       crops: [],
     });
@@ -54,29 +52,29 @@ const updateOnVariety = ({veggieId, firstCropDate}) => {
 };
 
 const multiBoxPreview = ({firstDay, lastDay, interval}) => {
-  const dates =
+  const daytes =
     !firstDay || !lastDay
       ? []
-      : getDatesInRange({
+      : getDaytesInRange({
           weekday: CONFIG.weekday,
-          firstDate: new Date(firstDay),
-          lastDate: new Date(lastDay),
+          firstDayte: new Dayte(firstDay),
+          lastDayte: new Dayte(lastDay),
           interval: Number(interval),
         });
-  View.renderBoxPreview(dates);
+  View.renderBoxPreview(daytes);
 };
 
 const marketDaysPreview = ({firstDay, lastDay, interval}) => {
-  const dates =
+  const daytes =
     !firstDay || !lastDay
       ? []
-      : getDatesInRange({
+      : getDaytesInRange({
           weekday: CONFIG.weekday,
-          firstDate: new Date(firstDay),
-          lastDate: new Date(lastDay),
+          firstDayte: new Dayte(firstDay),
+          lastDayte: new Dayte(lastDay),
           interval: Number(interval),
         });
-  View.renderMarketDaysPreview(dates);
+  View.renderMarketDaysPreview(daytes);
 };
 
 const saveBoxes = boxes => {
@@ -104,10 +102,10 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
   const dates =
     !firstDay || !lastDay
       ? []
-      : getDatesInRange({
+      : getDaytesInRange({
           weekday: CONFIG.weekday,
-          firstDate: new Date(firstDay),
-          lastDate: new Date(lastDay),
+          firstDayte: new Dayte(firstDay),
+          lastDayte: new Dayte(lastDay),
           interval: Number(interval),
         });
   const newBoxes = dates.map(date => new Box(date));
@@ -115,23 +113,23 @@ const saveMultiBoxSeries = ({firstDay, lastDay, interval}) => {
 };
 
 const saveMarketDaySeries = ({firstDay, lastDay, interval}) => {
-  const dates =
+  const daytes =
     !firstDay || !lastDay
       ? []
-      : getDatesInRange({
+      : getDaytesInRange({
           weekday: CONFIG.weekday,
-          firstDate: new Date(firstDay),
-          lastDate: new Date(lastDay),
+          firstDayte: new Dayte(firstDay),
+          lastDayte: new Dayte(lastDay),
           interval: Number(interval),
         });
-  const marketDays = dates.map(date => new MarketDay(date));
+  const marketDays = daytes.map(dayte => new MarketDay(dayte));
   saveMarketDays(marketDays);
 };
 
 const addBox = (boxes, newBoxDate) => {
   const box = new Box(newBoxDate);
   saveBoxes(
-    [...boxes, box].sort((a, b) => a.date.getTime() - b.date.getTime())
+    [...boxes, box].sort((a, b) => a.dayte.getTime() - b.dayte.getTime())
   );
 };
 
@@ -139,7 +137,7 @@ const addMarketDay = (marketDays, newMarketDayDate) => {
   const marketDay = new MarketDay(newMarketDayDate);
   saveMarketDays(
     [...marketDays, marketDay].sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
+      (a, b) => a.dayte.getTime() - b.dayte.getTime()
     )
   );
 };
@@ -149,20 +147,20 @@ const addSowing = sowingData => {
   const otherSowings = sowings.filter(
     sowing =>
       sowing.veggie.id !== veggie.id ||
-      sowing.sowingDate.getTime() !== sowingData.sowingDate.getTime()
+      sowing.sowingDayte.getTime() !== sowingData.sowingDayte.getTime()
   );
   const sowing = new Sowing({
     veggie,
-    sowingDate: sowingData.sowingDate,
+    sowingDayte: sowingData.sowingDayte,
     seedAmount: sowingData.seedAmount,
     crops: sowingData.crops.map(
-      crop => new Crop(crop.date, commaToDot(crop.amount), crop.salesChannel)
+      crop => new Crop(crop.dayte, commaToDot(crop.amount), crop.salesChannel)
     ),
   });
   const newSowings =
     sowing.seedAmount >= 1
       ? [...otherSowings, sowing].sort(
-          (a, b) => a.sowingDate.getTime() - b.sowingDate.getTime()
+          (a, b) => a.sowingDayte.getTime() - b.sowingDayte.getTime()
         )
       : [...otherSowings];
   saveSowings(newSowings);
@@ -171,7 +169,7 @@ const addSowing = sowingData => {
 const updateSowingForm = ({
   target,
   veggieId,
-  sowingDate,
+  sowingDayte,
   seedAmount,
   bedLength,
   quickpotAmount,
@@ -194,11 +192,11 @@ const updateSowingForm = ({
   else if (target === 'quickpots__ceil')
     seedAmount = quickpotAmount * veggie.quickpotSize * veggie.seedsPerPot;
   const newCrops = crops.map(
-    crop => new Crop(crop.date, crop.amount, crop.salesChannel)
+    crop => new Crop(crop.dayte, crop.amount, crop.salesChannel)
   );
   const sowing = new Sowing({
     veggie,
-    sowingDate,
+    sowingDayte,
     seedAmount,
     crops: newCrops,
   });
@@ -223,21 +221,40 @@ const sowings = await fetchJson('./api/sowings.php').then(data =>
     sowing =>
       new Sowing({
         veggie: new Veggie(sowing.veggie),
-        sowingDate: new Date(sowing.sowingDate),
+        sowingDayte: new Dayte(
+          `${sowing.sowingDayte.year}-${sowing.sowingDayte.month}-${sowing.sowingDayte.day}`
+        ),
         seedAmount: sowing.seedAmount,
         crops: sowing.crops.map(
-          crop => new Crop(new Date(crop.date), crop.amount, crop.salesChannel)
+          crop =>
+            new Crop(
+              new Dayte(
+                `${crop.dayte.year}-${crop.dayte.month}-${crop.dayte.day}`
+              ),
+              crop.amount,
+              crop.salesChannel
+            )
         ),
       })
   )
 );
 
 const boxes = await fetchJson('./api/boxes.php').then(jsonArray =>
-  jsonArray.map(item => new Box(new Date(item.date)))
+  jsonArray.map(
+    item =>
+      new Box(
+        new Dayte(`${item.dayte.year}-${item.dayte.month}-${item.dayte.day}`)
+      )
+  )
 );
 
 const marketDays = await fetchJson('./api/marketDays.php').then(jsonArray =>
-  jsonArray.map(item => new MarketDay(new Date(item.date)))
+  jsonArray.map(
+    item =>
+      new MarketDay(
+        new Dayte(`${item.dayte.year}-${item.dayte.month}-${item.dayte.day}`)
+      )
+  )
 );
 
 (function init() {

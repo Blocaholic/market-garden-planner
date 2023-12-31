@@ -1,4 +1,3 @@
-import {dateToString} from './Utils.mjs';
 const $ = id => document.getElementById(id);
 const $$ = query => document.querySelectorAll(query);
 
@@ -69,7 +68,7 @@ const renderWorkSteps = workSteps => {
       max.bedLength > sum.bedLength ? max.bedLength : sum.bedLength;
 
     const row = `<tr>
-      <td>${dateToString(workStep.date)}</td>
+      <td>${workStep.dayte.de}</td>
       <td>${translateWorkStep(workStep)}</td>
       <td>${workStep.veggie.id} ${workStep.veggie.fullName}</td>
       <td>${workStep.amount}</td>

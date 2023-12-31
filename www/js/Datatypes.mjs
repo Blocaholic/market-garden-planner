@@ -123,14 +123,14 @@ Veggie.prototype.toSeedAmount = function (x) {
   throw new Error(`Could not convert ${JSON.stringify(x)} to seedAmount!`);
 };
 
-function Crop(date, amount, salesChannel) {
-  if (date === undefined)
-    throw new Error(`Crop.constructor: parameter "date" is undefined`);
+function Crop(dayte, amount, salesChannel) {
+  if (dayte === undefined)
+    throw new Error(`Crop.constructor: parameter "dayte" is undefined`);
   if (amount === undefined)
     throw new Error(`Crop.constructor: parameter "amount" is undefined`);
-  if (date.constructor !== Date)
+  if (dayte.constructor !== Dayte)
     throw new Error(
-      `Crop.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
+      `Crop.constructor: "dayte" must be of type "Dayte" but is of type "${dayte.constructor.name}"!`
     );
   if (amount.constructor !== Number && amount.constructor !== String)
     throw new Error(
@@ -150,37 +150,37 @@ function Crop(date, amount, salesChannel) {
     throw new Error(
       `Crop.constructor: "salesChannel must be either "Box" or "MarketDay", but is ${salesChannel}!`
     );
-  this.date = new Date(date.getTime());
+  this.dayte = dayte;
   this.amount = Number(amount);
   this.salesChannel = salesChannel;
   Utils.deepFreeze(this);
 }
 
-function Box(date) {
-  if (date === undefined)
-    throw new Error(`Box.constructor: parameter "date" is undefined`);
-  if (date.constructor !== Date)
+function Box(dayte) {
+  if (dayte === undefined)
+    throw new Error(`Box.constructor: parameter "dayte" is undefined`);
+  if (dayte.constructor !== Dayte)
     throw new Error(
-      `Box.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
+      `Box.constructor: "dayte" must be of type "Dayte" but is of type "${date.constructor.name}"!`
     );
-  this.date = new Date(date.getTime());
+  this.dayte = dayte;
   Utils.deepFreeze(this);
 }
 
-function MarketDay(date) {
-  if (date === undefined)
-    throw new Error(`MarketDay.constructor: parameter "date" is undefined`);
-  if (date.constructor !== Date)
+function MarketDay(dayte) {
+  if (dayte === undefined)
+    throw new Error(`MarketDay.constructor: parameter "dayte" is undefined`);
+  if (dayte.constructor !== Dayte)
     throw new Error(
-      `MarketDay.constructor: "date" must be of type "Date" but is of type "${date.constructor.name}"!`
+      `MarketDay.constructor: "dayte" must be of type "Dayte" but is of type "${dayte.constructor.name}"!`
     );
-  this.date = new Date(date.getTime());
+  this.dayte = dayte;
   Utils.deepFreeze(this);
 }
 
-function Sowing({veggie, sowingDate, seedAmount, crops}) {
+function Sowing({veggie, sowingDayte, seedAmount, crops}) {
   this.veggie = veggie;
-  this.sowingDate = new Date(sowingDate.getTime());
+  this.sowingDayte = sowingDayte;
   this.seedAmount = seedAmount;
   this.crops = [...crops];
   this.id =
@@ -191,10 +191,7 @@ function Sowing({veggie, sowingDate, seedAmount, crops}) {
     ) +
     Date.now();
   crops.map(crop => {
-    if (
-      Utils.dateToWeekday(crop.date) !==
-      Utils.dateToWeekday(this.possibleCropDates[0])
-    ) {
+    if (crop.dayte.weekday !== this.possibleCropDaytes[0].weekday) {
       throw new Error(
         'Der Wochentag der tatsächlichen Ernte stimmt nicht mit dem Wochentag der möglichen Ernte überein.'
       );
@@ -204,32 +201,25 @@ function Sowing({veggie, sowingDate, seedAmount, crops}) {
 }
 
 Object.defineProperties(Sowing.prototype, {
-  possibleCropDates: {
+  possibleCropDaytes: {
     get() {
       const veggie = this.veggie;
-      const firstDate = Utils.addDaysToDate(
-        this.sowingDate,
+      const firstDayte = this.sowingDayte.addDays(
         veggie.quickpotDuration + veggie.bedDuration
       );
 
       const multiCropResult = () =>
         [...Array(veggie.numberOfHarvests - 1)].reduce(
-          (acc, _) => [
-            ...acc,
-            Utils.addDaysToDate(acc.at(-1), veggie.harvestInterval),
-          ],
-          [firstDate]
+          (acc, _) => [...acc, acc.at(-1).addDays(veggie.harvestInterval)],
+          [firstDayte]
         );
 
       const singleCropResult = () => {
-        const lastDate = Utils.addDaysToDate(
-          firstDate,
-          veggie.harvestTolerance
-        );
-        return Utils.getDatesInRange({
+        const lastDayte = firstDayte.addDays(veggie.harvestTolerance);
+        return Utils.getDaytesInRange({
           weekday: CONFIG.weekday,
-          firstDate,
-          lastDate,
+          firstDayte,
+          lastDayte,
           interval: 7,
         });
       };
@@ -297,14 +287,14 @@ Object.defineProperties(Sowing.prototype, {
         : 0;
     },
   },
-  lastCropDate: {
+  lastCropDayte: {
     get() {
       return this.crops
         .filter(crop => crop.amount > 0)
         .reduce(
           (max, crop) =>
-            max.getTime() > crop.date.getTime() ? max : crop.date,
-          new Date(0)
+            max.getTime() > crop.dayte.getTime() ? max : crop.dayte,
+          new Dayte('0000-01-01')
         );
     },
   },
@@ -313,7 +303,7 @@ Object.defineProperties(Sowing.prototype, {
 function Dayte(date) {
   // date: DD.MM.YYYY (DE) oder YYYY-MM-DD (ISO)
   const dateExists = dayte => {
-    const date = new Date(`${dayte.year}/${dayte.month}/${dayte.day}`);
+    const date = new Date(dayte.iso);
     if (Number(dayte.day) !== date.getDate()) return false;
     if (Number(dayte.month) !== date.getMonth() + 1) return false;
     if (Number(dayte.year) !== date.getFullYear()) return false;
@@ -321,8 +311,13 @@ function Dayte(date) {
   };
 
   if (typeof date !== 'string')
-    throw new Exception('date must be of type string');
-  if (date.length !== 10) throw new Exception('date must have 10 characters');
+    throw new Error(
+      `date must be of type string but is of type ${typeof date}.`
+    );
+  if (date.length !== 10)
+    throw new Error(
+      `date must have 10 characters but has ${date.length}. (${date})`
+    );
 
   let format;
   if (date[2] === '.' && date[5] === '.') {
@@ -330,7 +325,7 @@ function Dayte(date) {
   } else if (date[4] === '-' && date[7] === '-') {
     format = 'ISO';
   } else {
-    throw new Exception('invalid date format');
+    throw new Error('invalid date format');
   }
 
   if (format === 'DE') {
@@ -344,15 +339,44 @@ function Dayte(date) {
   }
 
   if (Number(this.day) < 1 || Number(this.day) > 31)
-    throw new Exception('day must be between 01 and 31');
+    throw new Error('day must be between 01 and 31');
   if (Number(this.month) < 1 || Number(this.month) > 12)
-    throw new Exception('month must be between 01 and 12');
+    throw new Error('month must be between 01 and 12');
   if (Number(this.year) < 0 || Number(this.year) > 9999)
-    throw new Exception('year must be between 0000 and 9999');
-  if (!dateExists(this)) throw new Exception('date does not exist');
-  this.de = `${this.day}.${this.month}.${this.year}`;
-  this.iso = `${this.year}-${this.month}-${this.day}`;
+    throw new Error('year must be between 0000 and 9999');
+  if (!dateExists(this)) throw new Error('date does not exist');
   Utils.deepFreeze(this);
 }
+Object.defineProperties(Dayte.prototype, {
+  de: {
+    get() {
+      return `${this.day}.${this.month}.${this.year}`;
+    },
+  },
+  iso: {
+    get() {
+      return `${this.year}-${this.month}-${this.day}`;
+    },
+  },
+  weekday: {
+    get() {
+      return ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][
+        new Date(this.iso).getDay()
+      ];
+    },
+  },
+});
+Dayte.prototype.addDays = function (days) {
+  if (typeof days !== 'number')
+    throw new Error('argument "days" has to be of type "number"');
+  const timestamp = Date.UTC(this.year, this.month - 1, this.day, 0, 0, 0);
+
+  const newDate = new Date(timestamp + days * 24 * 60 * 60 * 1000);
+
+  return new Dayte(newDate.toISOString().slice(0, 10));
+};
+Dayte.prototype.getTime = function () {
+  return new Date(this.iso).getTime();
+};
 
 export {Veggie, Crop, Box, MarketDay, Sowing, Dayte};
