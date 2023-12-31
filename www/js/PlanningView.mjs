@@ -242,6 +242,24 @@ const handleChangeSowingForm = handler => {
     crop.setAttribute('autocomplete', 'off');
     crop.addEventListener('click', e => e.target.select());
   });
+
+  const allBoxElements = [
+    ...document.querySelectorAll(
+      '.box > table > tbody > tr:last-child > td:nth-child(3)'
+    ),
+  ];
+  const meanBoxPriceElement = document.createElement('p');
+  const meanBoxPrice = dotToComma(
+    Math.round(
+      (allBoxElements
+        .map(td => Number(td.innerHTML.slice(0, -2).replace(',', '.')))
+        .reduce((a, b) => a + b, 0) /
+        allBoxElements.length) *
+        100
+    ) / 100
+  );
+  meanBoxPriceElement.innerText = `Durchschnittlicher Kistenpreis: ${meanBoxPrice} €`;
+  $('boxes__wrapper').before(meanBoxPriceElement);
   //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
@@ -886,9 +904,11 @@ const renderBoxes = (boxes, sowings) => {
       const sowing = sowings
         .filter(sowing => sowing.veggie.id === Number(veggieId))
         .find(sowing =>
-          sowing.crops.some(crop => crop.date.getTime() === cropDate.getTime())
+          sowing.crops.some(
+            crop => crop.dayte.getTime() === cropDayte.getTime()
+          )
         );
-      const firstCropDate = dateToString(sowing.crops[0].date);
+      const firstCropDate = sowing.crops[0].dayte.de;
       showSowingForm({firstCropDate, veggieId});
     })
   );

@@ -4,7 +4,6 @@
 
 - Doppelklick auf Gemüse (innerhalb Gemüsekiste) wird der falsche Satz geöffnet, wenn ein früherer Satz mit gleichem möglichem Erntetag existiert => Auswahl muss über Aussaat-ID erfolgen!
 - Es ist möglich eine höhere Ernte als verfügbar zu speichern
-- Durchschnittlichen Kistenpreis anzeigen
 
 - Auswertung Erntetage (mit Mengen)
 - Auswertung Überproduktion
