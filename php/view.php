@@ -33,7 +33,10 @@ function renderNav($user) {
     <a href="/planning">Planung</a>
   </li>
   <li class="header__navLi">
-    <a href="/report-1">Auswertung</a>
+    <a href="/report-1">Arbeitsschritte</a>
+  </li>
+  <li class="header__navLi">
+    <a href="/report-2">Saatgut</a>
   </li>
   <li class="header__navLi">
     <a href="/logout">Logout</a>
