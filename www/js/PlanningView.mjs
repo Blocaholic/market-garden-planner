@@ -257,9 +257,11 @@ const handleChangeSowingForm = handler => {
         100
     ) / 100
   );
-  $(
-    'boxes__meanBoxPrice'
-  ).innerText = `Durchschnittlicher Kistenpreis: ${meanBoxPrice} €`;
+  if (meanBoxPrice !== 'NaN') {
+    $(
+      'boxes__meanBoxPrice'
+    ).innerText = `Durchschnittlicher Kistenpreis: ${meanBoxPrice} €`;
+  }
   //$('addSowing').scrollIntoView({block: 'start', behavior: 'smooth'});
 };
 
