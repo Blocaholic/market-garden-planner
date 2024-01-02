@@ -231,30 +231,30 @@ label {
   cursor: pointer;
 }
 
-/* Report-1 */
+/* Reports */
 
-.report-1__table {
+.reportTable {
   border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 3.2rem;
 }
 
-.report-1__table thead {
+.reportTable thead {
   position: sticky;
   top: 19.3rem;
   background-color: white;
 }
 
-.report-1__table th {
+.reportTable th {
   border: none 0 transparent;
   padding: 0 0.5rem;
 }
 
-.report-1__table th:not(:empty) {
+.reportTable th:not(:empty) {
   border: 1px solid black;
 }
 
-.report-1__table td {
+.reportTable td {
   border: solid 1px black;
   padding: 0 0.5rem;
 }

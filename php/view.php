@@ -52,6 +52,8 @@ function renderScript($request, $user) {
     return '<script src="js/planning.mjs" type="module"></script>';
   } elseif ($request == 'report-1' && $user['isValid']) {
     return '<script src="js/report-1.mjs" type="module"></script>';
+  } elseif ($request == 'report-2' && $user['isValid']) {
+    return '<script src="js/report-2.mjs" type="module"></script>';
   } else {
     return '';
   }
