@@ -15,7 +15,7 @@ body {
 }
 
 input[type='text'] {
-  width: 50px;
+  width: 80px;
 }
 
 input[readonly] {
@@ -217,7 +217,7 @@ label {
 .box__addVeggieButton,
 .box__addVeggieButton:link,
 .box__addVeggieButton:visited,
-.box__addVeggieButton:hover,
+0 .box__addVeggieButton:hover,
 .box__addVeggieButton:active,
 .marketDay__addVeggieButton,
 .marketDay__addVeggieButton:link,
