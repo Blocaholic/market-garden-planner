@@ -19,6 +19,9 @@ const dotToComma = n => {
   return n.replace('.', ',');
 };
 
+const formatEuro = n =>
+  Number(n).toLocaleString('de-DE', {style: 'currency', currency: 'EUR'});
+
 const idEquals = id => x => x.id === Number(id);
 
 const daysBetween = (firstDayte, lastDayte) => {
