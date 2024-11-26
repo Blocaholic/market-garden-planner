@@ -1,5 +1,5 @@
 const weekday = 'Do';
-const numberOfBoxes = 100;
+const numberOfBoxes = 150;
 const bedWidth = 80;
 // const bedLength = 15;
 
